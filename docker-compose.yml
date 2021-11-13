@@ -1,0 +1,77 @@
+version: "3.7"
+services:
+
+  traefik:
+    image: traefik:2.5.4
+    command:
+      # Try to enable this if something isn't working. 
+      # Chances are, Traefik will tell you why.
+      # Be careful in production as it exposes the traffic you might not want to expose.
+      #--log.level=DEBUG
+
+      - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
+
+      - --providers.docker=true
+
+      - --api=true
+
+      # LetsEncrypt Staging Server - uncomment when testing
+      # - --certificatesResolvers.letsencrypt.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
+
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http
+      - --certificatesresolvers.letsencrypt.acme.email=${EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+    labels:
+      # Redirect all HTTP traffic to HTTPS
+      - traefik.http.routers.to-https.rule=HostRegexp(`{host:.+}`)
+      - traefik.http.routers.to-https.entrypoints=http
+      - traefik.http.routers.to-https.middlewares=to-https
+
+      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
+      - traefik.http.routers.traefik.entrypoints=https
+      - traefik.http.routers.traefik.middlewares=auth
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.traefik.tls.certresolver=${CERT_RESOLVER}
+
+      - traefik.http.middlewares.to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./data/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+
+  whoami:
+    image: containous/whoami
+    labels:
+      - traefik.http.routers.whoami.rule=Host(`whoami.tstsrv.de`)
+      - traefik.http.routers.whoami.entrypoints=https
+      - traefik.http.routers.whoami.tls=true
+      - traefik.http.routers.whoami.tls.certresolver=${CERT_RESOLVER}
+
+  haenno:
+    image: httpd
+    labels:
+      - traefik.http.routers.haenno.rule=Host(`haenno.tstsrv.de`)
+      - traefik.http.routers.haenno.entrypoints=https
+      - traefik.http.routers.haenno.tls=true
+      - traefik.http.routers.haenno.tls.certresolver=${CERT_RESOLVER}
+
+  rjh:
+   build: 
+     context: /home/rjhadmin/tstsrv/rjh
+     dockerfile: Dockerfile
+   command: python manage.py runserver 0.0.0.0:8000
+   ports:
+      - 8000:8000
+   labels:
+      - traefik.http.routers.rjh.rule=Host(`rjh.tstsrv.de`)
+      - traefik.http.routers.rjh.entrypoints=https
+      - traefik.http.routers.rjh.tls=true
+      - traefik.http.routers.rjh.tls.certresolver=${CERT_RESOLVER}
+
