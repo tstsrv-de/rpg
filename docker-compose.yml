@@ -46,21 +46,21 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 
-  whoami:
-    image: containous/whoami
-    labels:
-      - traefik.http.routers.whoami.rule=Host(`whoami.tstsrv.de`)
-      - traefik.http.routers.whoami.entrypoints=https
-      - traefik.http.routers.whoami.tls=true
-      - traefik.http.routers.whoami.tls.certresolver=${CERT_RESOLVER}
+#  whoami:
+#    image: containous/whoami
+#    labels:
+#      - traefik.http.routers.whoami.rule=Host(`whoami.tstsrv.de`)
+#      - traefik.http.routers.whoami.entrypoints=https
+#      - traefik.http.routers.whoami.tls=true
+#      - traefik.http.routers.whoami.tls.certresolver=${CERT_RESOLVER}
 
-  haenno:
-    image: httpd
-    labels:
-      - traefik.http.routers.haenno.rule=Host(`haenno.tstsrv.de`)
-      - traefik.http.routers.haenno.entrypoints=https
-      - traefik.http.routers.haenno.tls=true
-      - traefik.http.routers.haenno.tls.certresolver=${CERT_RESOLVER}
+#  haenno:
+#    image: httpd
+#    labels:
+#      - traefik.http.routers.haenno.rule=Host(`haenno.tstsrv.de`)
+#      - traefik.http.routers.haenno.entrypoints=https
+#      - traefik.http.routers.haenno.tls=true
+#      - traefik.http.routers.haenno.tls.certresolver=${CERT_RESOLVER}
 
   rjh:
    build: 
