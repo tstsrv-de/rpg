@@ -1,10 +1,13 @@
 import nltk
+nltk.download('punkt')
+
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 
 import numpy
 import tflearn
-import tensorflow
+#import tensorflow
+import tensorflow as tf
 import random
 import json
 import pickle
@@ -65,7 +68,8 @@ except:
     with open("data.pickle", "wb") as f:
         pickle.dump((words, labels, training, output), f)
 
-tensorflow.reset_default_graph()
+#tensorflow.reset_default_graph()
+tf.compat.v1.reset_default_graph()
 
 net = tflearn.input_data(shape=[None, len(training[0])])
 net = tflearn.fully_connected(net, 8)
