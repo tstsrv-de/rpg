@@ -10,9 +10,11 @@ docker-compose --project-directory /home/rjhadmin/tstsrv/ down
 # reset even more docker files
 #docker system prune -a --volumes
 
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
-docker-compose --project-directory /home/rjhadmin/tstsrv/ build --no-cache
+#docker stop $(docker ps -a -q)
+#docker rm $(docker ps -a -q)
+#docker-compose --project-directory /home/rjhadmin/tstsrv/ build --no-cache
+
+docker-compose --project-directory /home/rjhadmin/tstsrv/ build 
 docker-compose --project-directory /home/rjhadmin/tstsrv/ up -d
 
 

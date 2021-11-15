@@ -1,14 +1,31 @@
 import nltk
-nltk.download('punkt')
-
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 
 import numpy
-
+import tflearn
 import random
+import json
+import pickle
 
+import tensorflow as tf
 
+with open("intents.json") as file:
+    data = json.load(file)
+
+with open("data.pickle", "rb") as f:
+    words, labels, training, output = pickle.load(f)
+
+tf.compat.v1.reset_default_graph()
+
+net = tflearn.input_data(shape=[None, len(training[0])])
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
+net = tflearn.regression(net)
+
+model = tflearn.DNN(net)
+model.load("model.tflearn")
 
 def bag_of_words(s, words):
     bag = [0 for _ in range(len(words))]
