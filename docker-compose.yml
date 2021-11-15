@@ -75,3 +75,17 @@ services:
       - traefik.http.routers.rjh.tls=true
       - traefik.http.routers.rjh.tls.certresolver=${CERT_RESOLVER}
 
+
+  chatbot:
+   build: 
+     context: /home/rjhadmin/tstsrv/chatbot
+     dockerfile: Dockerfile
+   command: python manage.py runserver 0.0.0.0:8100
+   ports:
+      - 8100:8100
+   labels:
+      - traefik.http.routers.chatbot.rule=Host(`chatbot.tstsrv.de`)
+      - traefik.http.routers.chatbot.entrypoints=https
+      - traefik.http.routers.chatbot.tls=true
+      - traefik.http.routers.chatbot.tls.certresolver=${CERT_RESOLVER}
+
