@@ -103,7 +103,7 @@ services:
     build: 
       context: /home/rjhadmin/tstsrv/rpg
       dockerfile: Dockerfile
-    command: python rpg/manage.py runserver 0.0.0.0:8000
+    command: python rpg/manage.py runserver 0.0.0.0:8200
     volumes:
       - .:/code
     depends_on:
