@@ -1,6 +1,6 @@
 #!/bin/bash
 # start after update on rpg part of repo
-now=$(date)
+now=`date`
 echo '$now --> RPG update > Starting...'
 git -C /home/rjhadmin/tstsrv/ fetch origin
 if  [ `git -C /home/rjhadmin/tstsrv/ rev-list HEAD...origin/main --count` != 0 ] 
