@@ -1,4 +1,7 @@
-{% extends 'base.html' %} {% block content %} {% if error %} {{ error }}
+{% extends 'base.html' %}
+{% block content %} 
+{% if error %}
+{{ error }}
 
 <br />
 <br />
@@ -10,4 +13,6 @@
 <p>You are loged in.</p>
 {% else %}
 <p>Please login to see this page.</p>
-{% endif %} {% endblock %}
+{% endif %} 
+
+{% endblock %}
