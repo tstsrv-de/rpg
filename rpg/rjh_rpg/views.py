@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 
 def signup(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() == True:
         return redirect('home')
     else:
         if request.method == "POST":
@@ -29,7 +29,7 @@ def signup(request):
             return render(request,'signup.html')
 
 def login(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() == True:
         return redirect('home')
     else:
         if request.method == 'POST':
