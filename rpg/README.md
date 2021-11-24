@@ -24,6 +24,9 @@ New URLs:
         accounts/reset/<uidb64>/<token>/ [name='password_reset_confirm']
         accounts/reset/done/ [name='password_reset_complete']
 
+### Added bootstrap
+See https://www.w3schools.com/bootstrap/bootstrap_navbar.asp
+
 ## Project use documentation: 
 
 ### On update of rpg git repo:
