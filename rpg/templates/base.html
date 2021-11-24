@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,6 +21,8 @@
       <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
 
           {% if user.is_authenticated %}
+          <li class="{% if request.resolver_match.view_name == 'user_profile' %}active{% endif %}"> <a href="../user_profile/">user-profile</a></li>
+          <li class="{% if request.resolver_match.view_name == 'chars' %}active{% endif %}"> <a href="../chars/">chars</a></li>
           <li class="{% if request.resolver_match.view_name == 'logout' %}active{% endif %}"> <a href="../logout/">logout</a></li>
 
           {% else %}
@@ -33,7 +35,12 @@
 </nav>
 
     <div class="container text-center">
-    {% block content %} 
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />{% block content %} 
     {% endblock %}
     </div>
 

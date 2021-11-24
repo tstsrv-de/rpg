@@ -48,3 +48,8 @@ def home(request):
         pass
     return render(request, 'home.html')
 
+def chars(request):
+    return render(request, 'chars.html')
+
+def user_profile(request):
+    return render(request, 'user_profile.html')
