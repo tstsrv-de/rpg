@@ -2,6 +2,8 @@ from django.db import models
 
 # Create your models here.
 
+from django.conf import settings
+
 class User(models.Model):
     nickname = models.CharField(unique=True,max_length=100)
     email = models.EmailField(unique=True)
@@ -12,7 +14,7 @@ class User(models.Model):
     
     
 class UserChar(models.Model):
-    usernickname = models.ForeignKey(User, on_delete=models.RESTRICT)
+    usernickname = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT)
     name = models.CharField(unique=True,max_length=100)
     
     def __str__(self):
