@@ -9,7 +9,7 @@ def index(request):
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
-from rjh_rpg.modes import UserChar
+from rpg.modes import UserChar
 
 def signup(request):
     if request.method == "POST":
