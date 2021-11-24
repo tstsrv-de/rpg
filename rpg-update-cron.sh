@@ -1,12 +1,12 @@
 #!/bin/bash
 # start after update on rpg part of repo
 echo ' --> RPG update > Starting...'
-git fetch origin
-if  [ `git rev-list HEAD...origin/main --count` != 0 ] 
+git -C /home/rjhadmin/tstsrv/ fetch origin
+if  [ `git -C /home/rjhadmin/tstsrv/ rev-list HEAD...origin/main --count` != 0 ] 
 then
     echo ' --> RPG update > Remote git repo newer > Updating...'
     docker-compose stop rpg
-    git reset --hard origin/main
+    git -C /home/rjhadmin/tstsrv/ reset --hard origin/main
     git -C /home/rjhadmin/tstsrv/ fetch
     git -C /home/rjhadmin/tstsrv/ pull
     docker-compose run rpg python rpg/manage.py makemigrations
