@@ -42,5 +42,9 @@ def logout(request):
 
 
 def home(request):
+    if request.user.is_authenticated:
+        pass
+    else:
+        pass
     return render(request, 'home.html')
 
