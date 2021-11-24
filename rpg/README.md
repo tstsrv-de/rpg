@@ -6,6 +6,11 @@ Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incid
 ## Todo: 
 - Add license 
 
+## Project use documentation: 
+
+### On update of rpg git repo:
+Run the script "only-rebuild-rpg.sh". It will get the new files and changes from the git repo, stops the container, runs django updates in container and starts the container again.
+
 ## Project setup documentation: 
 Init: 
 1. copy files (docker-compose, dockerfile, example.env, requirements.txt) from repo local
