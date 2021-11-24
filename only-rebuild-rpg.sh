@@ -1,5 +1,5 @@
 #!/bin/bash
-# start after update on rpg part of repo
+# cron script for updating local rpg files from git-repo
 
 git fetch origin
 git reset --hard origin/main

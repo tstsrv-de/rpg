@@ -11,6 +11,11 @@ Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incid
 ### On update of rpg git repo:
 Run the script "only-rebuild-rpg.sh". It will get the new files and changes from the git repo, stops the container, runs django updates in container and starts the container again.
 
+### Automate clone of git repo updates to container: 
+Add a cron-job with the 'rpg-update-cron.sh' script: crontab -e, add the line: 
+``*/5 * * * * ~/tstsrv/rpg-update-cron.sh``
+And make the script executable with chmod +x!
+
 ## Project setup documentation: 
 Init: 
 1. copy files (docker-compose, dockerfile, example.env, requirements.txt) from repo local
@@ -44,7 +49,6 @@ Init:
                     'NAME': env('ENV_POSTGRES_DB'),
                     'USER': env('ENV_POSTGRES_USER'),
                     'PASSWORD': env('ENV_POSTGRES_PASSWORD'),
-
                 }
             }
 
