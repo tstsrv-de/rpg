@@ -14,14 +14,12 @@
 hier sind deine Chars: </p>
 
         {% if chars %}
-        <ol>
-        {% for char in chars %}
-        <li></li>
         <ul>
-            <li>Char Name: {{ char.name }}</li>
-        </ul>
+        {% for char in chars %}
+            <li>Char Name: {{ char.name }} &#10145; Welt betreten! </li>
         {% endfor %}
-        </ol>
+        </ul>
+
         {% else %}
         <p>Keine Chars gefunden!</p>
         {% endif %}
