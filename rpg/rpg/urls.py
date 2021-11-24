@@ -20,6 +20,6 @@ from rjh_rpg import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('accounts/', include('rjh_rpg.urls')),
+    path('accounts/', include('rpg.urls')),
     path('admin/', admin.site.urls),
 ]
