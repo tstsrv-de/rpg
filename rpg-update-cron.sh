@@ -1,5 +1,6 @@
 #!/bin/bash
 # start after update on rpg part of repo
+cd /home/rjhadmin/tstsrv/
 now=$(date "+%F %H:%M:%S")
 # echo "$now --> RPG update > Starting..."
 git -C /home/rjhadmin/tstsrv/ fetch origin >> /home/rjhadmin/cronlog.txt 
