@@ -13,7 +13,7 @@ Run the script "only-rebuild-rpg.sh". It will get the new files and changes from
 
 ### Automate clone of git repo updates to container: 
 Add a cron-job with the 'rpg-update-cron.sh' script: crontab -e, add the line: 
-``*/5 * * * * ~/tstsrv/rpg-update-cron.sh``
+``*/5 * * * * /home/rjhadmin/tstsrv/rpg-update-cron.sh >> /home/rjhadmin/cronlog.txt 2>&1``
 And make the script executable with chmod +x!
 
 ## Project setup documentation: 
