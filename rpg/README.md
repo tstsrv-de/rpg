@@ -5,6 +5,24 @@ Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incid
 
 ## Todo: 
 - Add license 
+- Configure e-mail service
+
+
+## Project dev documentation: 
+
+### Add user registration & more:
+See https://www.nintyzeros.com/2020/06/login-register-user%20page-in%20django.html
+
+See https://docs.djangoproject.com/en/3.2/topics/auth/default/#built-in-auth-forms
+New URLs:
+        accounts/login/ [name='login']
+        accounts/logout/ [name='logout']
+        accounts/password_change/ [name='password_change']
+        accounts/password_change/done/ [name='password_change_done']
+        accounts/password_reset/ [name='password_reset']
+        accounts/password_reset/done/ [name='password_reset_done']
+        accounts/reset/<uidb64>/<token>/ [name='password_reset_confirm']
+        accounts/reset/done/ [name='password_reset_complete']
 
 ## Project use documentation: 
 
