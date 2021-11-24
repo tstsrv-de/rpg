@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 def index(request):
     
-    return render(request, 'rjh_rpg/main.html')
+    return render(request, 'main.html')
 
 
 from django.shortcuts import redirect
@@ -16,15 +16,15 @@ def signup(request):
         if request.POST['password1'] == request.POST['password2']:
             try:
                 User.objects.get(username = request.POST['username'])
-                return render (request,'rjh_rpg/signup.html', {'error':'Username is already taken!'})
+                return render (request,'signup.html', {'error':'Username is already taken!'})
             except User.DoesNotExist:
                 user = User.objects.create_user(request.POST['username'],password=request.POST['password1'])
                 auth.login(request,user)
                 return redirect('home')
         else:
-            return render (request,'rjh_rpg/signup.html', {'error':'Password does not match!'})
+            return render (request,'signup.html', {'error':'Password does not match!'})
     else:
-        return render(request,'rjh_rpg/signup.html')
+        return render(request,'signup.html')
 
 def login(request):
     if request.method == 'POST':
@@ -33,9 +33,9 @@ def login(request):
             auth.login(request,user)
             return redirect('home')
         else:
-            return render (request,'rjh_rpg/login.html', {'error':'Username or password is incorrect!'})
+            return render (request,'login.html', {'error':'Username or password is incorrect!'})
     else:
-        return render(request,'rjh_rpg/login.html')
+        return render(request,'login.html')
 
 def logout(request):
     if request.method == 'POST':
