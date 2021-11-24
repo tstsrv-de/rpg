@@ -8,7 +8,7 @@ class User(models.Model):
     text = models.CharField(max_length=255, null=True, blank=True)
     
 class UserChar(models.Model):
-    user = models.ForeignKey(rjh_rpg.User, on_delete=models.RESTRICT)
+    user = models.ForeignKey(User, on_delete=models.RESTRICT)
     name = models.CharField(unique=True,max_length=100)
     
     def __str__(self):
