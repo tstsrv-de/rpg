@@ -1,7 +1,12 @@
-# rpg
-Browser RPG-Adventure
+# README for 'Browser RPG-Adventure' (Rico, Julian, Henning)
 
+## foo bar wiz
+Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
+## Todo: 
+- Add license 
+
+## Project setup documentation: 
 Init: 
 1. copy files (docker-compose, dockerfile, example.env, requirements.txt) from repo local
 2. rename .env.example to .env and change settings 
