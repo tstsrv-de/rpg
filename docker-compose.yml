@@ -46,21 +46,21 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 
-#  whoami:
-#    image: containous/whoami
-#    labels:
-#      - traefik.http.routers.whoami.rule=Host(`whoami.tstsrv.de`)
-#      - traefik.http.routers.whoami.entrypoints=https
-#      - traefik.http.routers.whoami.tls=true
-#      - traefik.http.routers.whoami.tls.certresolver=${CERT_RESOLVER}
+  whoami:
+    image: containous/whoami
+    labels:
+      - traefik.http.routers.whoami.rule=Host(`whoami.tstsrv.de`)
+      - traefik.http.routers.whoami.entrypoints=https
+      - traefik.http.routers.whoami.tls=true
+      - traefik.http.routers.whoami.tls.certresolver=${CERT_RESOLVER}
 
-#  haenno:
-#    image: httpd
-#    labels:
-#      - traefik.http.routers.haenno.rule=Host(`haenno.tstsrv.de`)
-#      - traefik.http.routers.haenno.entrypoints=https
-#      - traefik.http.routers.haenno.tls=true
-#      - traefik.http.routers.haenno.tls.certresolver=${CERT_RESOLVER}
+  haenno:
+    image: httpd
+    labels:
+      - traefik.http.routers.haenno.rule=Host(`haenno.tstsrv.de`)
+      - traefik.http.routers.haenno.entrypoints=https
+      - traefik.http.routers.haenno.tls=true
+      - traefik.http.routers.haenno.tls.certresolver=${CERT_RESOLVER}
 
   rjh:
    build: 
@@ -89,3 +89,29 @@ services:
       - traefik.http.routers.chatbot.tls=true
       - traefik.http.routers.chatbot.tls.certresolver=${CERT_RESOLVER}
 
+
+  db:
+    image: postgres:14.1-bullseye
+    volumes: 
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${ENV_POSTGRES_DB}
+      - POSTGRES_USER=${ENV_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${ENV_POSTGRES_PASSWORD}
+
+  rpg:
+    build: 
+      context: /home/rjhadmin/tstsrv/rpg
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+    ports:
+      - 8200:8200
+    labels:
+      - traefik.http.routers.rpg.rule=Host(`rpg.${DOMAIN}`)
+      - traefik.http.routers.rpg.entrypoints=https
+      - traefik.http.routers.rpg.tls=true
+      - traefik.http.routers.rpg.tls.certresolver=${CERT_RESOLVER}
