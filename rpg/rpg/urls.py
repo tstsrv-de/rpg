@@ -20,6 +20,7 @@ from rjh_rpg import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('home/', views.home, name='home'),
     #path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('login/', views.login, name='login'),
