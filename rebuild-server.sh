@@ -16,6 +16,8 @@ docker-compose --project-directory /home/rjhadmin/tstsrv/ down
 
 docker-compose --project-directory /home/rjhadmin/tstsrv/ build 
 docker-compose --project-directory /home/rjhadmin/tstsrv/ up -d
+chmod +x /home/rjhadmin/tstsrv/*.sh
+
 
 
 
