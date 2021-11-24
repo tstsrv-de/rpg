@@ -11,7 +11,26 @@
 
 {% if user.is_authenticated %}
 <p>Hi, {{ user.get_username }}!<br />
-Du bist eingeloggt. </p>
+hier sind deine Chars: </p>
+
+        {% if chars %}
+        <ol>
+        {% for char in chars %}
+        <li></li>
+        <ul>
+            <li>Char Name: {{ char.name }}</li>
+        </ul>
+        {% endfor %}
+        </ol>
+        {% else %}
+        <p>Keine Chars gefunden!</p>
+        {% endif %}
+
+<br />
+<br />
+<p>Hier kannst du einen neuen Char anlegen:<br /></p>
+
+
 {% else %}
 <p>Hi! Wenn du spielen willst, log dich bitte erst ein. </p>
 {% endif %} 

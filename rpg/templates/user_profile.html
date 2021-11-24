@@ -7,13 +7,16 @@
 <br />
 {% endif %}
 
-<h1>Home!</h1>
+<h1>Profileinstellungen...</h1>
 
 {% if user.is_authenticated %}
-<p>Hi, {{ user.get_username }}!<br />
-Du bist eingeloggt. </p>
+<p>User: {{ user.get_username }}<br /> </p>
+<p>Account löschen.<br>Passwort ändern.</p>
+
+
+
 {% else %}
-<p>Hi! Wenn du spielen willst, log dich bitte erst ein. </p>
+<p>Du bist nicht eingeloggt! </p>
 {% endif %} 
 
 {% endblock %}

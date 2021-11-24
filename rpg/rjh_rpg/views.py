@@ -9,6 +9,7 @@ def index(request):
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
+from rjh_rpg.modes import UserChar
 
 def signup(request):
     if request.method == "POST":
@@ -49,7 +50,13 @@ def home(request):
     return render(request, 'home.html')
 
 def chars(request):
-    return render(request, 'chars.html')
+    char_list = UserChar.objects.order_by('name')
+
+    frontend_values = {
+        'chars': char_list,
+    }
+    #add post variant to add new chars
+    return render(request, 'chars.html', context=frontend_values)
 
 def user_profile(request):
     return render(request, 'user_profile.html')
