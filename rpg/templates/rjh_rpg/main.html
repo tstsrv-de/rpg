@@ -8,28 +8,11 @@
     </head>
     <body>
         <h1>Clean install</h1>
-        {{ test_variable }}
         </br>
         <img src={% static "img/fom.jpeg" %} alt="Bild FOM Siegen">
 
         <div>
-            {% if access_records %}
-            <table>
-                <thead>
-                    <th>Webpage name</th>
-                    <th>Access at</th>
-                </thead>
-
-                {% for ar in access_records %}
-                <tr>
-                    <td>{{ ar.name }}</td>
-                    <td>{{ ar.date }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-            {% else %}
-            <p>No records found!</p>
-            {% endif %}
+            <p>wooohooo!</p>
         </div>
     </body>
 </html>
