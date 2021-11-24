@@ -10,6 +10,7 @@ then
     git -C /home/rjhadmin/tstsrv/ reset --hard origin/main
     git -C /home/rjhadmin/tstsrv/ fetch
     git -C /home/rjhadmin/tstsrv/ pull
+    chmod +x /home/rjhadmin/tstsrv/*.sh
     docker-compose --project-directory /home/rjhadmin/tstsrv/ run rpg python rpg/manage.py makemigrations
     docker-compose --project-directory /home/rjhadmin/tstsrv/ run rpg python rpg/manage.py migrate
     docker-compose --project-directory /home/rjhadmin/tstsrv/ start rpg
