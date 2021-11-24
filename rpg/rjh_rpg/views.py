@@ -42,3 +42,8 @@ def logout(request):
         auth.logout(request)
     return redirect('home')
 
+
+def home(request):
+    
+    return render(request, 'home.html')
+

@@ -1,0 +1,23 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% if error %}
+{{ error }}
+
+<br/>
+<br/>
+{% endif %}
+
+<h1>Home!</h1>
+
+ {% if user.is_authenticated %}
+    <p>You are loged in.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+
+{% endblock %}
