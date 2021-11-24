@@ -37,8 +37,8 @@ def login(request):
         return render(request,'login.html')
 
 def logout(request):
-    if request.method == 'POST':
-        auth.logout(request)
+    #if request.method == 'POST':
+    auth.logout(request)
     return redirect('home')
 
 
