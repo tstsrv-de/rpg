@@ -9,6 +9,12 @@
 
 <h1>Signup...</h1>
 
+
+{% if user.is_authenticated %}
+<p>Du bist bereits angemeldet!</p>
+{% else %}
+
+
 <form method="POST" action="{% url 'signup' %}">
   {% csrf_token %} 
   Benutzername:
@@ -21,11 +27,13 @@
   <br />
   Passwort wiederholen:
   <br />
-  <br />
+  
   <input type="password" name="password2" />
+  <br />
   <br />
   <input type="submit" value="Signup" />
   <br />
 </form>
+{% endif %} 
 
 {% endblock %}
