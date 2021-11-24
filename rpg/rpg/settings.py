@@ -37,6 +37,8 @@ ALLOWED_HOSTS = [env('ENV_ALLOWED_HOSTS')]
 # Application definition
 
 INSTALLED_APPS = [
+    'rjh_rpg.apps.AccountsConfig',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
