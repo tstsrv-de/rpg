@@ -7,10 +7,10 @@
 <br />
 {% endif %}
 
-<h1>Home!</h1>
+<h1>Home...</h1>
 
 {% if user.is_authenticated %}
-<p>Hi, {{ user.get_username }}!<br />
+<p>Hi, <b>{{ user.get_username }}</b>!<br />
 Du bist eingeloggt. </p>
 {% else %}
 <p>Hi! Wenn du spielen willst, log dich ein. </p>

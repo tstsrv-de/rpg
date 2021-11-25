@@ -1,0 +1,16 @@
+{% extends 'base.html' %} 
+
+{% block html_head %}
+<meta http-equiv="refresh" content="3; URL={% if target %}{{ target }}{% else %}{% url 'home' %}{% endif %}">
+{% endblock %}
+
+{% block content %} 
+<p>
+{% if msg %} 
+<b>{{ msg }}</b>
+{% endif %}
+<br />
+<br />
+Du wirst in 3 Sekunden automatisch weitergeleitet...
+</p>
+{% endblock %}

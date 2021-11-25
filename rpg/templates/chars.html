@@ -10,24 +10,39 @@
 <h1>Chars...</h1>
 
 {% if user.is_authenticated %}
-<p>Hi, {{ user.get_username }}!<br />
-hier sind deine Chars: </p>
+<p>Hi, {{ user.get_username }}!<br /></p>
 
         {% if chars %}
-        <ul>
+        hier sind deine Chars: 
+        <table class="table-bordered">
+        
         {% for char in chars %}
-            <li>Char Name: {{ char.name }} &#10145; Welt betreten! </li>
+        <tr>
+            <th>
+            <p class="container code">
+            Name: {{ char.name }} <br />
+            Geburtsort: {{ char.birthplace }} <br />
+            Geschlecht: {{ char.char_sex }} <br />
+            </p>
+            <p><b>&#10145; Welt betreten! </b></p>
+            </th>
+        </tr>
         {% endfor %}
-        </ul>
+        
+        </table>
 
         {% else %}
-        <p>Keine Chars gefunden!</p>
+        <p>du hast noch keine Chars!</p>
         {% endif %}
 
 <br />
 <br />
 <p>Hier kannst du einen neuen Char anlegen:<br /></p>
-
+<form method="post">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <input type="submit" value="Char anlegen" class="btn btn-primary" >
+</form>
 
 {% else %}
 <p>Hi! Wenn du spielen willst, log dich bitte erst ein. </p>
