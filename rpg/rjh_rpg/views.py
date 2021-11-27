@@ -49,7 +49,10 @@ def login(request):
 def logout(request):
     if request.user.is_authenticated:
         auth.logout(request)
-        # (TODO!) Alles Chars aus GameState löschen!
+
+        current_user = User.objects.get(id=request.user.id)
+        GameState.objects.get(char_user=current_user).delete()
+
         return render(request,'msg_redirect.html',{'msg':'Du wurdest ausgelogt!'})
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
@@ -66,6 +69,10 @@ def home(request):
 def chars(request):
     if request.user.is_authenticated:
         char_list = UserChar.objects.filter(usernickname=request.user).order_by('name')
+        
+        current_user = User.objects.get(id=request.user.id)
+        active_char = GameState.objects.filter(char_user=current_user)
+
         form = UserCharForm()
         
         if request.method == 'POST':
@@ -78,7 +85,7 @@ def chars(request):
             else:
                 pass
         
-        return render(request, 'chars.html', {'chars': char_list, 'form': form})
+        return render(request, 'chars.html', {'chars': char_list, 'form': form, 'active_char' : active_char})
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
@@ -90,6 +97,15 @@ def user_profile(request):
 
 
 # game views and logic:
+
+def game_stopsession(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id=request.user.id)
+        GameState.objects.get(char_user=current_user).delete()
+        return render(request,'msg_redirect.html',{'msg':'Deine Chars wurden zurückgesetzt!','target':'/chars/'})
+    else:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
+    
 
 def game_worldmap(request):
     if request.user.is_authenticated:
@@ -107,13 +123,24 @@ def game_worldmap(request):
             current_user = User.objects.get(id=request.user.id)
             char_to_gamestate.char_user = current_user
 
-            try_active_char = GameState.objects.filter(char=char_from_db)
-            try_active_user = GameState.objects.filter(char_user=current_user)
-    
-            if (try_active_user.count != 0) or (try_active_char.count != 0):
-                return render(request,'msg_redirect.html',{'msg':'Du bist schon mit einem Char auf der Worldmap!','target':'/chars/'})
-            else:
+            no_active_char = False
+            no_active_user = False
+
+            try: # user ist mit diesem char aktiv
+                try_active_char = GameState.objects.get(char=char_from_db)
+            except:
+                no_active_char = True
+
+            try: # = user ist mit anderem char aktiv
+                try_active_user = GameState.objects.get(char_user=current_user)
+            except:
+                no_active_user = True
+
+            if no_active_char and no_active_user:
                 char_to_gamestate.save()
+            else:
+                return render(request,'msg_redirect.html',{'msg':'Du bist schon mit einem Char auf der Worldmap!','target':'/chars/'})
+
 
             return render(request,
                 'game_worldmap.html',

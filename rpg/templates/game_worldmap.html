@@ -15,13 +15,19 @@
 
   <body>
   <h1>RPG-Adventure: Worldmap</h1> 
-  <p><a href="{% url 'chars' %}"><small>Zurück zur Charakterauswahl...</small></a></p>
     
     {% block content %} 
     <b>Aufbereitet aus POST Data, teils aus DB:</b> char_id: {{ char_id}}  //     char_name: {{ char_name }} //    char_user: {{ char_user }}  <br /> 
     <b>Andere Chars online in Worldmap:</b> 
 
     {% endblock %}
-    
+
+
+  <p><small>
+  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a> <br />
+  <a href="{% url 'game_stopsession' %}">Chars zurücksetzen...</a>
+  </small></p>
+  
+
   </body>
 </html>

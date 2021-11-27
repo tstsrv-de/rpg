@@ -45,7 +45,17 @@
 
 {% endif %}
 
-  {% if chars %}
+{% if active_char %}
+
+<!-- (TODO!) Wiedereinstieg in Game-Sitzung einbauen anstatt rauswurf -->
+<p>
+<b>Achtung!</b><br />
+Du hast noch eine aktive Spielsitzung. Bitte setzte zuerst deine Chars zurück &#10145; <a href="{% url 'game_stopsession' %}">Chars zurücksetzen</a><br />
+</p>
+
+{% else %}
+
+{% if chars %}
 
 <form action="{% url 'game_worldmap' %}" method="POST" id="interest-select" class="form-inline">
  <div class="form-group">
@@ -64,7 +74,11 @@
         {% else %}
         <p>du hast noch keine Chars!</p>
         {% endif %}
+  {% endif %}
+
 </div>
+
+
 
 <br />
 <br />
