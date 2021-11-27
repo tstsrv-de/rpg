@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    {% block html_head %} 
+    
+    {% endblock %}
+    <link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>RPG-Adventure: Worldmap</title>
+  </head>
+
+  <body>
+  <h1>RPG-Adventure: Worldmap</h1> 
+  <p><a href="{% url 'chars' %}"><small>Zurück zur Charakterauswahl...</small></a></p>
+    
+    {% block content %} 
+    <b>Aufbereitet aus POST Data, teils aus DB:</b> char_id: {{ char_id}}  //     char_name: {{ char_name }} //    char_user: {{ char_user }}  <br /> 
+    <b>Andere Chars online in Worldmap:</b> 
+
+    {% endblock %}
+    
+  </body>
+</html>

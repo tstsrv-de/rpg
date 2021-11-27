@@ -9,39 +9,71 @@
 
 <h1>Chars...</h1>
 
+<div class="container text-center">
+
 {% if user.is_authenticated %}
 <p>Hi, {{ user.get_username }}!<br /></p>
 
-        {% if chars %}
+        {% if chars %} <!-- (TODO!) Wenn ein Char bereits aktiv ist -- Keine Auswahl zulassen, sondern logout oder wiedereinstieg anbieten -->
         hier sind deine Chars: 
-        <table class="table-bordered">
+
+        <br />
+        <br />
+        <br />
+        <div class="table-responsive">
+        <table class="table table-bordered table-striped">
         
-        {% for char in chars %}
         <tr>
-            <th>
-            <p class="container code">
+        {% for char in chars %}
+        
+            <td>
+            <p>
             Name: {{ char.name }} <br />
             Geburtsort: {{ char.birthplace }} <br />
             Geschlecht: {{ char.char_sex }} <br />
             </p>
-            <p><b>&#10145; Welt betreten! </b></p>
-            </th>
-        </tr>
-        {% endfor %}
         
+            </td>
+        
+        {% endfor %}
+
+        
+        </tr>
+
         </table>
+        </div>
+
+{% endif %}
+
+  {% if chars %}
+
+<form action="{% url 'game_worldmap' %}" method="POST" id="interest-select" class="form-inline">
+ <div class="form-group">
+        {% csrf_token %}
+
+        <select id="char_id" name="char" class="form-control">
+        <!--<option disabled selected> Charakter auswählen... </option>--> <!-- muss noch raus solange er ohne auswahl das form absendet -->
+        {% for char in chars %}
+            <option value={{char.id}}>{{char.name}}</option>
+        {% endfor %}
+        </select> 
+         <input class="btn btn-primary" type="submit" value="&#10145; Welt betreten! "/>
+         </div>
+  </form>
 
         {% else %}
         <p>du hast noch keine Chars!</p>
         {% endif %}
+</div>
 
 <br />
 <br />
 <p>Hier kannst du einen neuen Char anlegen:<br /></p>
-<form method="post">
+<form method="POST">
     {{ form.as_p }}
     {% csrf_token %}
     <input type="submit" value="Char anlegen" class="btn btn-primary" >
+
 </form>
 
 {% else %}

@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 # Create your models here.
@@ -21,7 +22,7 @@ class UserChar(models.Model):
         MALE = 'M', gettext_lazy('Männchen')
         NONE = '0', gettext_lazy('Keins')
 
-    usernickname = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT)
+    usernickname = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(unique=True,max_length=100)
     birthplace = models.CharField(max_length=200, null=True, blank=True)
 
@@ -36,3 +37,9 @@ class UserChar(models.Model):
         return self.name
     
     
+class GameState(models.Model):
+    
+    char = models.ForeignKey(UserChar, on_delete=models.CASCADE, unique=True)
+    place = models.IntegerField(default=0)
+    charLogin = models.DateTimeField(default=datetime.now) 
+    char_user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True, on_delete=models.CASCADE, null=True, blank=True)

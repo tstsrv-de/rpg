@@ -1,3 +1,4 @@
+from django.db.models.aggregates import Count
 from django.shortcuts import render
 
 # Create your views here.
@@ -11,6 +12,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from rjh_rpg.models import UserChar
 from rjh_rpg.forms import UserCharForm
+from rjh_rpg.models import GameState
 
 def signup(request):
     if request.user.is_authenticated:
@@ -47,6 +49,7 @@ def login(request):
 def logout(request):
     if request.user.is_authenticated:
         auth.logout(request)
+        # (TODO!) Alles Chars aus GameState löschen!
         return render(request,'msg_redirect.html',{'msg':'Du wurdest ausgelogt!'})
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
@@ -85,3 +88,43 @@ def user_profile(request):
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
+
+# game views and logic:
+
+def game_worldmap(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+
+            # (TODO!) manipulation von post daten möglich? oder ist das der csf-token? falls nicht: id gegen datenbank prüfen und fehler anzeigen, falls nicht vorhanden (und ggfls. nicht zum user passt)
+            char_id = request.POST.get('char')
+
+            char_from_db = UserChar.objects.get(id=char_id)
+            char_name = char_from_db.name
+            char_user = char_from_db.usernickname
+            
+            char_to_gamestate = GameState()
+            char_to_gamestate.char = char_from_db
+            current_user = User.objects.get(id=request.user.id)
+            char_to_gamestate.char_user = current_user
+
+            try_active_char = GameState.objects.filter(char=char_from_db)
+            try_active_user = GameState.objects.filter(char_user=current_user)
+    
+            if (try_active_user.count != 0) or (try_active_char.count != 0):
+                return render(request,'msg_redirect.html',{'msg':'Du bist schon mit einem Char auf der Worldmap!','target':'/chars/'})
+            else:
+                char_to_gamestate.save()
+
+            return render(request,
+                'game_worldmap.html',
+                {
+                    'char_id': char_id,
+                    'char_name' : char_name,
+                    'char_user' : char_user,
+
+                }
+            )
+        else: 
+            return render(request,'msg_redirect.html',{'msg':'Du musst einen Char auswählen!','target':'/chars/'})
+    else:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})

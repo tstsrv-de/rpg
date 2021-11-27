@@ -28,4 +28,9 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('chars/', views.chars, name='chars'),
     path('user_profile/', views.user_profile, name='user_profile'),
+    
+    # Game/World URLs
+    ## checks for 1) login of user and 2) single use of char - if ok: set gamestate and show worldmap
+    path('game/worldmap/', views.game_worldmap, name='game_worldmap'),
+    
 ]
