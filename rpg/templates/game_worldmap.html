@@ -18,7 +18,8 @@
     
     {% block content %} 
     <b>Aufbereitet aus POST Data, teils aus DB:</b> char_id: {{ char_id}}  //     char_name: {{ char_name }} //    char_user: {{ char_user }}  <br /> 
-    <b>Andere Chars online in Worldmap:</b> 
+    <b>Andere Chars online in Worldmap bei laden der Seite:</b> {% if active_char_list %} {% for char in active_char_list %} {{char.char }}, {% endfor %}  {% endif %}
+    
 
     {% endblock %}
 

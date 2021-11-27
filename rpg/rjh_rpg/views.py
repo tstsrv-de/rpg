@@ -136,11 +136,12 @@ def game_worldmap(request):
             except:
                 no_active_user = True
 
-            if no_active_char and no_active_user:
+            if no_active_char and no_active_user: # = new user on map
                 char_to_gamestate.save()
             else:
                 return render(request,'msg_redirect.html',{'msg':'Du bist schon mit einem Char auf der Worldmap!','target':'/chars/'})
 
+            active_char_list = GameState.objects.filter(place=0).order_by('char') # place 0 = worldmap
 
             return render(request,
                 'game_worldmap.html',
@@ -148,6 +149,7 @@ def game_worldmap(request):
                     'char_id': char_id,
                     'char_name' : char_name,
                     'char_user' : char_user,
+                    'active_char_list' : active_char_list,
 
                 }
             )
