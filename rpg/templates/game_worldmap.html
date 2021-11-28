@@ -30,5 +30,85 @@
   </small></p>
   
 
+
+
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-6">
+                <!--<form>-->
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1" class="h4 pt-5">Chatroom</label>
+                        <textarea class="form-control" id="chat-text" rows="10"></textarea><br>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" id="input" type="text" onkeypress="return send_msg(event)" ></br>
+                    </div>
+                    <input class="btn btn-secondary btn-lg btn-block" id="submit" type="button" value="Send">
+                <!--</form>-->
+            </div>
+        </div>
+    </div>
+
+    {{ char_name|json_script:"user_username" }}
+    <!--{{ room_name|json_script:"room-name" }}-->
+    <script id="room-name" type="application/json">"worldmap"</script>
+
+    <script>
+        const user_username = JSON.parse(document.getElementById('user_username').textContent);
+        
+        document.querySelector('#submit').onclick = function (e) {
+            const messageInputDom = document.querySelector('#input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': user_username,
+            }));
+            messageInputDom.value = '';
+        };
+
+function send_msg(e) {
+    
+    if (e.keyCode == 13) {
+            const messageInputDom = document.querySelector('#input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': user_username,
+            }));
+            messageInputDom.value = '';
+    }
+}
+
+var textarea = document.getElementById('chat-text');
+setInterval(function(){
+    //textarea.value += Math.random()+'\n';
+    textarea.scrollTop = textarea.scrollHeight;
+}, 500);
+
+
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+        var loc = window.location;
+        var wsStart = 'ws://';
+        if (loc.protocol == 'https:') {
+            wsStart = 'wss://'
+        }
+
+        const chatSocket = new WebSocket(
+            wsStart +
+            window.location.host +
+            '/ws/chat/' +
+            roomName +
+            '/'
+        );
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            console.log(data)
+            document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
+        }
+    </script>
+
+
   </body>
 </html>

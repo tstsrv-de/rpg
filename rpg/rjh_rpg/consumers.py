@@ -18,17 +18,16 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.room_group_name, 
             {
-                'type': 'tester_message',
-                'tester': 'tester',
+                'type': 'welcome_message',
             }
         )
 
-    async def tester_message(self, event):
-        tester = event['tester']
-        
-        await self.send(text_data=json.dumps({ 
-                                              'tester': tester, 
-                                              }))
+    async def welcome_message(self, event):
+        # (TODO!) username mitgeben damit 'undefined' im chat verschwindet
+        await self.send(text_data=json.dumps({
+            'message': '...betritt den Chat...',
+        }))
+
         
 
     async def disconnect(self, close_code):
