@@ -1,4 +1,5 @@
 <!doctype html>
+{% load static %}
 <html lang="de">
   <head>
       {% block html_head %} 
@@ -39,6 +40,7 @@
 
     <div class="container text-center">
     <br />
+    <img src={% static "img/image_test.png" %} width="200"> 
     {% block content %} 
     {% endblock %}
     </div>
