@@ -157,3 +157,9 @@ def game_worldmap(request):
             return render(request,'msg_redirect.html',{'msg':'Du musst einen Char auswählen!','target':'/chars/'})
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
+
+# from YT Chat howto
+def room(request, room_name):
+    return render(request, 'chatroom.html', {
+        'room_name': room_name
+    })

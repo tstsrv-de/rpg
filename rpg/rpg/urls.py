@@ -34,5 +34,6 @@ urlpatterns = [
     path('game_worldmap/', views.game_worldmap, name='game_worldmap'),
     path('game_stopsession/', views.game_stopsession, name='game_stopsession'),
     
-    
+    # from YT chat howto:
+    path('<str:room_name>/', views.room, name='room'), # hängt sonst auf /chat/ rum
 ]
