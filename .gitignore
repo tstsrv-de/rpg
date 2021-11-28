@@ -4,6 +4,7 @@ rjh/fomtest/settings.py
 rjh-data/*
 data/letsencrypt/acme.json
 rjh/db.sqlite3
+data/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/*
