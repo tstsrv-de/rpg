@@ -43,6 +43,11 @@ class GameState(models.Model):   # wo ist der char? in der weltmap? oder in eine
     place = models.IntegerField(default=0) # 0 = weltmap, n > 0 = laufende_game_id
     charLogin = models.DateTimeField(default=datetime.now) 
     char_user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True, on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.char)
+    
+    
 class GamesScenesSteps(models.Model): # schritte der szenen
     name = models.CharField(max_length=100)
     #game_scene = 

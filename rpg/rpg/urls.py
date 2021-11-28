@@ -33,7 +33,8 @@ urlpatterns = [
     ## checks for 1) login of user and 2) single use of char - if ok: set gamestate and show worldmap
     path('game_worldmap/', views.game_worldmap, name='game_worldmap'),
     path('game_scene/', views.game_scene, name='game_scene'),
-    path('game_stopsession/', views.game_stopsession, name='game_stopsession'),
+    path('game_stop_to_worldmap/', views.game_stop_to_worldmap, name='game_stop_to_worldmap'),
+    path('game_stop_to_chars/', views.game_stop_to_chars, name='game_stop_to_chars'),
     
     # from YT chat howto:
     path('<str:room_name>/', views.room, name='room'), # hängt sonst auf /chat/ rum

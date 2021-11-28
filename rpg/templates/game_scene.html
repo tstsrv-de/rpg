@@ -18,8 +18,7 @@
     
     {% block content %} 
 
-{{ char_id}} 
-{{ scene_id }} 
+(Char-Id: {{ char_id}} / Scene-Id: {{ scene_id }})
 
 
 
@@ -31,7 +30,8 @@
 
 
   <p><small>
-  <a href="{% url 'game_worldmap' %}">Zurück zur Szenenauswahl...</a> <br />
+  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a> <br />
+  <a href="{% url 'game_stop_to_worldmap' %}">Zurück zur Worldmap...</a>
   </small></p>
   
 
@@ -55,7 +55,7 @@
     </div>
 
     {{ char_name|json_script:"user_username" }}
-    <!--{{ room_name|json_script:"room-name" }}-->
+    {{ scene_id|json_script:"room-name" }}
     <script id="room-name" type="application/json">"worldmap"</script>
 
     <script>
