@@ -13,6 +13,8 @@ from django.contrib import auth
 from rjh_rpg.models import UserChar
 from rjh_rpg.forms import UserCharForm
 from rjh_rpg.models import GameState
+from rjh_rpg.models import GameScenes
+from rjh_rpg.models import GameScenesRunning
 
 def signup(request):
     if request.user.is_authenticated:
@@ -106,7 +108,6 @@ def game_stopsession(request):
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
     
-
 def game_worldmap(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -142,6 +143,32 @@ def game_worldmap(request):
                 return render(request,'msg_redirect.html',{'msg':'Du bist schon mit einem Char auf der Worldmap!','target':'/chars/'})
 
             active_char_list = GameState.objects.filter(place=0).order_by('char') # place 0 = worldmap
+            
+            game_scenes_list = GameScenes.objects.order_by('name') # place 0 = worldmap
+            
+            # laufende szenen
+            
+            # wartende spieler in start steps
+            
+            complete_game_scenes_list = []
+
+                        
+            for scene in game_scenes_list: 
+                waiting_players = GameScenesRunning.objects.filter(scene_step=scene.start_step)
+
+                player_counter = 0
+                for waiting_player in waiting_players:
+                    player_counter = player_counter + 1
+                
+                
+                complete_game_scenes_list.append({
+                    'name': scene.name,
+                    'req_players': scene.req_players,
+                    'waiting_players': player_counter,
+                    'id': scene.id,
+                    }
+                )
+           
 
             return render(request,
                 'game_worldmap.html',
@@ -150,6 +177,7 @@ def game_worldmap(request):
                     'char_name' : char_name,
                     'char_user' : char_user,
                     'active_char_list' : active_char_list,
+                    'game_scenes_list': complete_game_scenes_list,
 
                 }
             )
@@ -163,3 +191,35 @@ def room(request, room_name):
     return render(request, 'chatroom.html', {
         'room_name': room_name
     })
+
+def game_scene(request):
+    if request.user.is_authenticated:
+
+        if request.method == 'POST':
+
+            # (TODO!) manipulation von post daten möglich? oder ist das der csf-token? falls nicht: id gegen datenbank prüfen und fehler anzeigen, falls nicht vorhanden (und ggfls. nicht zum user passt)
+            scene_id = request.POST.get('scene_id')
+            char_id = request.POST.get('char_id')
+            
+            GameState.objects.filter(char=char_id).update(place=scene_id)  
+
+            gs_obj = GameScenes.objects.filter(id=scene_id)            
+            usr_obj = UserChar.objects.get(id=char_id)
+            
+            new_gsr = GameScenesRunning(char=usr_obj, scene_step=gs_obj[0].start_step, game_id=0 )
+            new_gsr.save()
+
+
+            return render(request,
+                'game_scene.html',
+                {
+                    'char_id': char_id,
+                    'scene_id' : scene_id,
+                    
+                }
+            )
+        else: 
+            return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/chars/'})
+    else:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
+    

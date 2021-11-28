@@ -14,49 +14,24 @@
   </head>
 
   <body>
-  <h1>RPG-Adventure: Worldmap</h1> 
+  <h1>RPG-Adventure: Scene</h1> 
     
     {% block content %} 
-    <b>Aufbereitet aus POST Data, teils aus DB:</b> char_id: {{ char_id}}  //     char_name: {{ char_name }} //    char_user: {{ char_user }}  <br /> 
-    <b>Andere Chars online in Worldmap bei laden der Seite:</b> {% if active_char_list %} {% for char in active_char_list %} {{char.char }}, {% endfor %}  {% endif %}
-    
 
-            {% if game_scenes_list %}
-            <div align="center">
+{{ char_id}} 
+{{ scene_id }} 
 
-            <form action="{% url 'game_scene' %}" method="POST" id="interest-select" class="form-inline">
-            <div class="form-group">
-                    {% csrf_token %}
 
-                    <select id="scene_id" name="scene_id" class="form-control">
-                    {% for scene in game_scenes_list %} 
-                        <option value={{scene.id}}>{{scene.name}} ({{ scene.waiting_players }}/{{ scene.req_players }})</option>
-                    {% endfor %}
-                    </select> 
-                    <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">
-                    <input class="btn btn-primary" type="submit" value="&#10145; Scene betreten!"/>
-                    </div>
-            </form>
-            </div>
 
-                    {% else %}
-                    <p>Es gibt keine Szenen!</p>
-                    {% endif %}
-            
+    {% endblock %}
 
 
 
 
 
-
-
-
-
-{% endblock %}
 
   <p><small>
-  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a> <br />
-  <a href="{% url 'game_stopsession' %}">Chars zurücksetzen...</a>
+  <a href="{% url 'game_worldmap' %}">Zurück zur Szenenauswahl...</a> <br />
   </small></p>
   
 
