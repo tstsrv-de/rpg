@@ -5,6 +5,7 @@ rjh-data/*
 data/letsencrypt/acme.json
 rjh/db.sqlite3
 data/*
+rpg/rjh_rpg/migrations/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/*
