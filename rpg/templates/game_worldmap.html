@@ -14,12 +14,20 @@
   </head>
 
   <body>
-  <h1>RPG-Adventure: Worldmap</h1> 
+
+    <nav class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header navbar-brand">
+      RPG-Adventure >> Worldmap
+    </div>
+   <ul class="nav navbar-nav">
+      <li>  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a></li>
+    </ul>
+  </div>
+</nav>
     
     {% block content %} 
-    <b>Aufbereitet aus POST Data, teils aus DB:</b> char_id: {{ char_id}}  //     char_name: {{ char_name }} //    char_user: {{ char_user }}  <br /> 
-    <b>Andere Chars online in Worldmap bei laden der Seite:</b> {% if active_char_list %} {% for char in active_char_list %} {{char.char }}, {% endfor %}  {% endif %}
-    
+
 
             {% if game_scenes_list %}
             <div align="center">
@@ -52,9 +60,9 @@
 
 
 
-{% endblock %}
 
-  <p><small>
+
+  <p align="center"><small>
   <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a>
   </small></p>
   
@@ -66,7 +74,7 @@
             <div class="col-6">
                 <!--<form>-->
                     <div class="form-group">
-                        <label for="exampleFormControlTextarea1" class="h4 pt-5">Chatroom</label>
+                        <!--<label for="exampleFormControlTextarea1" class="h4 pt-5">Chatroom</label>-->
                         <textarea class="form-control" id="chat-text" rows="10"></textarea><br>
                     </div>
                     <div class="form-group">
@@ -77,6 +85,12 @@
             </div>
         </div>
     </div>
+
+
+    <p><br /> <br /> <b>Debug-Daten:</b> <br /> Aufbereitet aus POST Data, teils aus DB: char_id: {{ char_id}}  //     char_name: {{ char_name }} //    char_user: {{ char_user }}  <br /> 
+    Andere Chars online in Worldmap bei laden der Seite: {% if active_char_list %} {% for char in active_char_list %} {{char.char }}, {% endfor %}  {% endif %}</p>
+    
+{% endblock %}
 
     {{ char_name|json_script:"user_username" }}
     <!--{{ room_name|json_script:"room-name" }}-->

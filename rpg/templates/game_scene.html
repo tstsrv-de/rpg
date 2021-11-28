@@ -14,25 +14,26 @@
   </head>
 
   <body>
-  <h1>RPG-Adventure: Scene</h1> 
+    <nav class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header navbar-brand">
+      RPG-Adventure >> Szene
+    </div>
+   <ul class="nav navbar-nav">
+      <li>  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a></li>
+      <li>  <a href="{% url 'game_stop_to_worldmap' %}">Zurück zur Worldmap...</a></li>
+    </ul>
+  </div>
+</nav>
     
     {% block content %} 
 
-(Char-Id: {{ char_id}} / Scene-Id: {{ scene_id }})
-
-
-
-    {% endblock %}
 
 
 
 
 
 
-  <p><small>
-  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a> <br />
-  <a href="{% url 'game_stop_to_worldmap' %}">Zurück zur Worldmap...</a>
-  </small></p>
   
 
 
@@ -42,7 +43,7 @@
             <div class="col-6">
                 <!--<form>-->
                     <div class="form-group">
-                        <label for="exampleFormControlTextarea1" class="h4 pt-5">Chatroom</label>
+                        <!--<label for="exampleFormControlTextarea1" class="h4 pt-5">Chatroom</label>-->
                         <textarea class="form-control" id="chat-text" rows="10"></textarea><br>
                     </div>
                     <div class="form-group">
@@ -53,6 +54,14 @@
             </div>
         </div>
     </div>
+
+
+<p><br /> <br /> <b>Debug-Daten:</b> <br />
+(Char-Id: {{ char_id}} / Scene-Id: {{ scene_id }})</p>
+
+
+
+    {% endblock %}
 
     {{ char_name|json_script:"user_username" }}
     {{ scene_id|json_script:"room-name" }}
