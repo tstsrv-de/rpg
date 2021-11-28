@@ -25,7 +25,8 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def welcome_message(self, event):
         # (TODO!) username mitgeben damit 'undefined' im chat verschwindet
         await self.send(text_data=json.dumps({
-            'message': '...betritt den Chat...',
+            'username': 'System',
+            'message': 'Jemand hat den Raum betreten...',
         }))
 
         
