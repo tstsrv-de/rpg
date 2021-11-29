@@ -66,3 +66,7 @@ class GameScenes(models.Model): # eigenschaften der szenen   // GAME OVER Screen
     start_step = models.ForeignKey(GamesScenesSteps, on_delete=models.CASCADE, unique=True)  # start step = lobby, end step = after game screen (fortschritt, belohnungen, ...)
     req_players = models.BigIntegerField(default=1) # anzahl notweniger spieler
 
+class HelperCounter(models.Model):
+    name = models.CharField(unique=True, max_length=300)
+    count = models.BigIntegerField(default=0)
+    last_update = models.DateTimeField(default=datetime.now) 

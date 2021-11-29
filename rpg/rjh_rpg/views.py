@@ -42,6 +42,7 @@ def login(request):
             user = auth.authenticate(username=request.POST['username'],password = request.POST['password'])
             if user is not None:
                 auth.login(request,user)
+                # (TODO!) should we delete gamesessions here?
                 return redirect('home')
             else:
                 return render (request,'login.html', {'error':'Benutzername oder Passwort falsch!'})
@@ -127,7 +128,7 @@ def game_stop_to_chars(request):
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
 
-def game_stop_to_worldmap(request): 
+def game_stop_to_worldmap(request):  # url wrong when we use this, should be /game_worldmap/ but is /game_stop_to_worldmap/
     if request.user.is_authenticated:
         # get user obj from logged in user
         current_user_obj = User.objects.get(id=request.user.id)

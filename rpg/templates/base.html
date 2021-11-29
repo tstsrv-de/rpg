@@ -52,7 +52,38 @@
 </nav>
 
     <div class="container text-center">
-    <br />
+    
+      <!-- Start Counter Test -->
+    <input id="wmtc_submit" type="button" value="+">
+    <p id="wmtv_test_element"></p>
+
+    <script>
+    document.querySelector('#wmtc_submit').onclick = function (e) {
+        wmtc_socket.send(JSON.stringify({'msg': 'add_one',}));
+    };
+
+    function send_wmtc_msg(e) { var wmtc_textarea = document.getElementById('wmtv_test_element'); }
+
+    setInterval(function(){
+        var wmtc_textarea = document.getElementById('wmtv_test_element');
+        wmtc_textarea.scrollTop = wmtc_textarea.scrollHeight;
+        wmtc_socket.send(JSON.stringify({'msg': 'alive',}));
+    }, 100);
+
+    var wmtc_loc = window.location;
+    var wmtc_ws_prot = 'ws://';
+    if (wmtc_loc.protocol == 'https:') { wmtc_ws_prot = 'wss://' }
+
+    const wmtc_socket = new WebSocket(wmtc_ws_prot + window.location.host + '/ws/wmtc/');
+
+    wmtc_socket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data)
+        document.querySelector('#wmtv_test_element').innerHTML = (data.msg)
+    }
+    </script>
+    <!-- End Counter Test -->
+
     <img src={% static "img/image_test.png" %} width="200"> 
     {% block content %} 
     {% endblock %}
