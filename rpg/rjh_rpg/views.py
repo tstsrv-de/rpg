@@ -50,10 +50,19 @@ def login(request):
 
 def logout(request):
     if request.user.is_authenticated:
-        auth.logout(request)
 
-        current_user = User.objects.get(id=request.user.id)
-        GameState.objects.get(char_user=current_user).delete()
+        current_user_obj = User.objects.get(id=request.user.id)
+        GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
+        try:
+            GameScenesRunning.objects.get(char=GameState_char_obj[0].char).delete()
+        except:
+            pass
+        try:
+            GameState.objects.get(char_user=current_user_obj).delete()
+        except:
+            pass
+
+        auth.logout(request)
 
         return render(request,'msg_redirect.html',{'msg':'Du wurdest ausgelogt!'})
     else:
@@ -275,10 +284,10 @@ def game_worldmap(request):
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
 # from YT Chat howto
-def room(request, room_name):
-    return render(request, 'chatroom.html', {
-        'room_name': room_name
-    })
+#def room(request, room_name):
+#    return render(request, 'chatroom.html', {
+#        'room_name': room_name
+#    })
 
 def game_scene(request):
     if request.user.is_authenticated:

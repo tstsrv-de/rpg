@@ -37,5 +37,5 @@ urlpatterns = [
     path('game_stop_to_chars/', views.game_stop_to_chars, name='game_stop_to_chars'),
     
     # from YT chat howto:
-    path('<str:room_name>/', views.room, name='room'), # hängt sonst auf /chat/ rum
+    #path('<str:room_name>/', views.room, name='room'), # hängt sonst auf /chat/ rum
 ]

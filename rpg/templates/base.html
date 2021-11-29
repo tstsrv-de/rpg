@@ -22,14 +22,27 @@
       RPG-Adventure!!
     </div>
     <ul class="nav navbar-nav">
-      <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
-
           {% if user.is_authenticated %}
-          <li class="{% if request.resolver_match.view_name == 'user_profile' %}active{% endif %}"> <a href="../user_profile/">user-profile</a></li>
-          <li class="{% if request.resolver_match.view_name == 'chars' %}active{% endif %}"> <a href="../chars/">chars</a></li>
-          <li class="{% if request.resolver_match.view_name == 'logout' %}active{% endif %}"> <a href="../logout/">logout</a></li>
+
+            {% if request.resolver_match.view_name == 'game_worldmap' %}
+              <li class="active"> <a href="#">Worldmap </a></li>
+              <li>  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a></li>
+
+            {% elif request.resolver_match.view_name == 'game_scene' %}
+              <li class="active"> <a href="#">Szene </a></li>
+              <li>  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a></li>
+              <li>  <a href="{% url 'game_stop_to_worldmap' %}">Zurück zur Worldmap...</a></li>
+
+            {% else %}
+              <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
+              <li class="{% if request.resolver_match.view_name == 'user_profile' %}active{% endif %}"> <a href="../user_profile/">user-profile</a></li>
+              <li class="{% if request.resolver_match.view_name == 'chars' %}active{% endif %}"> <a href="../chars/">chars</a></li>
+              <li class="{% if request.resolver_match.view_name == 'logout' %}active{% endif %}"> <a href="../logout/">logout</a></li>
+            {% endif %}
+            
 
           {% else %}
+          <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
           <li class="{% if request.resolver_match.view_name == 'login' %}active{% endif %}"><a href="../login/">login</a></li>
           <li class="{% if request.resolver_match.view_name == 'signup' %}active{% endif %}"><a href="../signup/">signup</a></li>
           {% endif %} 

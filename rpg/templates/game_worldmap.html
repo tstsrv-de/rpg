@@ -1,32 +1,14 @@
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    {% block html_head %} 
-    
-    {% endblock %}
-    <link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>RPG-Adventure: Worldmap</title>
-  </head>
+{% extends 'base.html' %}
+{% block content %} 
+{% if error %}
+{{ error }}
 
-  <body>
+<br />
+<br />
+{% endif %}
+{% if user.is_authenticated %}
 
-    <nav class="navbar navbar-inverse">
-  <div class="container">
-    <div class="navbar-header navbar-brand">
-      RPG-Adventure >> Worldmap
-    </div>
-   <ul class="nav navbar-nav">
-      <li>  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a></li>
-    </ul>
-  </div>
-</nav>
-    
-    {% block content %} 
+
 
 
             {% if game_scenes_list %}
@@ -42,7 +24,7 @@
                     {% endfor %}
                     </select> 
                     <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">
-                    <input class="btn btn-primary" type="submit" value="&#10145; Scene betreten!"/>
+                    <input class="btn btn-primary" type="submit" value="&#10145; Szene betreten!"/>
                     </div>
             </form>
             </div>
@@ -53,19 +35,6 @@
             
 
 
-
-
-
-
-
-
-
-
-
-  <p align="center"><small>
-  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a>
-  </small></p>
-  
 
 
 
@@ -90,7 +59,6 @@
     <p><br /> <br /> <b>Debug-Daten:</b> <br /> Aufbereitet aus POST Data, teils aus DB: char_id: {{ char_id}}  //     char_name: {{ char_name }} //    char_user: {{ char_user }}  <br /> 
     Andere Chars online in Worldmap bei laden der Seite: {% if active_char_list %} {% for char in active_char_list %} {{char.char }}, {% endfor %}  {% endif %}</p>
     
-{% endblock %}
 
     {{ char_name|json_script:"user_username" }}
     <!--{{ room_name|json_script:"room-name" }}-->
@@ -152,6 +120,8 @@ setInterval(function(){
         }
     </script>
 
+{% else %}
+<p>Hi! Wenn du spielen willst, log dich bitte erst ein. </p>
+{% endif %} 
 
-  </body>
-</html>
+{% endblock %}

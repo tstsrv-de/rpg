@@ -1,40 +1,12 @@
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    {% block html_head %} 
-    
-    {% endblock %}
-    <link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>RPG-Adventure: Worldmap</title>
-  </head>
+{% extends 'base.html' %}
+{% block content %} 
+{% if error %}
+{{ error }}
 
-  <body>
-    <nav class="navbar navbar-inverse">
-  <div class="container">
-    <div class="navbar-header navbar-brand">
-      RPG-Adventure >> Szene
-    </div>
-   <ul class="nav navbar-nav">
-      <li>  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a></li>
-      <li>  <a href="{% url 'game_stop_to_worldmap' %}">Zurück zur Worldmap...</a></li>
-    </ul>
-  </div>
-</nav>
-    
-    {% block content %} 
-
-
-
-
-
-
-
-  
+<br />
+<br />
+{% endif %}
+{% if user.is_authenticated %}
 
 
 
@@ -60,8 +32,6 @@
 (Char-Id: {{ char_id}} / Scene-Id: {{ scene_id }})</p>
 
 
-
-    {% endblock %}
 
     {{ char_name|json_script:"user_username" }}
     {{ scene_id|json_script:"room-name" }}
@@ -123,6 +93,8 @@ setInterval(function(){
         }
     </script>
 
+{% else %}
+<p>Hi! Wenn du spielen willst, log dich bitte erst ein. </p>
+{% endif %} 
 
-  </body>
-</html>
+{% endblock %}
