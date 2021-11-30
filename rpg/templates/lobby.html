@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %} 
 {% if error %}
 {{ error }}
@@ -7,6 +8,42 @@
 <br />
 {% endif %}
 {% if user.is_authenticated %}
+
+
+
+<!-- Start LobbyWebsocket Test -->
+<!--<input id="lobby_submit" type="button" value="+">-->
+<a href="#"  alt="Click me!"><img src={% static "img/fom.jpeg" %} width="50" id="lobby_submit"></a> <b id="lobby_test_element"></b>
+{{ scene_id|json_script:"socket_scene_id" }}
+<script id="socket_scene_id" type="application/json">"socket_scene_id"</script>
+<script>
+document.querySelector('#lobby_submit').onclick = function (e) {
+    lobby_socket.send(JSON.stringify({'msg': 'add_one',}));
+};
+
+function send_wmtc_msg(e) { var lobby_textarea = document.getElementById('lobby_test_element'); }
+
+setInterval(function(){
+    var lobby_textarea = document.getElementById('lobby_test_element');
+    lobby_textarea.scrollTop = lobby_textarea.scrollHeight;
+    lobby_socket.send(JSON.stringify({'msg': 'alive',}));
+}, 100);
+
+var wmtc_loc = window.location;
+var wmtc_ws_prot = 'ws://';
+if (wmtc_loc.protocol == 'https:') { wmtc_ws_prot = 'wss://' }
+
+const socket_scene_id = JSON.parse(document.getElementById('socket_scene_id').textContent);
+const lobby_socket = new WebSocket(wmtc_ws_prot + window.location.host + '/ws/lobby-'+ socket_scene_id+'/');
+
+lobby_socket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    console.log(data)
+    document.querySelector('#lobby_test_element').innerHTML = (data.msg)
+}
+</script>
+<!-- End LobbyWebsocket Test -->
+
 
 
 
