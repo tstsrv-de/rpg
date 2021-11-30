@@ -28,7 +28,7 @@
               <li class="active"> <a href="#">Worldmap </a></li>
               <li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>
 
-            {% elif request.resolver_match.view_name == 'game_scene' %}
+            {% elif request.resolver_match.view_name == 'lobby' %}
               <li class="active"> <a href="#">Szene </a></li>
               <li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>
               <li>  <a href="{% url 'worldmap' %}">Zurück zur Worldmap...</a></li>

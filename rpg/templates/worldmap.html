@@ -14,7 +14,7 @@
             {% if game_scenes_list %}
             <div align="center">
 
-            <form action="{% url 'game_scene' %}" method="POST" id="interest-select" class="form-inline">
+            <form action="{% url 'lobby_jumper' %}" method="POST" id="interest-select" class="form-inline">
             <div class="form-group">
                     {% csrf_token %}
 
@@ -24,7 +24,7 @@
                     {% endfor %}
                     </select> 
                     <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">
-                    <input class="btn btn-primary" type="submit" value="&#10145; Szene betreten!"/>
+                    <input class="btn btn-primary" type="submit" value="&#10145; Lobby der Szene betreten!"/>
                     </div>
             </form>
             </div>

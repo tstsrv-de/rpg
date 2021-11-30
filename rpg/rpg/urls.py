@@ -32,7 +32,11 @@ urlpatterns = [
     # Game/World URLs
     ## checks for 1) login of user and 2) single use of char - if ok: set gamestate and show worldmap
     path('worldmap/', views.worldmap, name='worldmap'),
-    path('game_scene/', views.game_scene, name='game_scene'),
+    
+    path('lobby_jumper/', views.lobby_jumper, name='lobby_jumper'),
+    path('lobby-<int:scene_id>/', views.lobby, name='lobby'),
+    
+    #path('scene/', views.scene, name='scene'), # main game
 
     
     # from YT chat howto:

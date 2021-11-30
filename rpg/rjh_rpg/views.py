@@ -120,7 +120,7 @@ def chars(request):
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
  
     
-def worldmap(request):
+def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und zusammenpacken
     if request.user.is_authenticated:
         if request.method == 'POST':
 
@@ -264,37 +264,57 @@ def worldmap(request):
 #        'room_name': room_name
 #    })
 
-def game_scene(request):
-    if request.user.is_authenticated:
+def scene(request):
+    if not request.user.is_authenticated:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
+    if not request.method == 'POST':
+        return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/chars/'})
 
-        if request.method == 'POST':
+    # add logic for games...
+    pass
 
-            # (TODO!) manipulation von post daten möglich? oder ist das der csf-token? falls nicht: id gegen datenbank prüfen und fehler anzeigen, falls nicht vorhanden (und ggfls. nicht zum user passt)
-            scene_id = request.POST.get('scene_id')
-            char_id = request.POST.get('char_id')
-            
-            GameState.objects.filter(char=char_id).update(place=scene_id)  
-
-            gs_obj = GameScenes.objects.filter(id=scene_id)            
-            usr_obj = UserChar.objects.get(id=char_id)
-            
-            new_gsr = GameScenesRunning(char=usr_obj, scene_step=gs_obj[0].start_step, game_id=0 )
-            new_gsr.save()
-            
-            char_name = str(usr_obj)
-
-
-            return render(request,
-                'game_scene.html',
-                {
-                    'char_id': char_id,
-                    'scene_id' : scene_id,
-                    'char_name' : char_name, 
-                    
-                }
-            )
-        else: 
-            return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/chars/'})
-    else:
+    
+def lobby_jumper(request):
+    if not request.user.is_authenticated:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
     
+    if request.method == 'POST':
+        scene_id = request.POST.get('scene_id')
+        return redirect('/lobby-'+scene_id+'/')
+    else:
+        return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/worldmap/'})    
+
+
+def lobby(request, scene_id):
+    if not request.user.is_authenticated:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
+
+    if not GameScenes.objects.filter(id=scene_id).exists():
+        return render(request,'msg_redirect.html',{'msg':'Du musst eine existierende Szene auswählen!','target':'/worldmap/'})    
+    
+    current_user_obj = User.objects.get(id=request.user.id)
+    GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
+    char_id = str(GameState_char_obj[0].char.id)
+
+    # set char to the scene
+    GameState.objects.filter(char=char_id).update(place=scene_id)  
+
+    gs_obj = GameScenes.objects.filter(id=scene_id)            
+    usr_obj = UserChar.objects.get(id=char_id)
+    
+    new_gsr = GameScenesRunning(char=usr_obj, scene_step=gs_obj[0].start_step, game_id=0 )
+    new_gsr.save()
+    
+    char_name = str(usr_obj)
+
+
+    return render(request,
+        'lobby.html',
+        {
+            'char_id': char_id,
+            'scene_id' : scene_id,
+            'char_name' : char_name, 
+        }
+    )
+
+
