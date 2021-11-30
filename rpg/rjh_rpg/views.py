@@ -3,10 +3,6 @@ from django.shortcuts import render
 
 # Create your views here.
 
-def index(request):
-    return redirect('home')
-
-
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
