@@ -57,7 +57,7 @@ Du hast noch eine aktive Chars oder Szene. Bitte setze diese erst zurück &#1014
 
 {% if chars %}
 
-<form action="{% url 'game_worldmap' %}" method="POST" id="interest-select" class="form-inline">
+<form action="{% url 'worldmap' %}" method="POST" id="interest-select" class="form-inline">
  <div class="form-group">
         {% csrf_token %}
 

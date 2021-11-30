@@ -24,14 +24,14 @@
     <ul class="nav navbar-nav">
           {% if user.is_authenticated %}
 
-            {% if request.resolver_match.view_name == 'game_worldmap' %}
+            {% if request.resolver_match.view_name == 'worldmap' %}
               <li class="active"> <a href="#">Worldmap </a></li>
               <li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>
 
             {% elif request.resolver_match.view_name == 'game_scene' %}
               <li class="active"> <a href="#">Szene </a></li>
               <li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>
-              <li>  <a href="{% url 'game_stop_to_worldmap' %}">Zurück zur Worldmap...</a></li>
+              <li>  <a href="{% url 'worldmap' %}">Zurück zur Worldmap...</a></li>
 
             {% else %}
               <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>

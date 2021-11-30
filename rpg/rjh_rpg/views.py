@@ -118,81 +118,9 @@ def chars(request):
 
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
-
-
-def game_stop_to_worldmap(request):  # url wrong when we use this, should be /game_worldmap/ but is /game_stop_to_worldmap/
-    if request.user.is_authenticated:
-        # get user obj from logged in user
-        current_user_obj = User.objects.get(id=request.user.id)
-
-        # get gamestate obj based on the user object
-        GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
-
-        # delete current running scenes to this char from current users gamestate
-        char_id = GameState_char_obj[0].id
-
-        try:
-            GameScenesRunning.objects.get(char=GameState_char_obj[0].char).delete()
-        except:
-            pass
-     
-        # set char back to worldmap (place = 0)
-        GameState.objects.filter(char=char_id).update(place=0)  
-
-        # prepare nessesary lists for worldmap        
-        active_char_list = GameState.objects.filter(place=0).order_by('char') # place 0 = worldmap
-        game_scenes_list = GameScenes.objects.order_by('name') # place 0 = worldmap
-        
-        complete_game_scenes_list = []
-        for scene in game_scenes_list: 
-            waiting_players = GameScenesRunning.objects.filter(scene_step=scene.start_step)
-
-            player_counter = 0
-            for waiting_player in waiting_players:
-                player_counter = player_counter + 1
-            
-            
-            complete_game_scenes_list.append({
-                'name': scene.name,
-                'req_players': scene.req_players,
-                'waiting_players': player_counter,
-                'id': scene.id,
-                }
-            )
-        
-        
-
-        char_name = str(GameState_char_obj[0].char)
-        char_user = str(GameState_char_obj[0].char_user)
-
-        user_char_char_id = UserChar.objects.filter(name=char_name)
-        
-        char_id_form =  str(user_char_char_id[0].id)
-
-        
-        return render(request,
-            'game_worldmap.html',
-            {
-                'char_id': char_id_form,
-                'char_name' : char_name,
-                'char_user' : char_user,
-                'active_char_list' : active_char_list,
-                'game_scenes_list': complete_game_scenes_list,
-
-            }
-        )
-
-        
-    else:
-        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
-
-
+ 
     
-
-    
-
-    
-def game_worldmap(request):
+def worldmap(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
 
@@ -261,7 +189,7 @@ def game_worldmap(request):
             char_user = char_from_db.usernickname
 
             return render(request,
-                'game_worldmap.html',
+                'worldmap.html',
                 {
                     'char_id': char_id,
                     'char_name' : char_name,
@@ -272,7 +200,61 @@ def game_worldmap(request):
                 }
             )
         else: 
-            return render(request,'msg_redirect.html',{'msg':'Du musst einen Char auswählen!','target':'/chars/'})
+            # get user obj from logged in user
+            current_user_obj = User.objects.get(id=request.user.id)
+
+            # get gamestate obj based on the user object
+            GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
+
+            # delete current running scenes to this char from current users gamestate
+            char_id = GameState_char_obj[0].id
+
+            try:
+                GameScenesRunning.objects.get(char=GameState_char_obj[0].char).delete()
+            except:
+                pass
+        
+            # set char back to worldmap (place = 0)
+            GameState.objects.filter(char=char_id).update(place=0)  
+
+            # prepare nessesary lists for worldmap        
+            active_char_list = GameState.objects.filter(place=0).order_by('char') # place 0 = worldmap
+            game_scenes_list = GameScenes.objects.order_by('name') # place 0 = worldmap
+            
+            complete_game_scenes_list = []
+            for scene in game_scenes_list: 
+                waiting_players = GameScenesRunning.objects.filter(scene_step=scene.start_step)
+
+                player_counter = 0
+                for waiting_player in waiting_players:
+                    player_counter = player_counter + 1
+                
+                complete_game_scenes_list.append({
+                    'name': scene.name,
+                    'req_players': scene.req_players,
+                    'waiting_players': player_counter,
+                    'id': scene.id,
+                    }
+                )
+
+            char_name = str(GameState_char_obj[0].char)
+            char_user = str(GameState_char_obj[0].char_user)
+
+            user_char_char_id = UserChar.objects.filter(name=char_name)
+            
+            char_id_form =  str(user_char_char_id[0].id)
+            return render(request,
+                'worldmap.html',
+                {
+                    'char_id': char_id_form,
+                    'char_name' : char_name,
+                    'char_user' : char_user,
+                    'active_char_list' : active_char_list,
+                    'game_scenes_list': complete_game_scenes_list,
+
+                }
+            )
+
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 

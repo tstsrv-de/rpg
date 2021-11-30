@@ -31,9 +31,8 @@ urlpatterns = [
     
     # Game/World URLs
     ## checks for 1) login of user and 2) single use of char - if ok: set gamestate and show worldmap
-    path('game_worldmap/', views.game_worldmap, name='game_worldmap'),
+    path('worldmap/', views.worldmap, name='worldmap'),
     path('game_scene/', views.game_scene, name='game_scene'),
-    path('game_stop_to_worldmap/', views.game_stop_to_worldmap, name='game_stop_to_worldmap'),
 
     
     # from YT chat howto:
