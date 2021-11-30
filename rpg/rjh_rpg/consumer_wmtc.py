@@ -1,4 +1,3 @@
-# from https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started/blob/master/chat/consumers.py
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from rjh_rpg.models import HelperCounter
@@ -22,13 +21,13 @@ class Consumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(
             self.msg_group_name, 
             {
-                'type': 'msg_group_do_welcome_message',
+                'type': 'msg_group_do_init',
             }
         )
 
-    async def msg_group_do_welcome_message(self, event):
+    async def msg_group_do_init(self, event):
         await self.send(text_data=json.dumps({
-            'msg': 'Counter startet...',
+            'msg': 'Counter init...',
         }))
         
 
@@ -42,7 +41,6 @@ class Consumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['msg']
-        print(message)
 
         wmtc_counter = await sync_to_async(HelperCounter.objects.get_or_create)(name='wmtc')
         wmtc_current_count = str(wmtc_counter[0].count)
@@ -60,17 +58,10 @@ class Consumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async 
     def addone(self):
-        print("before") 
         wmtc_counter = HelperCounter.objects.get_or_create(name='wmtc')
         wmtc_current_count = str(wmtc_counter[0].count)
-        print(wmtc_counter[0].count)
         wmtc_counter[0].count = int(wmtc_current_count) + 1
         wmtc_counter[0].save()
-        print("after")
-        print(wmtc_counter[0].count)
-        
-
-        
 
     async def msg_group_do_send(self, event):
         message = event['msg']

@@ -53,10 +53,9 @@
 
     <div class="container text-center">
     
-      <!-- Start Counter Test -->
-    <input id="wmtc_submit" type="button" value="+">
-    <p id="wmtv_test_element"></p>
-
+    <!-- Start Counter Test -->
+    <!--<input id="wmtc_submit" type="button" value="+">-->
+    <a href="#"  alt="Click me!"><img src={% static "img/image_test.png" %} width="100" id="wmtc_submit"></a> <b id="wmtv_test_element"></b>
     <script>
     document.querySelector('#wmtc_submit').onclick = function (e) {
         wmtc_socket.send(JSON.stringify({'msg': 'add_one',}));
@@ -84,7 +83,7 @@
     </script>
     <!-- End Counter Test -->
 
-    <img src={% static "img/image_test.png" %} width="200"> 
+    
     {% block content %} 
     {% endblock %}
     </div>
@@ -92,7 +91,7 @@
     <br />
     <br />
     <br />    
-    <footer class="footer ">
+    <footer class="footer text-center">
       <div>
         <p><a href="../admin">{% now "Y" %}</a></p>
       </div>
