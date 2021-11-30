@@ -26,11 +26,11 @@
 
             {% if request.resolver_match.view_name == 'game_worldmap' %}
               <li class="active"> <a href="#">Worldmap </a></li>
-              <li>  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a></li>
+              <li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>
 
             {% elif request.resolver_match.view_name == 'game_scene' %}
               <li class="active"> <a href="#">Szene </a></li>
-              <li>  <a href="{% url 'game_stop_to_chars' %}">Zurück zur Charakterauswahl...</a></li>
+              <li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>
               <li>  <a href="{% url 'game_stop_to_worldmap' %}">Zurück zur Worldmap...</a></li>
 
             {% else %}
