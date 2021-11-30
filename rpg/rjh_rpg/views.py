@@ -78,8 +78,29 @@ def home(request):
         pass
     return render(request, 'home.html')
 
+
+def user_profile(request):
+    if request.user.is_authenticated:
+        return render(request, 'user_profile.html')
+    else:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
+
+
+# game views and logic:
+
 def chars(request):
     if request.user.is_authenticated:
+        current_user_obj = User.objects.get(id=request.user.id)
+        GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
+        try:
+            GameScenesRunning.objects.get(char=GameState_char_obj[0].char).delete()
+        except:
+            pass
+        try:
+            GameState.objects.get(char_user=current_user_obj).delete()
+        except:
+            pass
+
         char_list = UserChar.objects.filter(usernickname=request.user).order_by('name')
         
         current_user = User.objects.get(id=request.user.id)
@@ -98,32 +119,7 @@ def chars(request):
                 pass
         
         return render(request, 'chars.html', {'chars': char_list, 'form': form, 'active_char' : active_char})
-    else:
-        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
-def user_profile(request):
-    if request.user.is_authenticated:
-        return render(request, 'user_profile.html')
-    else:
-        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
-
-
-# game views and logic:
-
-def game_stop_to_chars(request):
-    if request.user.is_authenticated:
-        current_user_obj = User.objects.get(id=request.user.id)
-        GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
-        try:
-            GameScenesRunning.objects.get(char=GameState_char_obj[0].char).delete()
-        except:
-            pass
-        try:
-            GameState.objects.get(char_user=current_user_obj).delete()
-        except:
-            pass
-
-        return redirect('chars')
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
