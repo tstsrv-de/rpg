@@ -76,12 +76,15 @@ class Consumer(AsyncWebsocketConsumer):
             if  slot_state == 1:
                 slot_template = self.html_placeselector_used
                 slot_insert = slot_template.replace('**slot_id**',str(slot_id))
-                slot_insert = slot_template.replace('**slot_id_char_name**','willi wanka')
+                
+                char_name = await self.db_get_slot_char_name(slot_id)
+                slot_insert = slot_template.replace('**slot_id_char_name**',char_name)
                 
                 
             else:
                 slot_template = self.html_placeselector_free
                 slot_insert = slot_template.replace('**slot_id**',str(slot_id))
+                
             html = html + slot_insert 
         html = html + self.html_table_bottom
         
@@ -160,6 +163,16 @@ class Consumer(AsyncWebsocketConsumer):
             return 1
         else:
             return 0
+    
+    @database_sync_to_async     
+    def db_get_slot_char_name(self, slot_id):
+        self.scene_id = self.scope['url_route']['kwargs']['scene_id']
+        if LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id).exists():
+            char_name = LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id)
+            return str(char_name[0].user_char_id.name)
+        else:
+            return "Fehler"
+    
     
 
 
