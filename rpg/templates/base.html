@@ -79,7 +79,7 @@
         var wmtc_textarea = document.getElementById('wmtv_test_element');
         wmtc_textarea.scrollTop = wmtc_textarea.scrollHeight;
         wmtc_socket.send(JSON.stringify({'msg': 'alive',}));
-    }, 100);
+    }, 250);
 
     var wmtc_loc = window.location;
     var wmtc_ws_prot = 'ws://';

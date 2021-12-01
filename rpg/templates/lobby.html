@@ -14,7 +14,7 @@
 <!-- Start LobbyWebsocket Test -->
 <!--<a href="#"  alt="Click me!"><img src={% static "img/fom.jpeg" %} width="50" id="lobby_submit"></a> <b id="lobby_test_element"></b>-->
 <div id="lobby_websocket_container" align="center">
-    <form action="" method="" id="" class="form-inline">
+    <!--<form action="" method="" id="" class="form-inline">-->
         <div class="form-group">
             {% csrf_token %}
 
@@ -22,18 +22,21 @@
 
             </div>
         </div>
-    </form>
+    <!--</form>-->
 </div>
 
 
 {{ scene_id|json_script:"socket_scene_id" }}
+{{ char_id|json_script:"socket_char_id" }}
 <script id="socket_scene_id" type="application/json">"socket_scene_id"</script>
 <script>
 var wmtc_loc = window.location; var wmtc_ws_prot = 'ws://'; if (wmtc_loc.protocol == 'https:') { wmtc_ws_prot = 'wss://' }
 const socket_scene_id = JSON.parse(document.getElementById('socket_scene_id').textContent);
+const socket_char_id = JSON.parse(document.getElementById('socket_char_id').textContent);
+
 const lobby_socket = new WebSocket(wmtc_ws_prot + window.location.host + '/ws/lobby-'+ socket_scene_id+'/');
 
-setInterval(function(){ lobby_socket.send(JSON.stringify({'lobby_msg': 'heartbeat',}));}, 200);
+setInterval(function(){ lobby_socket.send(JSON.stringify({'lobby_msg': 'heartbeat',}));}, 2000);
 
 lobby_socket.onmessage = function (e) {
     const data = JSON.parse(e.data);
@@ -41,14 +44,23 @@ lobby_socket.onmessage = function (e) {
     document.querySelector('#lobby_test_element').innerHTML = (data.lobby_msg)
 }
 
-//document.querySelector('#lobby_slot_take').onclick = function (e) {
-//    const messageInputDom = document.querySelector('#input');
-//    const slot_id = messageInputDom.value;
-//
-//    lobby_socket.send(JSON.stringify({
-//        'lobby_msg': 'add_one',
-//    }));
-//};
+function take_the_slot(slot_id) {
+
+    lobby_socket.send(JSON.stringify({
+        'lobby_msg': 'take_the_slot',
+        'slot_id': slot_id,
+        'char_id': socket_char_id,
+    }));   
+}
+
+function free_the_slot(slot_id) {
+
+    lobby_socket.send(JSON.stringify({
+        'lobby_msg': 'free_the_slot',
+        'slot_id': slot_id,
+        'char_id': socket_char_id,
+    }));   
+}
 
 
 </script>
@@ -76,7 +88,7 @@ lobby_socket.onmessage = function (e) {
 
 
 <p><br /> <br /> <b>Debug-Daten:</b> <br />
-(Char-Id: {{ char_id}} / Scene-Id: {{ scene_id }})</p>
+(Char-Id: {{ char_id }} / Scene-Id: {{ scene_id }})</p>
 
 
 

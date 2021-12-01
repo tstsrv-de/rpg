@@ -1,3 +1,4 @@
+from django.db.models import deletion
 from django.db.models.aggregates import Count
 from django.shortcuts import render
 
@@ -11,6 +12,7 @@ from rjh_rpg.forms import UserCharForm
 from rjh_rpg.models import GameState
 from rjh_rpg.models import GameScenes
 from rjh_rpg.models import GameScenesRunning
+from rjh_rpg.models import LobbySlots
 
 def signup(request):
     if request.user.is_authenticated:
@@ -47,17 +49,27 @@ def login(request):
 
 def logout(request):
     if request.user.is_authenticated:
-
+        
         current_user_obj = User.objects.get(id=request.user.id)
         GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
+
+        user_char_list = UserChar.objects.filter(usernickname=current_user_obj)
+        for user_char in user_char_list:
+            try:
+                LobbySlots.objects.get(user_char_id=user_char).delete()
+            except:
+                pass
+
         try:
             GameScenesRunning.objects.get(char=GameState_char_obj[0].char).delete()
         except:
             pass
+        
         try:
             GameState.objects.get(char_user=current_user_obj).delete()
         except:
             pass
+        
 
         auth.logout(request)
 
@@ -133,6 +145,15 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
             # get gamestate obj based on the user object
             GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
 
+            # delete lobby slots
+            user_char_list = UserChar.objects.filter(usernickname=current_user_obj)
+            for user_char in user_char_list:
+                try:
+                    LobbySlots.objects.get(user_char_id=user_char).delete()
+                except:
+                    pass            
+            
+
             char_from_db = UserChar.objects.get(id=char_id)
   
             char_to_gamestate = GameState()
@@ -202,6 +223,15 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
         else: 
             # get user obj from logged in user
             current_user_obj = User.objects.get(id=request.user.id)
+
+            # delete lobby slots
+            user_char_list = UserChar.objects.filter(usernickname=current_user_obj)
+            for user_char in user_char_list:
+                try:
+                    LobbySlots.objects.get(user_char_id=user_char).delete()
+                except:
+                    pass            
+
 
             # get gamestate obj based on the user object
             GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)

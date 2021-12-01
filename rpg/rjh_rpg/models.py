@@ -34,7 +34,7 @@ class UserChar(models.Model):
         )
     
     
-    def __str__(self):
+    def __str__(self): # (TODO!) this maybe the cause of many problems... why do we need this? would it be better w/o? to fetch id's...
         return self.name
     
     

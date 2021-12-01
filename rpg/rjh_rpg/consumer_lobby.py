@@ -4,7 +4,9 @@ from rjh_rpg.models import HelperCounter
 from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from rjh_rpg.models import GameScenes, LobbySlots
-
+from django.contrib.auth.models import User
+from rjh_rpg.models import GameState
+from rjh_rpg.models import UserChar
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -15,19 +17,13 @@ class Consumer(AsyncWebsocketConsumer):
     
     """
     
-    html_placeselector_used = """
+    html_placeselector = """
     
     <td>
-    <input class="form-control" style="min-width: 0;width: auto;" type="text" id="slot_id_**slot_id" name="slot_id_**slot_id" value="**slot_id_char_name**" disabled><br />
-    <input class="btn btn-primary" type="submit" value="Platz freigeben">
+    <input class="form-control" style="min-width: 0;width: auto;" type="text" id="slot_id_**slot_id**" name="slot_id_**slot_id**" value="**slot_id_char_name**" disabled><br />
+    <input class="btn btn-primary" type="submit" value="**button_text**" onclick="**js_button_function**(**slot_id**);" **button_disabled**>
     </td>
     
-    """    
-    html_placeselector_free = """
-    <td>
-    <input class="form-control" style="min-width: 0;width: auto;" type="text" id="slot_id_**slot_id**" name="slot_id_**slot_id" value="" disabled><br />
-    <input class="btn btn-primary" type="submit" value="Platz nehmen">
-    </td>
     """    
     
     html_table_bottom = """
@@ -57,11 +53,12 @@ class Consumer(AsyncWebsocketConsumer):
         )
 
     async def msg_group_send_init(self, event):
-        await self.send(text_data=json.dumps({ # send data init
-            'lobby_msg': 'Counter init...',
-        }))
+        await self.channel_layer.group_send(
+            self.msg_group_name, { 'type': 'msg_group_send_content',  } 
+        )
         
     async def msg_group_send_content(self, event):
+        
         
         scene_name = await self.db_get_scene_name()
         html = self.html_table_top.replace("**scene_name**",scene_name) 
@@ -72,22 +69,35 @@ class Consumer(AsyncWebsocketConsumer):
                 html = html + "</tr><tr>"
             
             slot_state = await self.db_get_slot_state(slot_id)
+    
+            slot_template = self.html_placeselector
+            slot_template = slot_template.replace('**slot_id**',str(slot_id))            
+            
+            char_name = ""
+            slot_char_id = await self.db_get_slot_char_id(slot_id)
             
             if  slot_state == 1:
-                slot_template = self.html_placeselector_used
-                slot_insert = slot_template.replace('**slot_id**',str(slot_id))
-                
                 char_name = await self.db_get_slot_char_name(slot_id)
-                slot_insert = slot_template.replace('**slot_id_char_name**',char_name)
+                slot_template = slot_template.replace('**js_button_function**','free_the_slot')
+                slot_template = slot_template.replace('**button_text**','Platz freigeben')
+                # check if own entry or not, disable button if it is so
+                #if slot_char_id == self.char_id:
+                slot_template = slot_template.replace('**button_disabled**','')
+                #else:
+                #    slot_template = slot_template.replace('**button_disabled**','disabled')
+                    
                 
-                
+                #slot_template = slot_template.replace('**button_disabled**','')
             else:
-                slot_template = self.html_placeselector_free
-                slot_insert = slot_template.replace('**slot_id**',str(slot_id))
+                slot_template = slot_template.replace('**js_button_function**','take_the_slot')
+                slot_template = slot_template.replace('**button_text**','Platz belegen')
+                slot_template = slot_template.replace('**button_disabled**','')
                 
-            html = html + slot_insert 
+            slot_template = slot_template.replace('**slot_id_char_name**',char_name)
+                
+            html = html + slot_template 
         html = html + self.html_table_bottom
-        
+        html = html.replace('\n','')
         
         await self.send(text_data=json.dumps({ # send data update
             'lobby_msg': str(html),
@@ -105,35 +115,35 @@ class Consumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['lobby_msg']
 
-        lobby_counter = await sync_to_async(HelperCounter.objects.get_or_create)(name=self.msg_group_name)
-        lobby_current_count = str(lobby_counter[0].count)
-        
         if message == 'heartbeat':
+            # (TODO!) update timestamps, delete old entrys
+            pass
+
+        if message == 'free_the_slot':
+
+            #text_data_json = json.loads(text_data)
+            char_id = text_data_json['char_id']
+            slot_id = text_data_json['slot_id']
+            
+            set_new_char_to_slot = await self.db_free_slot(slot_id, char_id)
+            print(set_new_char_to_slot)
+            
             await self.channel_layer.group_send(
-            self.msg_group_name, 
-            {
-                'type': 'msg_group_send_content',
-            }
-        )
+                self.msg_group_name, { 'type': 'msg_group_send_content', 'char_id' : char_id,  } 
+            )            
+        
+        if message == 'take_the_slot':
+            #text_data_json = json.loads(text_data)
+            char_id = text_data_json['char_id']
+            slot_id = text_data_json['slot_id']
+            
+            set_new_char_to_slot = await self.db_set_char_to_slot(slot_id, char_id)
+            print(set_new_char_to_slot)
+                     
+            await self.channel_layer.group_send(
+                self.msg_group_name, { 'type': 'msg_group_send_content',  'char_id' : char_id, } 
+            )            
 
-            #num_players = await self.get_number_of_players_in_scene()
-            #await self.channel_layer.group_send(
-            #    self.msg_group_name,
-            #    {
-            #        'type': 'msg_group_do_send',
-            #        'lobby_msg': '<h1>'+lobby_current_count+'</h1> <h2>' + str(num_players) + '</h2>',
-            #    }
-            #)
-        if message == 'take_slot':
-            slot_id_to_take = text_data_json['lobby_msg']
-            await self.addone()
-
-    @database_sync_to_async 
-    def addone(self):
-        lobby_counter = HelperCounter.objects.get_or_create(name=self.msg_group_name)
-        lobby_current_count = str(lobby_counter[0].count)
-        lobby_counter[0].count = int(lobby_current_count) + 1
-        lobby_counter[0].save()
 
     async def msg_group_do_send(self, event):
         message = event['lobby_msg']
@@ -160,9 +170,9 @@ class Consumer(AsyncWebsocketConsumer):
     def db_get_slot_state(self, slot_id):
         self.scene_id = self.scope['url_route']['kwargs']['scene_id']
         if LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id).exists():
-            return 1
+            return 1 #used
         else:
-            return 0
+            return 0 #free
     
     @database_sync_to_async     
     def db_get_slot_char_name(self, slot_id):
@@ -171,9 +181,57 @@ class Consumer(AsyncWebsocketConsumer):
             char_name = LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id)
             return str(char_name[0].user_char_id.name)
         else:
-            return "Fehler"
-    
-    
+            return "Error"
 
+    @database_sync_to_async     
+    def db_get_slot_char_id(self, slot_id):
+        self.scene_id = self.scope['url_route']['kwargs']['scene_id']
+        if LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id).exists():
+            char_id = LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id)
+            return int(char_id[0].user_char_id.id)
+        else:
+            return "Error"
+
+    @database_sync_to_async     
+    def db_set_char_to_slot(self, slot_id, char_id):
+        self.scene_id = self.scope['url_route']['kwargs']['scene_id']
+        
+        new_lobby_slot = LobbySlots()
+        
+        new_lobby_slot.slot_id = slot_id
+
+        char_id_obj = UserChar.objects.filter(id=char_id)
+        new_lobby_slot.user_char_id = char_id_obj[0]
+        
+        scene_id_obj = GameScenes.objects.filter(id=self.scene_id) # place 0 = worldmap        
+        new_lobby_slot.game_scene_id = scene_id_obj[0]
+        
+        try: 
+            new_lobby_slot.save()
+            if LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id).exists():
+                char_name = LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id)
+                return "save: ok"
+            else:
+                return "save: error"
+        except:
+            return "save: double"
+
+    @database_sync_to_async     
+    def db_free_slot(self, slot_id, char_id):
+
+        self.scene_id = self.scope['url_route']['kwargs']['scene_id']
+        try:
+            LobbySlots.objects.get(game_scene_id=self.scene_id, slot_id=slot_id, user_char_id=char_id).delete()
+        except:
+            return "delete: alien char_id"
+
+        try: 
+            if LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id).exists():
+                char_name = LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id)
+                return "delete: still there"
+            else:
+                return "delete: ok"
+        except:
+            return "delele: wierd error"
 
     pass
