@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing_extensions import Required
 from django.db import models
 
 # Create your models here.
@@ -65,8 +66,18 @@ class GameScenes(models.Model): # eigenschaften der szenen   // GAME OVER Screen
     name = models.CharField(unique=True, max_length=300)
     start_step = models.ForeignKey(GamesScenesSteps, on_delete=models.CASCADE, unique=True)  # start step = lobby, end step = after game screen (fortschritt, belohnungen, ...)
     req_players = models.BigIntegerField(default=1) # anzahl notweniger spieler
+    
+    def __str__(self):
+        return self.name    
 
 class HelperCounter(models.Model):
     name = models.CharField(unique=True, max_length=300)
     count = models.BigIntegerField(default=0)
     last_update = models.DateTimeField(default=datetime.now) 
+    
+class LobbySlots(models.Model):
+    user_char_id = models.ForeignKey(UserChar, on_delete=models.CASCADE, unique=True)
+    game_scene_id = models.ForeignKey(GameScenes, on_delete=models.CASCADE) # also known as scene_id
+    slot_id = models.IntegerField(null=True, blank=True) # also known as scene_id    (TODO!) install as a required field w/o null and blank   
+    datetime_slot_taken = models.DateTimeField(default=datetime.now) 
+    datetime_locked_in = models.DateTimeField(null=True, blank=True)

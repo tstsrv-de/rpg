@@ -30,7 +30,7 @@
 
             {% elif request.resolver_match.view_name == 'lobby' %}
               <li class="active"> <a href="#">Szene </a></li>
-              <li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>
+              <!--<li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>-->
               <li>  <a href="{% url 'worldmap' %}">Zurück zur Worldmap...</a></li>
 
             {% else %}
@@ -51,7 +51,19 @@
   </div>
 </nav>
 
-    <div class="container text-center">
+  <div class="container text-center">
+    
+    
+    {% block content %} 
+    {% endblock %}
+    </div>
+
+    <br />
+    <br />
+    <br />    
+<footer class="footer text-center">
+  <div>
+    <p><a href="../admin">{% now "Y" %}</a></p>
     
     <!-- Start Counter Test -->
     <!--<input id="wmtc_submit" type="button" value="+">-->
@@ -82,19 +94,10 @@
     }
     </script>
     <!-- End Counter Test -->
+  
+  </div>
+</footer>
 
-    
-    {% block content %} 
-    {% endblock %}
-    </div>
 
-    <br />
-    <br />
-    <br />    
-    <footer class="footer text-center">
-      <div>
-        <p><a href="../admin">{% now "Y" %}</a></p>
-      </div>
-    </footer>
   </body>
 </html>
