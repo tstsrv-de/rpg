@@ -82,18 +82,33 @@ class Consumer(AsyncWebsocketConsumer):
         )
         
     async def msg_group_send_content(self, event):
-        
         try:
             countdown = event['countdown']
         except:
             countdown = ""
+
+        try:
+            char_id = event['char_id']
+        except:
+            char_id = ""
             
-        print("countdown from send: " + str(countdown))
+        print("char_id")
+        print(char_id)
+        
+
+        if char_id != "":
+            user_char_name = await self.db_get_char_id_char_name(char_id)    
+            print("hole char name")
+            print(user_char_name)
+            
+        else:
+            user_char_name = ""
+            print("hole char name nicht")
         
         scene_name = await self.db_get_scene_name()
         html = self.html_table_top.replace("**scene_name**",scene_name) 
         num_players = await self.db_get_num_players()
-        
+
         
         for slot_id in range(num_players):
             if slot_id != 0 and slot_id % 3 == 0: # linebreak in table every 4 slots
@@ -103,44 +118,48 @@ class Consumer(AsyncWebsocketConsumer):
     
             slot_template = self.html_placeselector
             slot_template = slot_template.replace('**slot_id**',str(slot_id))            
-            
+
             char_name = ""
-            slot_char_id = await self.db_get_slot_char_id(slot_id)
             
-            if  slot_state == 1:
+            if  slot_state == 1: # slot is used 
                 char_name = await self.db_get_slot_char_name(slot_id)
                 slot_template = slot_template.replace('**js_button_function**','free_the_slot')
                 slot_template = slot_template.replace('**button_text**','Platz freigeben')
-                
-                # (TODO!) Disable buttons
-                # check if own entry or not, disable button if it is so
-                #if slot_char_id == self.char_id:
-                slot_template = slot_template.replace('**button_disabled**','')
-                #else:
-                #    slot_template = slot_template.replace('**button_disabled**','disabled')
+
+                if str(user_char_name) == str(char_name): # disable button not here, maybe on countdown
+                    slot_template = slot_template.replace('**button_disabled**','**button_disabled_for_lvl2**')
+                else: # disable button here now - because first you need to free the taken slot
+                    slot_template = slot_template.replace('**button_disabled**','disabled')
                     
-                
-                #slot_template = slot_template.replace('**button_disabled**','')
-            else:
+            else: # slot is free
                 slot_template = slot_template.replace('**js_button_function**','take_the_slot')
                 slot_template = slot_template.replace('**button_text**','Platz belegen')
-                slot_template = slot_template.replace('**button_disabled**','')
-                
+                slot_template = slot_template.replace('**button_disabled**','**button_disabled_for_lvl2**')
+
+            
+            if char_name == False:
+                char_name = ""
+                    
             slot_template = slot_template.replace('**slot_id_char_name**',char_name)
                 
             html = html + slot_template 
+        
         html = html + self.html_table_bottom
         html = html.replace('\n','')
         
         ## add countdown if it is set:
         
-        print("countdown string sender:" + countdown)
         if countdown == "":
             countdown_html = '' # no countdown
         else: # countdown is running / game is ready
             countdown = int(countdown)
-            if countdown < 12: 
-                countdown = (countdown -12) * -1
+            if countdown < 11: 
+                countdown = (countdown -11) * -1
+                if countdown < 6:
+                    html = html.replace('**button_disabled_for_lvl2**','disabled')
+                else:
+                    html = html.replace('**button_disabled_for_lvl2**','')
+                    
                 countdown_html = """
                 <p style="color:green;">**seconds** Sekunden bis Spielstart!</p>
                 """
@@ -150,6 +169,9 @@ class Consumer(AsyncWebsocketConsumer):
                 <p style="color:red;">Go!</p>
                 """
         html = html + countdown_html 
+        
+
+
 
         await self.send(text_data=json.dumps({ # send data update
             'lobby_msg': str(html),
@@ -166,6 +188,7 @@ class Consumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['lobby_msg']
+        char_id = text_data_json['char_id']
 
         if message == 'heartbeat':
             # (TODO!) update timestamps, delete old entrys
@@ -180,8 +203,7 @@ class Consumer(AsyncWebsocketConsumer):
                 if slot_state == 1: # slot is used
                     players_in_lobby = players_in_lobby + 1
                     
-            if req_players == players_in_lobby:
-                print("lobby voll:" + str(players_in_lobby) + "/" + str(req_players))
+            if req_players == players_in_lobby: # lobby is full 
                 
                 # create/check countdown
                 # do all slots have the same timestamp in countdown?
@@ -205,11 +227,12 @@ class Consumer(AsyncWebsocketConsumer):
                     last_timestamp = int(last_timestamp.strftime('%s'))
                     timediff = now-last_timestamp
                     
-                    if timediff > 1: # wait a second for updates...
+                    if timediff > 0: # wait a second for updates...
                         await self.channel_layer.group_send(
                             self.msg_group_name, { 
                                                   'type': 'msg_group_send_content',  
                                                   'countdown' : str(timediff), 
+                                                  'char_id' : char_id,
                                                   } 
                         )            
                     
@@ -217,27 +240,23 @@ class Consumer(AsyncWebsocketConsumer):
                     set_datetimes = await self.db_set_datetime_locked_in()
                 
             else:
-                print("lobby nicht voll:" + str(players_in_lobby) + "/" + str(req_players))
-                
-                
+                pass # lobby is not full
             
             # if yes, then replace slot table with form to join a scene, broadcast to all
             
         if message == 'free_the_slot':
-            char_id = text_data_json['char_id']
             slot_id = text_data_json['slot_id']
             
-            set_new_char_to_slot = await self.db_free_slot(slot_id, char_id)
+            await self.db_free_slot(slot_id, char_id)
             
             await self.channel_layer.group_send(
                 self.msg_group_name, { 'type': 'msg_group_send_content', 'char_id' : char_id,  } 
             )            
         
         if message == 'take_the_slot':
-            char_id = text_data_json['char_id']
             slot_id = text_data_json['slot_id']
             
-            set_new_char_to_slot = await self.db_set_char_to_slot(slot_id, char_id)
+            await self.db_set_char_to_slot(slot_id, char_id)
                      
             await self.channel_layer.group_send(
                 self.msg_group_name, { 'type': 'msg_group_send_content',  'char_id' : char_id, } 
@@ -280,7 +299,16 @@ class Consumer(AsyncWebsocketConsumer):
             char_name = LobbySlots.objects.filter(game_scene_id=self.scene_id, slot_id=slot_id)
             return str(char_name[0].user_char_id.name)
         else:
-            return "Error"
+            return False
+
+    @database_sync_to_async     
+    def db_get_char_id_char_name(self, char_id):
+        self.scene_id = self.scope['url_route']['kwargs']['scene_id']
+        if LobbySlots.objects.filter(game_scene_id=self.scene_id, user_char_id=char_id).exists():
+            char_id_name = LobbySlots.objects.filter(game_scene_id=self.scene_id, user_char_id=char_id)
+            return char_id_name[0].user_char_id
+        else:
+            return ''
 
     @database_sync_to_async     
     def db_get_slot_char_id(self, slot_id):
