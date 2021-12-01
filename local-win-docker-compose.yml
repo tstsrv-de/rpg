@@ -14,7 +14,7 @@ services:
     build: 
       context: .
       dockerfile: local-win-Dockerfile
-    command: python rpg/manage.py runserver 0.0.0.0:8000
+    command: python rpg/manage.py runserver localhost:8000
     volumes:
       - .:/code
     depends_on:
