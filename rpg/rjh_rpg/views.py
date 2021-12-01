@@ -188,10 +188,20 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
             # wartende spieler in start steps
             
             complete_game_scenes_list = []
-
                         
+
             for scene in game_scenes_list: 
-                waiting_players = GameScenesRunning.objects.filter(scene_step=scene.start_step)
+
+                players_in_chat = GameScenesRunning.objects.filter(scene_step=scene.start_step)
+
+                players_in_chat_counter = 0
+                for player_in_chat in players_in_chat:
+                    players_in_chat_counter = players_in_chat_counter + 1
+
+
+
+                waiting_players = LobbySlots.objects.filter(game_scene_id=scene.id)
+                #GameScenesRunning.objects.filter(scene_step=scene.start_step)
 
                 player_counter = 0
                 for waiting_player in waiting_players:
@@ -202,6 +212,7 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
                     'name': scene.name,
                     'req_players': scene.req_players,
                     'waiting_players': player_counter,
+                    'players_in_chat_counter' : players_in_chat_counter,
                     'id': scene.id,
                     }
                 )
@@ -252,8 +263,16 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
             game_scenes_list = GameScenes.objects.order_by('name') # place 0 = worldmap
             
             complete_game_scenes_list = []
+
             for scene in game_scenes_list: 
-                waiting_players = GameScenesRunning.objects.filter(scene_step=scene.start_step)
+
+                players_in_chat = GameScenesRunning.objects.filter(scene_step=scene.start_step)
+
+                players_in_chat_counter = 0
+                for player_in_chat in players_in_chat:
+                    players_in_chat_counter = players_in_chat_counter + 1
+
+                waiting_players = LobbySlots.objects.filter(game_scene_id=scene.id)
 
                 player_counter = 0
                 for waiting_player in waiting_players:
@@ -263,10 +282,11 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
                     'name': scene.name,
                     'req_players': scene.req_players,
                     'waiting_players': player_counter,
+                    'players_in_chat_counter' : players_in_chat_counter,
                     'id': scene.id,
                     }
                 )
-
+                
             char_name = str(GameState_char_obj[0].char)
             char_user = str(GameState_char_obj[0].char_user)
 
@@ -300,6 +320,7 @@ def scene(request):
     if not request.method == 'POST':
         return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/chars/'})
 
+    return render(request,'msg_redirect.html',{'msg':'(TODO!) SZENE ERREICHT! Gamelogik...','target':'/chars/'})
     # add logic for games...
     pass
 
@@ -310,7 +331,11 @@ def lobby_jumper(request):
     
     if request.method == 'POST':
         scene_id = request.POST.get('scene_id')
-        return redirect('/lobby-'+scene_id+'/')
+
+        if scene_id is None: 
+            return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/worldmap/'})    
+        else:
+            return redirect('/lobby-'+scene_id+'/')
     else:
         return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/worldmap/'})    
 

@@ -19,9 +19,9 @@
             <div class="form-group">
                     {% csrf_token %}
 
-                    <select id="scene_id" name="scene_id" class="form-control">
+                    <select  class="custom-select form-control" size="5" id="scene_id" name="scene_id" >
                     {% for scene in game_scenes_list %} 
-                        <option value={{scene.id}}>{{scene.name}} ({{ scene.waiting_players }}/{{ scene.req_players }})</option>
+                        <option value={{scene.id}}>{{scene.name}} (Spieler im Chat: {{ scene.players_in_chat_counter }}, davon spielbereit: {{ scene.waiting_players }}/{{ scene.req_players }})</option>
                     {% endfor %}
                     </select> 
                     <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">
@@ -40,27 +40,14 @@
 
 
 
-    <div class="container">
-        <div class="row d-flex justify-content-center">
-            <div class="col-6">
-                <!--<form>-->
-                    <div class="form-group">
-                        <!--<label for="exampleFormControlTextarea1" class="h4 pt-5">Chatroom</label>-->
-                        <textarea class="form-control" id="chat-text" rows="10"></textarea><br>
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control" id="input" type="text" onkeypress="return send_msg(event)" ></br>
-                    </div>
-                    <input class="btn btn-secondary btn-lg btn-block" id="submit" type="button" value="Send">
-                <!--</form>-->
-            </div>
-        </div>
-    </div>
 
 
-    <p><br /> <br /> <b>Debug-Daten:</b> <br /> Aufbereitet aus POST Data, teils aus DB: char_id: {{ char_id}}  //     char_name: {{ char_name }} //    char_user: {{ char_user }}  <br /> 
-    Andere Chars online in Worldmap bei laden der Seite: {% if active_char_list %} {% for char in active_char_list %} {{char.char }}, {% endfor %}  {% endif %}</p>
-    
+<textarea class="form-control" id="chat-text" rows="10"></textarea>
+<div class="form-inline">
+    <input class="form-control mb-2" id="input" type="text" onkeypress="return send_msg(event)" > 
+    <input class="btn btn-primary" id="submit" type="button" value="Send">
+</div>
+
 
     {{ char_name|json_script:"user_username" }}
     <!--{{ room_name|json_script:"room-name" }}-->
