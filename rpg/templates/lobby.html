@@ -36,7 +36,7 @@ const socket_char_id = JSON.parse(document.getElementById('socket_char_id').text
 
 const lobby_socket = new WebSocket(wmtc_ws_prot + window.location.host + '/ws/lobby-'+ socket_scene_id+'/');
 
-setInterval(function(){ lobby_socket.send(JSON.stringify({'lobby_msg': 'heartbeat',}));}, 2000);
+setInterval(function(){ lobby_socket.send(JSON.stringify({'lobby_msg': 'heartbeat',}));}, 500);
 
 lobby_socket.onmessage = function (e) {
     const data = JSON.parse(e.data);
