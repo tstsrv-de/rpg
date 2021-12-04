@@ -36,6 +36,8 @@ urlpatterns = [
 
     path('lobby_jumper/', views.lobby_jumper, name='lobby_jumper'),
     path('lobby-<int:scene_id>/', views.lobby, name='lobby'),
+    
+    path('game-<int:game_id>/', views.game, name='game'),
 
     # path('scene/', views.scene, name='scene'), # main game
 

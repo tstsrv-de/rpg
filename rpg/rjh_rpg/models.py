@@ -78,3 +78,12 @@ class HelperCounter(models.Model):
     count = models.BigIntegerField(default=0)
     last_update = models.DateTimeField(default=datetime.now) 
     
+class Games(models.Model):
+    created = models.DateTimeField(default=datetime.now) 
+    game_scene_id = models.ForeignKey(GameScenes, on_delete=models.CASCADE)
+    game_finished = models.BooleanField(default=False)
+    
+class UserCharInGames(models.Model):
+    game_id = models.ForeignKey(Games, on_delete=models.CASCADE)
+    user_char_id = models.ForeignKey(UserChar, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

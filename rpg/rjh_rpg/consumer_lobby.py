@@ -170,6 +170,12 @@ class Consumer(AsyncWebsocketConsumer):
                 countdown_html = """
                 <p style="color:red;">Die Szene startet!</p>
                 """
+            if countdown < -5:
+                countdown_html = """
+                <p style="color:red;">Restart!</p>
+                """
+                
+                
 
         html = html + countdown_html 
 

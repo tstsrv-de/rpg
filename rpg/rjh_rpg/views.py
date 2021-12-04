@@ -12,6 +12,8 @@ from rjh_rpg.forms import UserCharForm
 from rjh_rpg.models import GameState
 from rjh_rpg.models import GameScenes
 from rjh_rpg.models import LobbySlots
+from rjh_rpg.models import Games
+from rjh_rpg.models import UserCharInGames
 
 def signup(request):
     if request.user.is_authenticated:
@@ -301,3 +303,28 @@ def lobby(request, scene_id):
             'char_name': char_name,
         }
     )
+
+def game(request, game_id):
+    if not request.user.is_authenticated:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
+
+    if not Games.objects.filter(id=game_id).exists():
+        return render(request,'msg_redirect.html',{'msg':'Das Spiel existiert nicht!','target':'/worldmap/'})
+    
+    game_obj = Games.objects.get(id=game_id)
+    
+    if game_obj.game_finished == True:
+        return render(request,'msg_redirect.html',{'msg':'Das Spiel ist bereits beendet!','target':'/worldmap/'})
+    
+    user_is_player_of_this_game = False
+    user_chars_in_game = UserCharInGames.objects.filter(game_id=game_id)
+    for user_char in user_chars_in_game:
+        print("CHECK: user_char.user_id: " + str(user_char.user_id) + " // " + "request.user.id: " + str(request.user.id))
+        if user_char.user_id == request.user.id:
+            user_is_player_of_this_game = True
+
+
+    return render(request,'msg_redirect.html',{'msg':'Spielchecks laufen...','target':'/worldmap/'})
+    
+    
+ 
