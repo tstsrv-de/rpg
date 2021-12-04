@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from rjh_rpg.models import GameState
 from rjh_rpg.models import UserChar
 from django.db.models.functions import Now
-from datetime import datetime
+from datetime import datetime, time
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -171,8 +171,6 @@ class Consumer(AsyncWebsocketConsumer):
                 <p style="color:red;">Die Szene startet!</p>
                 """
 
-            print(countdown)
-
         html = html + countdown_html 
 
         await self.send(text_data=json.dumps({ # send data update
@@ -228,6 +226,8 @@ class Consumer(AsyncWebsocketConsumer):
                 
                 for timestamp in locked_in_datetimes:
                     if last_timestamp != timestamp:
+                        timestamps_are_the_same = False
+                    if (last_timestamp is None) and (timestamp is None):
                         timestamps_are_the_same = False
                 
                 if timestamps_are_the_same:  # check if countdown is over
