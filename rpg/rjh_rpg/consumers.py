@@ -2,7 +2,8 @@
 # Chatroom-Getting-Started/blob/master/chat/consumers.py
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-
+from rjh_rpg.models import GameState
+from channels.db import database_sync_to_async
 
 class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -24,17 +25,20 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         )
 
     async def welcome_message(self, event):
-        # (TODO!) username mitgeben damit 'undefined' im chat verschwindet
+        chars_in_chat = await self.db_get_list_chars_in_chat()
+
         await self.send(text_data=json.dumps({
-            'username': 'System',
-            'message': 'Jemand hat den Raum betreten...',
+            'username': 'Aktuell im Chat',
+            'message': chars_in_chat,
         }))
+
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
+
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -58,5 +62,15 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
             'message': message,
             'username': username,
         }))
+
+    @database_sync_to_async     
+    def db_get_list_chars_in_chat(self):
+        list_of_chars_in_chat = GameState.objects.filter(place=self.room_name).order_by('char')
+        char_names = []
+        
+        for row in list_of_chars_in_chat:
+            char_names.append(str(row.char))
+            
+        return char_names
 
     pass
