@@ -32,23 +32,10 @@ class UserChar(models.Model):
             choices=CharSex.choices,
             default=CharSex.NONE,
         )
-    
-    
+
     def __str__(self): # (TODO!) this maybe the cause of many problems... why do we need this? would it be better w/o? to fetch id's...
         return self.name
-    
-    
-class GameState(models.Model):   # wo ist der char? in der weltmap? oder in einer szene?
-    
-    char = models.ForeignKey(UserChar, on_delete=models.CASCADE, unique=True)
-    place = models.IntegerField(default=0) # 0 = weltmap, n > 0 = laufende_game_id
-    charLogin = models.DateTimeField(default=datetime.now) 
-    char_user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True, on_delete=models.CASCADE, null=True, blank=True)
-    
-    def __str__(self):
-        return str(self.char)
-    
-    
+
 class GamesScenesSteps(models.Model): # schritte der szenen
     name = models.CharField(max_length=100)
     #game_scene = 
@@ -56,12 +43,7 @@ class GamesScenesSteps(models.Model): # schritte der szenen
     #next_step = 
     #possible_actions = ('kampf','schritt vorwärts', )
     #background_image = 
-    
-class GameScenesRunning(models.Model): # das laufende spiel
-    char = models.ForeignKey(UserChar, on_delete=models.CASCADE, unique=True)
-    scene_step = models.ForeignKey(GamesScenesSteps, on_delete=models.CASCADE)
-    game_id = models.BigIntegerField() # instanz id, 0= wartende spieler >=1 spiel läuft
-        
+
 class GameScenes(models.Model): # eigenschaften der szenen   // GAME OVER Screen? als step? 
     name = models.CharField(unique=True, max_length=300)
     start_step = models.ForeignKey(GamesScenesSteps, on_delete=models.CASCADE, unique=True)  # start step = lobby, end step = after game screen (fortschritt, belohnungen, ...)
@@ -70,14 +52,29 @@ class GameScenes(models.Model): # eigenschaften der szenen   // GAME OVER Screen
     def __str__(self):
         return self.name    
 
-class HelperCounter(models.Model):
-    name = models.CharField(unique=True, max_length=300)
-    count = models.BigIntegerField(default=0)
-    last_update = models.DateTimeField(default=datetime.now) 
-    
+
 class LobbySlots(models.Model):
     user_char_id = models.ForeignKey(UserChar, on_delete=models.CASCADE, unique=True)
     game_scene_id = models.ForeignKey(GameScenes, on_delete=models.CASCADE) # also known as scene_id
     slot_id = models.IntegerField(null=True, blank=True) # also known as scene_id    (TODO!) install as a required field w/o null and blank   
     datetime_slot_taken = models.DateTimeField(default=datetime.now) 
-    datetime_locked_in = models.DateTimeField(null=True, blank=True)
+    datetime_locked_in = models.DateTimeField(null=True, blank=True)    
+
+
+ # better name would have been 'UserCharState'
+ # since there is no information about the games - only of the user and its char
+class GameState(models.Model): 
+    char = models.ForeignKey(UserChar, on_delete=models.CASCADE, unique=True)
+    place = models.IntegerField(default=0) # 0 = weltmap, n > 0 = laufende_game_id
+    charLogin = models.DateTimeField(default=datetime.now) 
+    char_user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True, on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.char)
+    
+
+class HelperCounter(models.Model):
+    name = models.CharField(unique=True, max_length=300)
+    count = models.BigIntegerField(default=0)
+    last_update = models.DateTimeField(default=datetime.now) 
+    

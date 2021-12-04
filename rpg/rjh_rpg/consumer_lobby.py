@@ -89,18 +89,11 @@ class Consumer(AsyncWebsocketConsumer):
         except:
             char_id = ""
             
-        print("char_id")
-        print(char_id)
-        
-
         if char_id != "":
             user_char_name = await self.db_get_char_id_char_name(char_id)    
-            print("hole char name")
-            print(user_char_name)
             
         else:
             user_char_name = ""
-            print("hole char name nicht")
         
         scene_name = await self.db_get_scene_name()
         html = self.html_table_top.replace("**scene_name**",scene_name) 
@@ -110,11 +103,11 @@ class Consumer(AsyncWebsocketConsumer):
         for slot_id in range(num_players):
             if slot_id != 0 and slot_id % 3 == 0: # linebreak in table every 4 slots
                 html = html + "</tr><tr>"
-            
+
             slot_state = await self.db_get_slot_state(slot_id)
-    
+
             slot_template = self.html_placeselector
-            slot_template = slot_template.replace('**slot_id**',str(slot_id))            
+            slot_template = slot_template.replace('**slot_id**',str(slot_id))
 
             char_name = ""
             
@@ -123,57 +116,69 @@ class Consumer(AsyncWebsocketConsumer):
                 slot_template = slot_template.replace('**js_button_function**','free_the_slot')
                 slot_template = slot_template.replace('**button_text**','Platz freigeben')
 
-                if str(user_char_name) == str(char_name): # disable button not here, maybe on countdown
-                    slot_template = slot_template.replace('**button_disabled**','**button_disabled_for_lvl2**')
-                else: # disable button here now - because first you need to free the taken slot
-                    slot_template = slot_template.replace('**button_disabled**','disabled')
+                # (TODO!) every user gets the same html string, so this logic does not work in this way. 
+                # maybe with JS an local check if the char_id fits the button
+                # if str(user_char_name) == str(char_name): # disable button not here, maybe on countdown
+                #    slot_template = slot_template.replace('**button_disabled**','**button_disabled_for_lvl2**')
+                # else: # disable button here now - because first you need to free the taken slot
+                #    slot_template = slot_template.replace('**button_disabled**','disabled')
+                slot_template = slot_template.replace('**button_disabled**','**button_disabled_for_lvl2**')
                     
             else: # slot is free
                 slot_template = slot_template.replace('**js_button_function**','take_the_slot')
                 slot_template = slot_template.replace('**button_text**','Platz belegen')
                 slot_template = slot_template.replace('**button_disabled**','**button_disabled_for_lvl2**')
 
-            
+
             if char_name == False:
                 char_name = ""
-                    
+
             slot_template = slot_template.replace('**slot_id_char_name**',char_name)
-                
+
             html = html + slot_template 
-        
+
         html = html + self.html_table_bottom
         html = html.replace('\n','')
-        
-        ## add countdown if it is set:
-        
-        if countdown == "":
-            countdown_html = '' # no countdown
-        else: # countdown is running / game is ready
-            countdown = int(countdown)
-            if countdown < 11: 
-                countdown = (countdown -11) * -1
-                if countdown < 6:
-                    html = html.replace('**button_disabled_for_lvl2**','disabled')
-                else:
-                    html = html.replace('**button_disabled_for_lvl2**','')
-                    
-                countdown_html = """
-                <p style="color:green;">**seconds** Sekunden bis Spielstart!</p>
-                """
-                countdown_html = countdown_html.replace('**seconds**', str(countdown))
+
+        # Coundown logic part:
+
+        if countdown == "":  # no countdown, clear html part in template
+            countdown_html = ''
+        else:  # countdown is running
+            countdown = (int(countdown) -11) * -1
+
+            countdown_html = """
+            <p style="color:**countdown_color**;">**seconds** Sekunden bis Spielstart!</p>
+            """
+
+            # disable button to free slot when countdown hits 5 seconds
+            if countdown < 7:
+                countdown_html = countdown_html.replace('**countdown_color**', 'red')
+            elif countdown < 9:
+                countdown_html = countdown_html.replace('**countdown_color**', 'orange')
+            if countdown < 11:
+                countdown_html = countdown_html.replace('**countdown_color**', 'green')
+            
+            if countdown < 5:
+                html = html.replace('**button_disabled_for_lvl2**','disabled')
             else:
+                html = html.replace('**button_disabled_for_lvl2**','')
+                
+            countdown_html = countdown_html.replace('**seconds**', str(countdown))
+
+            if countdown < 1:
                 countdown_html = """
-                <p style="color:red;">Go!</p>
+                <p style="color:red;">Die Szene startet!</p>
                 """
+
+            print(countdown)
+
         html = html + countdown_html 
-        
-
-
 
         await self.send(text_data=json.dumps({ # send data update
             'lobby_msg': str(html),
         }))
-                
+
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
@@ -189,7 +194,6 @@ class Consumer(AsyncWebsocketConsumer):
 
         if message == 'heartbeat':
             # (TODO!) update timestamps, delete old entrys
-            
             # check timestamps, delete old and zombie  entrys
            
             # check if all slots are taken
@@ -213,9 +217,12 @@ class Consumer(AsyncWebsocketConsumer):
                 except:
                     pass
                 
-                # singleplayer check and repair
-                if last_timestamp is None and req_players == 1: 
-                    last_timestamp = datetime.now()
+                # singleplayer check and repair (and catch excepted exception)
+                try:
+                    if last_timestamp is None and req_players == 1: 
+                        last_timestamp = datetime.now()
+                except:
+                    pass
                     
                 timestamps_are_the_same = True
                 
@@ -398,9 +405,5 @@ class Consumer(AsyncWebsocketConsumer):
             return True
         except:
             return False
-        
-
-
-    
 
     pass
