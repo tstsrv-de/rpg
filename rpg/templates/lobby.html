@@ -65,12 +65,20 @@ function free_the_slot(slot_id) {
 
 </script>
 <!-- End LobbyWebsocket Test -->
-
-<textarea class="form-control" id="chat-text" rows="10"></textarea>
+<table class="table table-bordered table-striped">
+<tr>
+<td class="text-left">
+<b>Aktuell im Chat:</b><p id="chat-userlist"></p>
+</td>
+<td>
+<textarea class="form-control" id="chat-text" rows="10" disabled></textarea>
 <div class="form-inline">
-    <input class="form-control" id="input" type="text" onkeypress="return send_msg(event)" > 
-    <input class="btn btn-primary" id="submit" type="button" value="Send">
+<input class="form-control" id="input" type="text" onkeypress="return send_msg(event)" > 
+<input class="btn btn-primary" id="submit" type="button" value="Send">
 </div>
+</td>
+</tr>
+</table>
 
 
 
@@ -106,7 +114,7 @@ function send_msg(e) {
 
 var textarea = document.getElementById('chat-text');
 setInterval(function(){
-    //textarea.value += Math.random()+'\n';
+    chatSocket.send(JSON.stringify({'ul': 'heatbeat', }));
     textarea.scrollTop = textarea.scrollHeight;
 }, 500);
 
@@ -130,7 +138,12 @@ setInterval(function(){
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
             console.log(data)
-            document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
+            if (data.ul) {
+                document.querySelector('#chat-userlist').innerHTML = (data.ul)
+            } else {
+                document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
+            };
+
         }
     </script>
 

@@ -39,18 +39,22 @@
 
 
 
-
-
-
-<textarea class="form-control" id="chat-text" rows="10"></textarea>
+<table class="table table-bordered table-striped">
+<tr>
+<td class="text-left">
+<b>Aktuell im Chat:</b><p id="chat-userlist"></p>
+</td>
+<td>
+<textarea class="form-control" id="chat-text" rows="10" disabled></textarea>
 <div class="form-inline">
-    <input class="form-control mb-2" id="input" type="text" onkeypress="return send_msg(event)" > 
-    <input class="btn btn-primary" id="submit" type="button" value="Send">
+<input class="form-control mb-2" id="input" type="text" onkeypress="return send_msg(event)" > 
+<input class="btn btn-primary" id="submit" type="button" value="Send">
 </div>
-
+</td>
+</tr>
+</table>
 
     {{ char_name|json_script:"user_username" }}
-    <!--{{ room_name|json_script:"room-name" }}-->
     <script id="room-name" type="application/json">"0"</script>
 
     <script>
@@ -58,9 +62,9 @@
         
         document.querySelector('#submit').onclick = function (e) {
             const messageInputDom = document.querySelector('#input');
-            const message = messageInputDom.value;
+            const message_snd = messageInputDom.value;
             chatSocket.send(JSON.stringify({
-                'message': message,
+                'message': message_snd,
                 'username': user_username,
             }));
             messageInputDom.value = '';
@@ -70,9 +74,9 @@ function send_msg(e) {
     
     if (e.keyCode == 13) {
             const messageInputDom = document.querySelector('#input');
-            const message = messageInputDom.value;
+            const message_snd = messageInputDom.value;
             chatSocket.send(JSON.stringify({
-                'message': message,
+                'message': message_snd,
                 'username': user_username,
             }));
             messageInputDom.value = '';
@@ -81,7 +85,7 @@ function send_msg(e) {
 
 var textarea = document.getElementById('chat-text');
 setInterval(function(){
-    //textarea.value += Math.random()+'\n';
+    chatSocket.send(JSON.stringify({'ul': 'heatbeat', }));
     textarea.scrollTop = textarea.scrollHeight;
 }, 500);
 
@@ -104,8 +108,12 @@ setInterval(function(){
 
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-            console.log(data)
-            document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
+            console.log(data);
+            if (data.ul) {
+                document.querySelector('#chat-userlist').innerHTML = (data.ul)
+            } else {
+                document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
+            };
         }
     </script>
 
