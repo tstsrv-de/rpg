@@ -1,8 +1,5 @@
-from datetime import time
 import json
-from json.encoder import JSONEncoder
 from channels.generic.websocket import AsyncWebsocketConsumer
-from rjh_rpg.models import HelperCounter
 from asgiref.sync import sync_to_async
 from channels.db import database_sync_to_async
 from rjh_rpg.models import GameScenes, LobbySlots
@@ -209,7 +206,12 @@ class Consumer(AsyncWebsocketConsumer):
                 # do all slots have the same timestamp in countdown?
                 
                 locked_in_datetimes = await self.db_get_list_datetime_locked_in(self.scene_id)
-                last_timestamp = locked_in_datetimes[0]
+                
+                # catch excepted error on list access (if no results where found)
+                try:
+                    last_timestamp = locked_in_datetimes[0]
+                except:
+                    pass
                 
                 # singleplayer check and repair
                 if last_timestamp is None and req_players == 1: 

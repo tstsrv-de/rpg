@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import environ
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -17,7 +19,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
-import environ
 env = environ.Env()
 environ.Env.read_env()
 
@@ -44,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rjh_rpg',
-    'channels', # from YT Chat Howto    
+    'channels',  # from YT Chat Howto
 ]
 
 MIDDLEWARE = [
@@ -98,16 +99,21 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.\
+                UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -140,7 +146,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-## start from YT chat howto
+# start from YT chat howto
 ASGI_APPLICATION = "rpg.routing.application"
 
 CHANNEL_LAYERS = {
@@ -149,16 +155,16 @@ CHANNEL_LAYERS = {
     }
 }
 
-#CHANNEL_LAYERS = {
+# CHANNEL_LAYERS = {
 #    'default': {
 #        'BACKEND': 'channels_redis.core.RedisChannelLayer',
 #        'CONFIG': {
 #            "hosts": [os.environ['REDIS_URL']],
 #        },
 #    },
-#}
+# }
 
-#CACHES = {
+# CACHES = {
 #    "default": {
 #        "BACKEND": "django_redis.cache.RedisCache",
 #        "LOCATION": os.environ['REDIS_URL'],
@@ -166,5 +172,5 @@ CHANNEL_LAYERS = {
 #            "CLIENT_CLASS": "django_redis.client.DefaultClient"
 #        }
 #    }
-#}
-## end from yt howto chat
+# }
+# end from yt howto chat

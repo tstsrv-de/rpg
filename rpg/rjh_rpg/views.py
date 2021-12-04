@@ -16,7 +16,10 @@ from rjh_rpg.models import LobbySlots
 
 def signup(request):
     if request.user.is_authenticated:
-        return render(request,'msg_redirect.html',{'msg':'Du bist bereits angemeldet!','target':'/user_profile/'})
+        return render(request, 'msg_redirect.html', {
+            'msg':'Du bist bereits angemeldet!', 
+            'target':'/user_profile/'
+            })
     else:
         if request.method == "POST":
             if request.POST['password1'] == request.POST['password2']:
@@ -345,31 +348,30 @@ def lobby(request, scene_id):
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
 
     if not GameScenes.objects.filter(id=scene_id).exists():
-        return render(request,'msg_redirect.html',{'msg':'Du musst eine existierende Szene auswählen!','target':'/worldmap/'})    
+        return render(request,'msg_redirect.html',{'msg':'Du musst eine existierende Szene auswählen!','target':'/worldmap/'})
     
     current_user_obj = User.objects.get(id=request.user.id)
     GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
     char_id = str(GameState_char_obj[0].char.id)
 
     # set char to the scene
-    GameState.objects.filter(char=char_id).update(place=scene_id)  
+    GameState.objects.filter(char=char_id).update(place=scene_id)
 
-    gs_obj = GameScenes.objects.filter(id=scene_id)            
+    gs_obj = GameScenes.objects.filter(id=scene_id)
     usr_obj = UserChar.objects.get(id=char_id)
-    
-    new_gsr = GameScenesRunning(char=usr_obj, scene_step=gs_obj[0].start_step, game_id=0 )
+
+    new_gsr = GameScenesRunning(
+        char=usr_obj,
+        scene_step=gs_obj[0].start_step,
+        game_id=0
+        )
     new_gsr.save()
-    
+
     char_name = str(usr_obj)
 
-
-    return render(request,
-        'lobby.html',
-        {
+    return render(request, 'lobby.html', {
             'char_id': char_id,
-            'scene_id' : scene_id,
-            'char_name' : char_name, 
+            'scene_id': scene_id,
+            'char_name': char_name,
         }
     )
-
-

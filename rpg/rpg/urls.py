@@ -14,31 +14,32 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
 from rjh_rpg import views
 
 urlpatterns = [
     path('', views.home, name='index'),
     path('home/', views.home, name='home'),
-    #path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('login/', views.login, name='login'),
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout, name='logout'),
     path('chars/', views.chars, name='chars'),
     path('user_profile/', views.user_profile, name='user_profile'),
-    
+
     # Game/World URLs
-    ## checks for 1) login of user and 2) single use of char - if ok: set gamestate and show worldmap
+    # checks for 1) login of user and 2) single use of char - if ok:
+    # set gamestate and show worldmap
     path('worldmap/', views.worldmap, name='worldmap'),
-    
+
     path('lobby_jumper/', views.lobby_jumper, name='lobby_jumper'),
     path('lobby-<int:scene_id>/', views.lobby, name='lobby'),
-    
-    #path('scene/', views.scene, name='scene'), # main game
 
-    
+    # path('scene/', views.scene, name='scene'), # main game
+
     # from YT chat howto:
-    #path('<str:room_name>/', views.room, name='room'), # hängt sonst auf /chat/ rum
+    # path('<str:room_name>/', views.room, name='room'),
+    # hängt sonst auf /chat/ rum
 ]

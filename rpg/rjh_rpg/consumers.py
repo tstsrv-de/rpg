@@ -1,4 +1,5 @@
-# from https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started/blob/master/chat/consumers.py
+# from https://github.com/veryacademy/YT-Django-Project-\
+# Chatroom-Getting-Started/blob/master/chat/consumers.py
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
@@ -12,11 +13,11 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        
+
         await self.accept()
-                
+
         await self.channel_layer.group_send(
-            self.room_group_name, 
+            self.room_group_name,
             {
                 'type': 'welcome_message',
             }
@@ -29,8 +30,6 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
             'message': 'Jemand hat den Raum betreten...',
         }))
 
-        
-
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -41,7 +40,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         username = text_data_json['username']
-        
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
