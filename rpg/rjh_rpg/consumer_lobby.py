@@ -184,7 +184,7 @@ class Consumer(AsyncWebsocketConsumer):
 
 
             if countdown < -5:
-                countdown_html = """<p style="color:red;">Die übrigen Spieler gehen bitte zurück in die Worldmap oder laden diese Seite neu. Danke!</p>"""
+                countdown_html = """<p style="color:red;">Die übrigen Spieler gehen bitte zurück in die Worldmap <br />oder laden diese Seite für einen Neustart der Lobby erneut. <br />Danke!</p>"""
                 try:
                     await self.db_free_all_slots_in_current_lobby()
                 except:
