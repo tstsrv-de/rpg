@@ -182,10 +182,13 @@ class Consumer(AsyncWebsocketConsumer):
                 """
                 countdown_html = countdown_html.replace("**game_id**", str(game_id))
 
+
             if countdown < -5:
-                countdown_html = """
-                <p style="color:red;">Restart!</p>
-                """
+                countdown_html = """<p style="color:red;">Die übrigen Spieler gehen bitte zurück in die Worldmap oder laden diese Seite neu. Danke!</p>"""
+                try:
+                    await self.db_free_all_slots_in_current_lobby()
+                except:
+                    pass                
                 
                 
 
@@ -372,7 +375,6 @@ class Consumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async     
     def db_free_slot(self, slot_id, char_id):
-
         self.scene_id = self.scope['url_route']['kwargs']['scene_id']
         try:
             LobbySlots.objects.get(game_scene_id=self.scene_id, slot_id=slot_id, user_char_id=char_id).delete()
@@ -454,5 +456,17 @@ class Consumer(AsyncWebsocketConsumer):
             user_char_list.append(row.user_char_id)
             
         return user_char_list
+
+    @database_sync_to_async     
+    def db_free_all_slots_in_current_lobby(self):
+        self.scene_id = self.scope['url_route']['kwargs']['scene_id']
+        try:
+            delelte_slots_in_lobby = LobbySlots.objects.filter(game_scene_id=self.scene_id).delete()
+            print("delelte_slots_in_lobby:" + str(delelte_slots_in_lobby))
+        except:
+            pass
+        
+        return delelte_slots_in_lobby
+
     
     pass
