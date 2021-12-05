@@ -8,6 +8,7 @@ from rjh_rpg.models import GameState
 from rjh_rpg.models import UserChar
 from django.db.models.functions import Now
 from datetime import datetime, time
+from rjh_rpg.models import Games
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -167,9 +168,19 @@ class Consumer(AsyncWebsocketConsumer):
             countdown_html = countdown_html.replace('**seconds**', str(countdown))
 
             if countdown < 1:
+                user_char_list = await self.db_get_user_chars_in_lobby()
+                self.scene_id = self.scope['url_route']['kwargs']['scene_id']
+                locked_in_datetime = await self.db_get_list_datetime_locked_in(self.scene_id)
+                # locked_in_datetime = locked_in_datetime[0].strftime()
+                
+                game_id = await self.db_start_game(self.scene_id, user_char_list, locked_in_datetime[0])
+                
                 countdown_html = """
-                <p style="color:red;">Die Szene startet!</p>
+                <h4 style="color:red;">Das Spiel startet!</h4>
+                <h3><a href="/game-**game_id**/">...angemeldete Spieler wechseln <u>jetzt</u> bitte zum Spiel!</a></h1>
                 """
+                countdown_html = countdown_html.replace("**game_id**", str(game_id[0]))
+
             if countdown < -5:
                 countdown_html = """
                 <p style="color:red;">Restart!</p>
@@ -412,4 +423,26 @@ class Consumer(AsyncWebsocketConsumer):
         except:
             return False
 
+    @database_sync_to_async     
+    def db_start_game(self, scene_id, user_char_list, locked_in_datetime):
+        
+        scene_id_obj = GameScenes.objects.filter(id=self.scene_id) # place 0 = worldmap        
+        game_scene_id = scene_id_obj[0]
+
+        game_id = Games.objects.get_or_create(game_scene_id = game_scene_id, locked_in_datetime = locked_in_datetime)
+        print(" return of get / create: " + str(game_id))
+        
+        return str(game_id)
+
+    @database_sync_to_async     
+    def db_get_user_chars_in_lobby(self):
+        self.scene_id = self.scope['url_route']['kwargs']['scene_id']
+        list_of_user_chars = LobbySlots.objects.filter(game_scene_id=self.scene_id)
+        user_char_list = []
+        
+        for row in list_of_user_chars:
+            user_char_list.append(row.user_char_id)
+            
+        return user_char_list
+    
     pass

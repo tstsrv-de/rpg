@@ -150,9 +150,9 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
 
             try: # check if user has an active char allready, if yes redirect
                 try_active_user = GameState.objects.get(char_user=current_user)
-                print("try active user ging")
             except:
-                print("try active user ging nicht!")
+                pass
+
 
             # save GameState item on post data, also catch reload error with post data
             try:
@@ -168,7 +168,6 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
         for user_char in user_char_list:
             try:
                 LobbySlots.objects.get(user_char_id=user_char).delete()
-                print("deleted user from lobbyslots")
             except:
                 pass            
 
@@ -178,7 +177,6 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
         # try if char is selected, if not redirect to char selection
         try:
             char_id = GameState_char_obj[0].id
-            print(char_id)
         except:
             return render(request,'msg_redirect.html',{'msg':'Du musst einen Char auswählen!','target':'/chars/'})
 
@@ -192,7 +190,6 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
 
         char_id_update = str(GameState_char_obj[0].char.id)
         update_test = GameState.objects.filter(char=char_id_update).update(place=0)
-        print(update_test)
 
         # prepare nessesary lists for worldmap        
         active_char_list = GameState.objects.filter(place=0).order_by('char') # place 0 = worldmap
@@ -319,12 +316,14 @@ def game(request, game_id):
     user_is_player_of_this_game = False
     user_chars_in_game = UserCharInGames.objects.filter(game_id=game_id)
     for user_char in user_chars_in_game:
-        print("CHECK: user_char.user_id: " + str(user_char.user_id) + " // " + "request.user.id: " + str(request.user.id))
-        if user_char.user_id == request.user.id:
+        if user_char.user_id == request.user:
             user_is_player_of_this_game = True
 
+    if user_is_player_of_this_game == False:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht Spieler dieses Spiels!','target':'/worldmap/'})
 
-    return render(request,'msg_redirect.html',{'msg':'Spielchecks laufen...','target':'/worldmap/'})
+
+    return render(request,'game.html')
     
     
  

@@ -82,6 +82,7 @@ class Games(models.Model):
     created = models.DateTimeField(default=datetime.now) 
     game_scene_id = models.ForeignKey(GameScenes, on_delete=models.CASCADE)
     game_finished = models.BooleanField(default=False)
+    locked_in_datetime = models.DateTimeField(null=True, blank=True)
     
 class UserCharInGames(models.Model):
     game_id = models.ForeignKey(Games, on_delete=models.CASCADE)
