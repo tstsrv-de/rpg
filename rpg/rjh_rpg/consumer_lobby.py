@@ -9,6 +9,7 @@ from rjh_rpg.models import UserChar
 from django.db.models.functions import Now
 from datetime import datetime, time
 from rjh_rpg.models import Games
+from rjh_rpg.models import UserCharInGames
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -179,7 +180,7 @@ class Consumer(AsyncWebsocketConsumer):
                 <h4 style="color:red;">Das Spiel startet!</h4>
                 <h3><a href="/game-**game_id**/">...angemeldete Spieler wechseln <u>jetzt</u> bitte zum Spiel!</a></h1>
                 """
-                countdown_html = countdown_html.replace("**game_id**", str(game_id[0]))
+                countdown_html = countdown_html.replace("**game_id**", str(game_id))
 
             if countdown < -5:
                 countdown_html = """
@@ -425,14 +426,23 @@ class Consumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async     
     def db_start_game(self, scene_id, user_char_list, locked_in_datetime):
-        
-        scene_id_obj = GameScenes.objects.filter(id=self.scene_id) # place 0 = worldmap        
+
+        scene_id_obj = GameScenes.objects.filter(id=scene_id) # place 0 = worldmap        
         game_scene_id = scene_id_obj[0]
 
-        game_id = Games.objects.get_or_create(game_scene_id = game_scene_id, locked_in_datetime = locked_in_datetime)
-        print(" return of get / create: " + str(game_id))
+        # add game to db model 'Games'
+        game_id_obj, game_id_freshly_created = Games.objects.get_or_create(game_scene_id = game_scene_id, locked_in_datetime = locked_in_datetime)
+        game_id = game_id_obj.id
         
-        return str(game_id)
+        # if game_id is new: add users, user chars and game id to db model 'UserCharInGames'
+        if game_id_freshly_created == True:
+            for user_char in user_char_list:
+                new_UserCharInGames = UserCharInGames()
+                new_UserCharInGames.game_id = game_id_obj
+                new_UserCharInGames.user_char_id = user_char
+                new_UserCharInGames.save()
+
+        return game_id
 
     @database_sync_to_async     
     def db_get_user_chars_in_lobby(self):

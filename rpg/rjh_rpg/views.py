@@ -316,12 +316,19 @@ def game(request, game_id):
     user_is_player_of_this_game = False
     user_chars_in_game = UserCharInGames.objects.filter(game_id=game_id)
     for user_char in user_chars_in_game:
-        if user_char.user_id == request.user:
+        # get user id based on userChar
+        user_char_obj = UserChar.objects.get(id=user_char.user_char_id.id)
+        if user_char_obj.usernickname == request.user:
             user_is_player_of_this_game = True
 
     if user_is_player_of_this_game == False:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht Spieler dieses Spiels!','target':'/worldmap/'})
-
+    
+    # Checks done: 
+    # - user is logged in
+    # - game exists
+    # - game is not finished
+    # - user is player of this game
 
     return render(request,'game.html')
     

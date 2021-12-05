@@ -87,4 +87,3 @@ class Games(models.Model):
 class UserCharInGames(models.Model):
     game_id = models.ForeignKey(Games, on_delete=models.CASCADE)
     user_char_id = models.ForeignKey(UserChar, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
