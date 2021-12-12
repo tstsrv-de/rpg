@@ -4,8 +4,8 @@
 <head>
 {% block html_head %} 
 {% endblock %}
-<link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
 
+<link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
 <meta charset="utf-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,44 +18,45 @@
 </head>
 
 <body>
-<h1>Game...</h1>
+
 {% block content %} 
 {% endblock %}
 
-<br />
-<a href="/">zurück</a>
-<br />
+
+<div id="game_websocket_content_rx">
 
 
-<!-- Start Counter Test -->
-<!--<input id="wmtc_submit" type="button" value="+">-->
-<a href="#"  alt="Click me!"><img src={% static "img/image_test.png" %} width="100" id="wmtc_submit"></a> <b id="wmtv_test_element"></b>
+</div>
+
+<!-- Start Game Websocket -->
+
+{{ game_id|json_script:"game_id" }}
+<script id="game_id" type="application/json">"game_id"</script>
+
 <script>
-document.querySelector('#wmtc_submit').onclick = function (e) {
-wmtc_socket.send(JSON.stringify({'msg': 'add_one',}));
-};
 
-function send_wmtc_msg(e) { var wmtc_textarea = document.getElementById('wmtv_test_element'); }
 
 setInterval(function(){
-var wmtc_textarea = document.getElementById('wmtv_test_element');
-wmtc_textarea.scrollTop = wmtc_textarea.scrollHeight;
-wmtc_socket.send(JSON.stringify({'msg': 'alive',}));
-}, 250);
+wmtc_socket.send(JSON.stringify({
+    'msg': 'alive',
+    'game_id': game_id,
+}));
+}, 500);
 
-var wmtc_loc = window.location;
-var wmtc_ws_prot = 'ws://';
-if (wmtc_loc.protocol == 'https:') { wmtc_ws_prot = 'wss://' }
+var game_ws_loc = window.location;
+var game_ws_prot = 'ws://';
+if (game_ws_loc.protocol == 'https:') { game_ws_prot = 'wss://' }
 
-const wmtc_socket = new WebSocket(wmtc_ws_prot + window.location.host + '/ws/wmtc/');
+const game_id = JSON.parse(document.getElementById('game_id').textContent);
+const wmtc_socket = new WebSocket(game_ws_prot + window.location.host + '/ws/game/' + game_id + '/');
 
 wmtc_socket.onmessage = function (e) {
 const data = JSON.parse(e.data);
-console.log(data)
-document.querySelector('#wmtv_test_element').innerHTML = (data.msg)
+//console.log(data)
+document.querySelector('#game_websocket_content_rx').innerHTML = (data.game_websocket_content)
 }
 </script>
-<!-- End Counter Test -->
+<!-- End Game Websocket -->
 
 
 </body>

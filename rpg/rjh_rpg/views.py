@@ -330,7 +330,9 @@ def game(request, game_id):
     # - game is not finished
     # - user is player of this game
 
-    return render(request,'game.html')
+    return render(request,'game.html', {
+        'game_id': game_id,
+    })
     
     
  
