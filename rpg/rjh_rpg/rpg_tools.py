@@ -1,0 +1,73 @@
+from rjh_rpg.models import UserCharInGames
+from rjh_rpg.models import UserChar
+from rjh_rpg.models import GameState
+from rjh_rpg.models import UserCharInGames
+from rjh_rpg.models import Games
+
+
+def rpg_user_is_player_of_this_game_id(game_id, request_user):
+
+    user_is_player_of_this_game = False
+    user_chars_in_game = UserCharInGames.objects.filter(game_id=game_id)
+    for user_char in user_chars_in_game:
+        # get user id based on userChar
+        user_char_obj = UserChar.objects.get(id=user_char.user_char_id.id)
+        if user_char_obj.usernickname == request_user:
+            user_is_player_of_this_game = True
+
+    return user_is_player_of_this_game
+
+
+def rpg_user_has_active_game(request_user):
+
+    print("req_user:" + str(request_user))
+    
+    users_game_state = GameState.objects.get(char_user=request_user)
+    
+    print("users_game_state:" + str(users_game_state))
+    print("users_game_state.char_user:" + str(users_game_state.char_user))
+    print("users_game_state.place:" + str(users_game_state.place))
+    print("all_chars_from_user:" + str(rpg_all_chars_from_user(request_user)))
+    
+    for user_char in rpg_all_chars_from_user(request_user):
+        print("game_ids:" + str(rpg_get_game_ids_to_user_char(user_char)))
+        for game_id in rpg_get_game_ids_to_user_char(user_char):
+            print("rpg_game_id_is_finished(game_id): " + str(rpg_game_id_is_finished(game_id.id)))
+            game_id_is_finished = rpg_game_id_is_finished(game_id.id)
+            if not game_id_is_finished: # means it is still running
+                return int(game_id.id)
+
+    return 0
+
+
+def rpg_all_chars_from_user(request_user):
+    char_list = []
+    char_list_objects = UserChar.objects.filter(usernickname=request_user).order_by('name')
+
+    for user_char in char_list_objects:
+        char_list.append(user_char.name)
+
+    return char_list
+
+def rpg_get_game_ids_to_user_char(user_char):
+    
+    game_ids = []
+    game_objects = UserCharInGames.objects.filter(user_char_id=rpg_user_char_name_to_id(user_char))
+
+    for game in game_objects:
+        game_ids.append(game.game_id)
+
+    return game_ids
+
+def rpg_user_char_id_to_name(user_char_name):
+    return UserChar.objects.get(id=user_char_name).name
+
+def rpg_user_char_name_to_id(user_char_name):
+    return UserChar.objects.get(name=user_char_name).id
+
+def rpg_game_id_is_finished(game_id):
+    return Games.objects.get(id=game_id).game_finished
+    
+
+
+

@@ -1,5 +1,6 @@
 from django.db.models import deletion
 from django.db.models.aggregates import Count
+from django.http import request
 from django.shortcuts import render
 
 # Create your views here.
@@ -14,6 +15,9 @@ from rjh_rpg.models import GameScenes
 from rjh_rpg.models import LobbySlots
 from rjh_rpg.models import Games
 from rjh_rpg.models import UserCharInGames
+
+from rjh_rpg.rpg_tools import rpg_user_has_active_game
+from rjh_rpg.rpg_tools import rpg_user_is_player_of_this_game_id
 
 def signup(request):
     if request.user.is_authenticated:
@@ -96,11 +100,12 @@ def user_profile(request):
 
 def chars(request):
     if request.user.is_authenticated:
+        if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
+            return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
+
         current_user_obj = User.objects.get(id=request.user.id)
         GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
         
-        # (TODO!) Only delete here, if the game found, is over. 
-        # show a link to the game, if it is not yet finished.
 
         try:
             GameState.objects.get(char_user=current_user_obj).delete()
@@ -133,7 +138,8 @@ def chars(request):
 def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und zusammenpacken
     if request.user.is_authenticated:
 
-        # (TODO!) redirect to maybe running game        
+        if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
+            return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
 
         # set char to worldmap after selection in /chars/
         if request.method == 'POST':
@@ -241,11 +247,6 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
-# from YT Chat howto
-#def room(request, room_name):
-#    return render(request, 'chatroom.html', {
-#        'room_name': room_name
-#    })
 
 def scene(request):
     if not request.user.is_authenticated:
@@ -280,13 +281,12 @@ def lobby(request, scene_id):
     if not GameScenes.objects.filter(id=scene_id).exists():
         return render(request,'msg_redirect.html',{'msg':'Du musst eine existierende Szene auswählen!','target':'/worldmap/'})
     
+    if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
+        return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
+
     current_user_obj = User.objects.get(id=request.user.id)
     GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
     char_id = str(GameState_char_obj[0].char.id)
-
-    # set char to the scene
-    # (TODO!) Only update if no unfinished game is running
-    # if a game is running, show link...
 
     GameState.objects.filter(char=char_id).update(place=scene_id)
 
@@ -312,16 +312,8 @@ def game(request, game_id):
     
     if game_obj.game_finished == True:
         return render(request,'msg_redirect.html',{'msg':'Das Spiel ist bereits beendet!','target':'/worldmap/'})
-    
-    user_is_player_of_this_game = False
-    user_chars_in_game = UserCharInGames.objects.filter(game_id=game_id)
-    for user_char in user_chars_in_game:
-        # get user id based on userChar
-        user_char_obj = UserChar.objects.get(id=user_char.user_char_id.id)
-        if user_char_obj.usernickname == request.user:
-            user_is_player_of_this_game = True
 
-    if user_is_player_of_this_game == False:
+    if rpg_user_is_player_of_this_game_id(game_id, request.user) == False:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht Spieler dieses Spiels!','target':'/worldmap/'})
     
     # Checks done: 
