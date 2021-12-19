@@ -10,6 +10,6 @@ from . import consumer_game
 websocket_urlpatterns = [
     re_path(r'ws/chat/(?P<room_name>\w+)/$', consumers.ChatRoomConsumer.as_asgi()),
     re_path('ws/wmtc/', consumer_wmtc.Consumer.as_asgi()), # wmtc = worldmaptestcounter 
-    re_path(r'ws/lobby-(?P<scene_id>\w+)/$', consumer_lobby.Consumer.as_asgi()), # wmtc = worldmaptestcounter 
-    re_path(r'ws/game/(?P<game_id>\w+)/$', consumer_game.Consumer.as_asgi()),
+    re_path(r'ws/lobby-(?P<scene_id>\w+)/$', consumer_lobby.Consumer.as_asgi()),
+    re_path(r'ws/game-(?P<game_id>\w+)/$', consumer_game.Consumer.as_asgi()),
 ]

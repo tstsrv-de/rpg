@@ -1,63 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 {% load static %}
 <html lang="de">
-<head>
-{% block html_head %} 
-{% endblock %}
+  <head>
+    {% block html_head %} {% endblock %}
+    <link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RPG-Adventure</title>
+  </head>
+  <body>
+    {% block content %} {% endblock %}
+    <div id="game_websocket_content_rx"></div>
 
-<link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
-<meta charset="utf-8">
+    <!-- Start Game Websocket -->
+    {{ game_id|json_script:"game_id" }}
+    <script>
+      setInterval(function () {
+        game_socket.send(
+          JSON.stringify({
+            msg: "alive",
+            game_id: game_id,
+          })
+        );
+      }, 500);
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
--->
-<title>RPG-Adventure</title>
-</head>
+      var game_ws_loc = window.location;
+      var game_ws_prot = "ws://";
+      if (game_ws_loc.protocol == "https:") {
+        game_ws_prot = "wss://";
+      }
 
-<body>
+      const game_id = JSON.parse(
+        document.getElementById("game_id").textContent
+      );
+      const game_socket = new WebSocket(
+        game_ws_prot + window.location.host + "/ws/game-" + game_id + "/"
+      );
 
-{% block content %} 
-{% endblock %}
-
-
-<div id="game_websocket_content_rx">
-
-
-</div>
-
-<!-- Start Game Websocket -->
-
-{{ game_id|json_script:"game_id" }}
-<script id="game_id" type="application/json">"game_id"</script>
-
-<script>
-
-
-setInterval(function(){
-wmtc_socket.send(JSON.stringify({
-    'msg': 'alive',
-    'game_id': game_id,
-}));
-}, 500);
-
-var game_ws_loc = window.location;
-var game_ws_prot = 'ws://';
-if (game_ws_loc.protocol == 'https:') { game_ws_prot = 'wss://' }
-
-const game_id = JSON.parse(document.getElementById('game_id').textContent);
-const wmtc_socket = new WebSocket(game_ws_prot + window.location.host + '/ws/game/' + game_id + '/');
-
-wmtc_socket.onmessage = function (e) {
-const data = JSON.parse(e.data);
-//console.log(data)
-document.querySelector('#game_websocket_content_rx').innerHTML = (data.game_websocket_content)
-}
-</script>
-<!-- End Game Websocket -->
-
-
-</body>
+      game_socket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        //console.log(data)
+        document.querySelector("#game_websocket_content_rx").innerHTML =
+          data.game_websocket_content;
+      };
+    </script>
+    <!-- End Game Websocket -->
+  </body>
 </html>
