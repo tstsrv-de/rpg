@@ -43,6 +43,16 @@
         document.querySelector("#game_websocket_content_rx").innerHTML =
           data.game_websocket_content;
       };
+
+      function set_game_to_finished() {
+        game_socket.send(JSON.stringify({
+            msg: 'set_game_to_finished',
+            game_id: game_id,
+        }));   
+      }
+    
+    
+
     </script>
     <!-- End Game Websocket -->
   </body>

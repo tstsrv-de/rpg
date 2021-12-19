@@ -19,20 +19,9 @@ def rpg_user_is_player_of_this_game_id(game_id, request_user):
 
 
 def rpg_user_has_active_game(request_user):
-
-    print("req_user:" + str(request_user))
-    
-    users_game_state = GameState.objects.get(char_user=request_user)
-    
-    print("users_game_state:" + str(users_game_state))
-    print("users_game_state.char_user:" + str(users_game_state.char_user))
-    print("users_game_state.place:" + str(users_game_state.place))
-    print("all_chars_from_user:" + str(rpg_all_chars_from_user(request_user)))
     
     for user_char in rpg_all_chars_from_user(request_user):
-        print("game_ids:" + str(rpg_get_game_ids_to_user_char(user_char)))
         for game_id in rpg_get_game_ids_to_user_char(user_char):
-            print("rpg_game_id_is_finished(game_id): " + str(rpg_game_id_is_finished(game_id.id)))
             game_id_is_finished = rpg_game_id_is_finished(game_id.id)
             if not game_id_is_finished: # means it is still running
                 return int(game_id.id)
