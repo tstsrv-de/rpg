@@ -36,17 +36,9 @@ class UserChar(models.Model):
     def __str__(self): # (TODO!) this maybe the cause of many problems... why do we need this? would it be better w/o? to fetch id's...
         return self.name
 
-class GamesScenesSteps(models.Model): # schritte der szenen
-    name = models.CharField(max_length=100)
-    #game_scene = 
-    #parent_step = 
-    #next_step = 
-    #possible_actions = ('kampf','schritt vorwärts', )
-    #background_image = 
 
 class GameScenes(models.Model): # eigenschaften der szenen   // GAME OVER Screen? als step? 
     name = models.CharField(unique=True, max_length=300)
-    start_step = models.ForeignKey(GamesScenesSteps, on_delete=models.CASCADE, unique=True)  # start step = lobby, end step = after game screen (fortschritt, belohnungen, ...)
     req_players = models.BigIntegerField(default=1) # anzahl notweniger spieler
     
     def __str__(self):
