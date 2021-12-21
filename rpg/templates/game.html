@@ -8,52 +8,196 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>RPG-Adventure</title>
   </head>
-  <body>
-    {% block content %} {% endblock %}
-    <div id="game_websocket_content_rx"></div>
+  <body style="background-color:#006E9C;">
 
-    <!-- Start Game Websocket -->
+
+    {% block content %} 
+
+
+
+    <div id="game_websocket_content_rx" style="
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-size: 2vw;
+    color: #ffffff;
+    ">
+  
+    <table  cellpadding="0"
+    cellspacing="0"
+    style="
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    ">
+    <tr style="height: 50%; width: 100%">
+      <td  style="
+          background-color: #3EB96A;
+          vertical-align: middle;
+          text-align: center;
+          width:50%;  " >
+
+        {% for user_char in game_user_char_list %} 
+
+        {{user_char.user_char_id}} <br />
+
+        {% endfor %}
+
+  
+      </td>
+      <td style="background-color: #00A97F; 
+      vertical-align: middle; 
+      text-align: center; width:50%;
+      "  >
+  
+        
+        <div id="game_log_textara" style="
+        margin: 0 auto;
+        width:70%; 
+        height:70%; 
+        font-family: monospace;
+        font-size: 12px;
+        font-size: 1vw;
+        text-align: left;
+        border:1px solid;
+        overflow-y: scroll;">
+  
+  
+      </div>
+    </div>
+      </td>
+    </tr>
+  
+    <tr style="height: 50%; width: 100%">
+      <td       style="
+      background-color: #009690; 
+      vertical-align: middle; 
+      text-align: center
+      "  >
+  
+      <input type="text" id="game_log_add_text" name="game_log_add_text">
+      <input type="submit" value="Gedanken ins Gamelog schreiben" onclick="game_log_think();"><br />
+      <br />  
+      
+      <input type="submit" value="Spiel beenden" onclick="set_game_to_finished();">
+      </td>
+      <td      style="
+          background-color: #00839B;
+          vertical-align: middle;
+          text-align: center;      "    >
+  
+        <div id="game_counter">0</div>
+      </td>
+    </tr>
+  </table>
+  
+
+  </div>
+
+
     {{ game_id|json_script:"game_id" }}
+    {{ request_user|json_script:"request_user" }}
+    
     <script>
-      setInterval(function () {
-        game_socket.send(
-          JSON.stringify({
-            msg: "alive",
-            game_id: game_id,
-          })
-        );
-      }, 500);
-
       var game_ws_loc = window.location;
       var game_ws_prot = "ws://";
       if (game_ws_loc.protocol == "https:") {
-        game_ws_prot = "wss://";
+          game_ws_prot = "wss://";
       }
-
+      
       const game_id = JSON.parse(
-        document.getElementById("game_id").textContent
+          document.getElementById("game_id").textContent
       );
       const game_socket = new WebSocket(
-        game_ws_prot + window.location.host + "/ws/game-" + game_id + "/"
+          game_ws_prot + window.location.host + "/ws/game-" + game_id + "/"
       );
-
-      game_socket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        //console.log(data)
-        document.querySelector("#game_websocket_content_rx").innerHTML =
-          data.game_websocket_content;
-      };
-
+      
+      
       function set_game_to_finished() {
-        game_socket.send(JSON.stringify({
-            msg: 'set_game_to_finished',
-            game_id: game_id,
-        }));   
+          game_socket.send(JSON.stringify({
+              msg: 'set_game_to_finished',
+              game_id: game_id,
+          }));
       }
-    
-    
+     
+      function game_log_think() {
+        var msg_to_gamelog_text = document.querySelector("#game_log_add_text").value
+        game_socket.send(JSON.stringify({
+            msg: 'game_log_think',
+            msg_to_gamelog: msg_to_gamelog_text,
+        }));
+    }     
+
+      game_socket.onmessage = function(e) {
+          const data = JSON.parse(e.data);
+          console.log(data)
+      
+          if (data.game_msg_type == 'game_content_update') {
+              document.querySelector("#game_websocket_content_rx").innerHTML =
+                  data.game_websocket_content;
+          }
+      
+          if (data.game_msg_type == 'game_log_update') {
+              document.querySelector("#game_log_textara").innerHTML =
+                  data.game_websocket_content;
+          }
+      
+          if (data.game_msg_type == 'game_counter_update') {
+              document.querySelector("#game_counter").innerHTML =
+                  data.game_websocket_content;
+          }
+      
+          if (data.game_msg_type == 'game_endscreen') {
+              document.querySelector("#game_websocket_content_rx").innerHTML =
+                  data.game_websocket_content;
+          }
+      
+          if (data.game_msg_type == 'game_init_content') {
+              document.querySelector("#game_websocket_content_rx").innerHTML =
+                  data.game_websocket_content;
+          }
+      };
+      
+      
+      
+      // Game-log
+      
+      var log_textara = document.querySelector('#game_log_textara');
+
+      var game_timer_helper = 0;
+      
+      function local_game_loop() {
+          console.log(JSON.stringify(game_timer_helper))
+
+          // on 0 
+          if (game_timer_helper == 0) {
+              game_socket.send(JSON.stringify({
+                  msg: "alive",
+              }));
+          }
+      
+          // allways
+          log_textara.scrollTop = log_textara.scrollHeight;
+
+          // count to 4 and reset to 0 if it is reached, so that there are 4 "stages" (0..3)
+          game_timer_helper = game_timer_helper + 1;
+          if (game_timer_helper == 4) 
+          {
+            game_timer_helper = 0;
+          }
+      
+      
+      }
+      
+      setInterval(local_game_loop, 500);
+
 
     </script>
     <!-- End Game Websocket -->
+
+    {% endblock %}
   </body>
 </html>

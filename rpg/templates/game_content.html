@@ -1,5 +1,4 @@
-<table
-  cellpadding="0"
+<table  cellpadding="0"
   cellspacing="0"
   style="
     height: 100%;
@@ -9,43 +8,53 @@
     bottom: 0;
     left: 0;
     right: 0;
-  "
->
+  ">
   <tr style="height: 50%; width: 100%">
-    <td
-      style="
-        background-color: green;
+    <td  style="
+        background-color: #3EB96A;
         vertical-align: middle;
         text-align: center;
-      "
-    >
-      top left hey test
+        width:50%;  " >
+
     </td>
-    <td
-      style="background-color: blue; vertical-align: middle; text-align: center"
-    >
-      top right
+    <td style="background-color: #00A97F; 
+    vertical-align: middle; 
+    text-align: center; width:50%;
+    "  >
+
+      
+      <div id="game_log_textara"  disabled style="
+      margin: 0 auto;
+      width:70%; 
+      height:70%; 
+      font-family: monospace;
+      font-size: 12px;
+      font-size: 1vw;
+      text-align: left;
+      border:1px solid;
+      overflow-y: scroll;">
+
+
+    </div>
+  </div>
     </td>
   </tr>
 
   <tr style="height: 50%; width: 100%">
-    <td
-      style="background-color: red; vertical-align: middle; text-align: center"
-    >
-      bottom left<br />
-      <br />
-      end the game: <br />
+    <td       style="
+    background-color: #009690; 
+    vertical-align: middle; 
+    text-align: center
+    "  >
+
       <input type="submit" value="Spiel beenden" onclick="set_game_to_finished();">
     </td>
-    <td
-      style="
-        background-color: yellow;
+    <td      style="
+        background-color: #00839B;
         vertical-align: middle;
-        text-align: center;
-      "
-    >
-      bottom right
-      {{ mycounter }}
+        text-align: center;      "    >
+
+      <div id="game_counter">0</div>
     </td>
   </tr>
 </table>

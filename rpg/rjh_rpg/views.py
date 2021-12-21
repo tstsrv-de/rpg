@@ -321,9 +321,13 @@ def game(request, game_id):
     # - game exists
     # - game is not finished
     # - user is player of this game
-
+    
+    game_user_char_list = UserCharInGames.objects.filter(game_id=game_id)
+    
     return render(request,'game.html', {
         'game_id': game_id,
+        'game_user_char_list' : game_user_char_list,  
+        'request_user'      : str(request.user),
     })
     
     
