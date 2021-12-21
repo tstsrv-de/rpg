@@ -69,12 +69,14 @@ class HelperCounter(models.Model):
     name = models.CharField(unique=True, max_length=300)
     count = models.BigIntegerField(default=0)
     last_update = models.DateTimeField(default=datetime.now) 
-    
-class Games(models.Model):
+
+class Games(models.Model): # Here we find all information on games that were started, are being played and finished games. 
     created = models.DateTimeField(default=datetime.now) 
     game_scene_id = models.ForeignKey(GameScenes, on_delete=models.CASCADE)
     game_finished = models.BooleanField(default=False)
     locked_in_datetime = models.DateTimeField(null=True, blank=True)
+    chat_log = models.TextField(default='', null=True, blank=True)
+    game_log = models.TextField(default='', null=True, blank=True)
     
 class UserCharInGames(models.Model):
     game_id = models.ForeignKey(Games, on_delete=models.CASCADE)

@@ -145,11 +145,11 @@ Konkret:
 	\item Daran anschließend eine Prüfung im laufendem Spiel, ob das Spiele beendet wurde und falls ja, Anzeige eines Endbildschirms.
 \end{itemize}
 
-Die Entwicklung der Grundlagen an diesem Tag wurde mit Fokus auf Modularisierung erledigt. Der Code der  jeweiligen Funktionen wurde in einzelnen Dateien ausgelagert um Wiederverwendbarkeit und Lesbarkeit zu erhöhen. 
+Die Entwicklung der Grundlagen an diesem Tag wurde mit Fokus auf Modularisierung erledigt. Der Code der jeweiligen Funktionen wurde in einzelnen Dateien ausgelagert um Wiederverwendbarkeit und Lesbarkeit zu erhöhen. 
 
 Die zugehörigen Commits sind insbesondere: 
-\url{https://github.com/tstsrv-de/tstsrv-de/commit/b43f7f42182007ced4fcb8f07e64545769650c0a} und 
-\url{https://github.com/tstsrv-de/tstsrv-de/commit/175ef5601ac029669252832a6645cf35ac422afa}
+\url{https://git.io/JDjKl} und 
+\url{https://git.io/JDjKB}
 
 
 \subsection{Entwicklung, Dienstag 19.12.2021:}
@@ -159,5 +159,6 @@ Grundlagen des Kampfsystems entsprechend der Projekt Besprechung vom 11.12.2021 
 Vorbereitungen: 
 
 \begin{itemize}
-    \item Tabelle "GamesScenesSteps" und Verknüpfungen entfernen. 
+    \item Tabelle "GamesScenesSteps" und Verknüpfungen entfernen (Commits \url{https://git.io/JDjKz} und \url{https://git.io/JDjKg})
+    \item Kampf-/Gamelog erzeugen: Darin werden alle Meldungen aus dem Spiel wie z.B. Kampftexte, Schaden, Aktionen, Systemmeldungen und alles andere denkbare angezeigt und gespeichert. Getrennt davon soll der Chat-Log dargestellt werden. Dazu werden in der Tabelle "Games" zwei neue Textfelder erzeugt. 
 \end{itemize}
