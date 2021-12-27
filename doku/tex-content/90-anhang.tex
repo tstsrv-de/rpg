@@ -152,9 +152,9 @@ Die zugehörigen Commits sind insbesondere:
 \url{https://git.io/JDjKB}
 
 
-\subsection{Entwicklung, Dienstag 19.12.2021:}
+\subsection{Entwicklung, Dienstag 21.12.2021:}
 
-Grundlagen des Kampfsystems entsprechend der Projekt Besprechung vom 11.12.2021 (Abbildung \ref{fig:2021-12-11-Projekt-Besprechung}) sollen implementiert werden.
+Grundlagen des Kampfsystems entsprechend der Projekt-Besprechung vom 11.12.2021 (Abbildung \ref{fig:2021-12-11-Projekt-Besprechung}) sollen implementiert werden.
 
 Vorbereitungen: 
 
@@ -163,3 +163,14 @@ Vorbereitungen:
     \item Kampf-/Gamelog erzeugen: Darin werden alle Meldungen aus dem Spiel wie z.B. Kampftexte, Schaden, Aktionen, Systemmeldungen und alles andere denkbare angezeigt und gespeichert. Getrennt davon soll der Chat-Log dargestellt werden. Dazu werden in der Tabelle "Games" zwei neue Textfelder erzeugt (Commit \url{https://git.io/JDj63}). 
     \item Anzeige des Game-Logs auf der Spielseite. Schreiben von Nachrichten in das Gamelog als ersten Test des grundlegend umgestellten Seitenaufbaus: Es werden nur noch einzelene Elementinhalte per Websocket transportiert, nicht mehr ganze HTML-Code-Blöcke (Commit \url{https://git.io/JyeJQ}).
 \end{itemize}
+
+
+\subsection{Entwicklung, Montag 27.12.2021:}
+
+Weitere Entwicklungen entsprechend der Projekt-Besprechung vom 11.12.2021 (Abbildung \ref{fig:2021-12-11-Projekt-Besprechung}):
+
+\begin{itemize}
+    \item Eintrag ins Gamelog zum Spielstart (Commit \url{https://git.io/JyBRf}).
+    \item Rundensystem implementieren. Dazu mindestens notwendig: Lebens- und Angriffspunkte der User-Chars sowie des Gegners.
+\end{itemize}
+
