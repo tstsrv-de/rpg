@@ -37,10 +37,13 @@ class UserChar(models.Model):
         return self.name
 
 
-class GameScenes(models.Model): # eigenschaften der szenen   // GAME OVER Screen? als step? 
+class GameScenes(models.Model): # blueprint of the games
     name = models.CharField(unique=True, max_length=300)
     req_players = models.BigIntegerField(default=1) # anzahl notweniger spieler
     welcome_text = models.TextField(default='', null=True, blank=True)
+    enemy_name = models.CharField(default='', null=True, blank=True, max_length=300)
+    enemy_hp = models.IntegerField(default=100) 
+    enemy_ap =  models.IntegerField(default=10)
     
     def __str__(self):
         return self.name    
@@ -78,6 +81,10 @@ class Games(models.Model): # Here we find all information on games that were sta
     locked_in_datetime = models.DateTimeField(null=True, blank=True)
     chat_log = models.TextField(default='', null=True, blank=True)
     game_log = models.TextField(default='', null=True, blank=True)
+    enemy_current_hp = models.IntegerField(default=None, null=True, blank=True)
+    round_state = models.IntegerField(default=0, null=True, blank=True)
+    round_state_locked = models.BooleanField(default=False, null=True, blank=True)
+    round_counter = models.IntegerField(default=0, null=True, blank=True)
     
 class UserCharInGames(models.Model):
     game_id = models.ForeignKey(Games, on_delete=models.CASCADE)

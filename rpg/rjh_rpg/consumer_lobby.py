@@ -444,8 +444,18 @@ class Consumer(AsyncWebsocketConsumer):
                 new_UserCharInGames.user_char_id = user_char
                 new_UserCharInGames.save()
 
-            welcome_text = "<b>&#128214; &#128172; Intro:</b> <br /> " + str(scene_id_obj[0].welcome_text) + "<br />"
-            Games.objects.filter(id=game_id).update(game_log=welcome_text)
+            gamelog_init_text = "<b>&#128214; &#128172; Intro:</b> <br /> " + str(scene_id_obj[0].welcome_text) + "<br />"
+
+            for user_char in user_char_list:
+                gamelog_init_text = gamelog_init_text + "&#127918; " + str(user_char) + " kommt ins Spiel... <br />"
+
+            gamelog_init_text = gamelog_init_text + "&#128126; " + str(scene_id_obj[0].enemy_name) + " sieht euch und beginnt einen Angriff! <br />"
+            # the above is important for ethical and moral reasons ;-) 
+
+            enemy_current_hp = int(scene_id_obj[0].enemy_hp)
+            gamelog_init_text = gamelog_init_text + "&#128126; " + str(scene_id_obj[0].enemy_name) + " hat " + str(enemy_current_hp) + " Lebenspunkte. <br /> <br />"
+
+            Games.objects.filter(id=game_id).update(game_log=gamelog_init_text, enemy_current_hp=enemy_current_hp)
 
         return game_id
 
@@ -471,5 +481,4 @@ class Consumer(AsyncWebsocketConsumer):
         
         return delelte_slots_in_lobby
 
-    
     pass

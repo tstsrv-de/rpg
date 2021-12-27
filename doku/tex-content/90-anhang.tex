@@ -171,6 +171,18 @@ Weitere Entwicklungen entsprechend der Projekt-Besprechung vom 11.12.2021 (Abbil
 
 \begin{itemize}
     \item Eintrag ins Gamelog zum Spielstart (Commit \url{https://git.io/JyBRf}).
-    \item Rundensystem implementieren. Dazu mindestens notwendig: Lebens- und Angriffspunkte der User-Chars sowie des Gegners.
+    \item Rundensystem implementieren. Dazu mindestens notwendig: Lebens- und Angriffspunkte der User-Chars sowie des Gegners. Ablauf einer Runde als Pseudo-Code: 
+    \begin{enumerate}
+        \item Gameloop-Schleife: [round-state]
+        \item Aktion von Gegner ausführen (Schaden) [100]
+        \item Prüfen ob User-Char tod ist (HP < 1 = Dead-Flag: True) [200]
+        \item Prüfen wie viele User-Chars noch leben (n < 1 = Gameover-Flag: True, break-Gameloop-Schleife) [300]
+        \item Aktionen der User-Chars aufnehmen (Entscheidung für nächste Aktion von jedem Spieler annehmen + wegspeichern) [400]
+        \item Alle Aktionen der User-Chars ausführen (Aktionen laden und ausführen: Schaden, Aktion, Passen) [500]
+        \item Nach jedem Spieler, prüfen ob Gegner besiegt wurde (HP < 1 = Win-Flag: True, break-Gameloop-Schleife) [immernoch 500]
+        \item Rundencounter +1 [600]
+        \item Gameloop-Schleife nächster Durchlauf [700, zurück zu 100]...
+    \end{enumerate}
+    Steuerung über "round-stat" Hilfsvariable, gespeichert in Games-Tabelle (Default=0, Gameover=990, Win=995). Da der Aufruf der Spiele-Logik über den Websocket-Heartbeat der Spieler erfolgt, müssen die Arbeitsschritte sehr kleinteilig sein und diese laufend in kleinen (kleinsten?) Schritten weggepeichert werden. Möglicherweise ergibt sich ein Sync-Problem.
 \end{itemize}
 
