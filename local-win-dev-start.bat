@@ -1,5 +1,5 @@
 @echo off
-echo Docker gestartet? > Weiter mit Tastendruck...
+echo Docker gestartet? Dann weiter mit Tastendruck...
 pause >nul
 docker-compose -f local-win-docker-compose.yml build
 docker-compose -f local-win-docker-compose.yml up -d

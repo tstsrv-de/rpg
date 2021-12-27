@@ -147,21 +147,21 @@ class Consumer(AsyncWebsocketConsumer):
         if countdown == "":  # no countdown, clear html part in template
             countdown_html = ''
         else:  # countdown is running
-            countdown = (int(countdown) -11) * -1
+            countdown = (int(countdown) -6) * -1
 
             countdown_html = """
             <p style="color:**countdown_color**;">**seconds** Sekunden bis Spielstart!</p>
             """
 
             # disable button to free slot when countdown hits 5 seconds
-            if countdown < 7:
+            if countdown < 3:
                 countdown_html = countdown_html.replace('**countdown_color**', 'red')
-            elif countdown < 9:
+            elif countdown < 4:
                 countdown_html = countdown_html.replace('**countdown_color**', 'orange')
-            if countdown < 11:
+            if countdown < 5:
                 countdown_html = countdown_html.replace('**countdown_color**', 'green')
             
-            if countdown < 5:
+            if countdown < 2:
                 html = html.replace('**button_disabled_for_lvl2**','disabled')
             else:
                 html = html.replace('**button_disabled_for_lvl2**','')
@@ -179,12 +179,11 @@ class Consumer(AsyncWebsocketConsumer):
                 countdown_html = """
                 <h4 style="color:red;">Das Spiel startet!</h4>
                 <h3><a href="/game-**game_id**/">...angemeldete Spieler wechseln <u>jetzt</u> bitte zum Spiel!</a></h1>
+                <br />
+                <p style="color:red;">Die übrigen Spieler gehen bitte zurück in die Worldmap <br />oder laden diese Seite für einen Neustart der Lobby erneut. <br />Danke!</p>
                 """
                 countdown_html = countdown_html.replace("**game_id**", str(game_id))
 
-
-            if countdown < -5:
-                countdown_html = """<p style="color:red;">Die übrigen Spieler gehen bitte zurück in die Worldmap <br />oder laden diese Seite für einen Neustart der Lobby erneut. <br />Danke!</p>"""
                 try:
                     await self.db_free_all_slots_in_current_lobby()
                 except:
@@ -437,12 +436,16 @@ class Consumer(AsyncWebsocketConsumer):
         game_id = game_id_obj.id
         
         # if game_id is new: add users, user chars and game id to db model 'UserCharInGames'
+        # also add welcome text from game to game_log
         if game_id_freshly_created == True:
             for user_char in user_char_list:
                 new_UserCharInGames = UserCharInGames()
                 new_UserCharInGames.game_id = game_id_obj
                 new_UserCharInGames.user_char_id = user_char
                 new_UserCharInGames.save()
+
+            welcome_text = "<b>&#128214; &#128172; Intro:</b> <br /> " + str(scene_id_obj[0].welcome_text) + "<br />"
+            Games.objects.filter(id=game_id).update(game_log=welcome_text)
 
         return game_id
 

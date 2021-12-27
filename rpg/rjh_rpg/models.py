@@ -40,6 +40,7 @@ class UserChar(models.Model):
 class GameScenes(models.Model): # eigenschaften der szenen   // GAME OVER Screen? als step? 
     name = models.CharField(unique=True, max_length=300)
     req_players = models.BigIntegerField(default=1) # anzahl notweniger spieler
+    welcome_text = models.TextField(default='', null=True, blank=True)
     
     def __str__(self):
         return self.name    
