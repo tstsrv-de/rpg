@@ -70,18 +70,35 @@ def db_get_user_char_in_game_list(game_id):
 
 @database_sync_to_async
 def db_get_random_alive_user_char_in_games_id(game_id):
-    alive_user_chars = UserCharInGames.objects.filter(game_id=game_id, current_hp__gte = 0)
-    random_alive_user_char = random.choice(alive_user_chars)
-    return random_alive_user_char.id
+    try:
+        alive_user_chars = UserCharInGames.objects.filter(game_id=game_id, current_hp__gte = 0, user_char_died=False)
+        random_alive_user_char = random.choice(alive_user_chars)
+        return random_alive_user_char.id
+    except:
+        return None
+
+@database_sync_to_async
+def db_get_died_but_not_dead_user_chars(game_id):
+    fresh_died_user_chars = UserCharInGames.objects.filter(game_id=game_id, current_hp=0, user_char_died=False)
+    new_deads = []
+    for user_char in fresh_died_user_chars:
+        new_deads.append(user_char.id)
+    return new_deads
+
+@database_sync_to_async
+def db_set_user_char_to_dead(user_char_in_games_id):
+    return UserCharInGames.objects.filter(id=user_char_in_games_id).update(user_char_died=True)
+
 
 @database_sync_to_async
 def db_give_dmg_to_user_char(user_char_in_games_id, ap_to_deliver):
     last_hp = UserCharInGames.objects.get(id=user_char_in_games_id).current_hp
+    ap_to_deliver = random.randint(int(ap_to_deliver * 0.5), int(ap_to_deliver * 1.5))
     new_hp = last_hp - int(ap_to_deliver)
     if new_hp < 0:
         new_hp = 0
     UserCharInGames.objects.filter(id=user_char_in_games_id).update(current_hp=new_hp)
-    dmg_taken = ap_to_deliver
+    dmg_taken = last_hp - new_hp
     return (last_hp, new_hp, dmg_taken)
     
 @database_sync_to_async

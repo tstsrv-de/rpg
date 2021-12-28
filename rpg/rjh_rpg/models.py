@@ -106,3 +106,4 @@ class UserCharInGames(models.Model):
     user_char_id = models.ForeignKey(UserChar, on_delete=models.CASCADE)
     current_hp = models.IntegerField(default=None, null=True, blank=True)
     current_ap = models.IntegerField(default=None, null=True, blank=True)
+    user_char_died = models.BooleanField(default=False)

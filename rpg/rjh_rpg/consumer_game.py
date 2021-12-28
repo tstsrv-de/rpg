@@ -9,7 +9,7 @@ from rjh_rpg.consumer_game_tools import db_get_round_state, db_set_round_state
 from rjh_rpg.consumer_game_tools import db_get_is_round_state_locked, db_set_round_state_locked
 from rjh_rpg.consumer_game_tools import db_increase_round_counter, db_get_round_counter
 from rjh_rpg.consumer_game_tools import db_get_enemy_name, db_get_enemy_ap
-from rjh_rpg.consumer_game_tools import db_get_user_char_in_game_list, db_get_random_alive_user_char_in_games_id, db_give_dmg_to_user_char, db_get_char_name_of_user_char_in_games_id
+from rjh_rpg.consumer_game_tools import db_get_user_char_in_game_list, db_get_random_alive_user_char_in_games_id, db_give_dmg_to_user_char, db_get_char_name_of_user_char_in_games_id, db_get_died_but_not_dead_user_chars, db_set_user_char_to_dead
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -111,30 +111,45 @@ class Consumer(AsyncWebsocketConsumer):
                     print ("round_state set to 100")
 
             elif round_state == 100:
-                await db_expand_game_log(self.game_id, "<br /> ⏩ Es beginnt Runde " + str(await db_get_round_counter(self.game_id)) + "! <br /><br />")
-                await db_expand_game_log(self.game_id, " ⚔ " + str(await db_get_enemy_name(self.game_id)) + " greift an...<br />" )
+                await db_expand_game_log(self.game_id, "<br /> ⏩ Es beginnt Runde " + str(await db_get_round_counter(self.game_id)) + ": <br /><br />")
 
                 char_to_hit = await db_get_random_alive_user_char_in_games_id(self.game_id)
-                ap_to_deliver = await db_get_enemy_ap(self.game_id)
-                dmg_dealt = await db_give_dmg_to_user_char(char_to_hit, ap_to_deliver)
-                char_name_to_hit = await db_get_char_name_of_user_char_in_games_id(char_to_hit)
 
-                await db_expand_game_log(self.game_id, " 💥 ...und trifft " + char_name_to_hit + " mit " + str(dmg_dealt[2]) + " Schadenspunkten. <br /> 💔 Die Lebenspunkte von " + char_name_to_hit + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
+                if not char_to_hit: # failsave in case no player is alive
+                    await db_set_round_state(self.game_id, 300)
 
-                await db_set_round_state(self.game_id, 200)    
-                
-                
+                else:
+                    ap_to_deliver = await db_get_enemy_ap(self.game_id)
+                    dmg_dealt = await db_give_dmg_to_user_char(char_to_hit, ap_to_deliver)
+                    char_name_to_hit = await db_get_char_name_of_user_char_in_games_id(char_to_hit)
+
+                    await db_expand_game_log(self.game_id, " ⚔ " + str(await db_get_enemy_name(self.game_id)) + " greift mit "+ str(ap_to_deliver) +" Angriffspunkten an...<br />" )
+
+                    await db_expand_game_log(self.game_id, " 💥 ...und trifft " + char_name_to_hit + " für " + str(dmg_dealt[2]) + " Schaden. <br /> 💔 Die Lebenspunkte von " + char_name_to_hit + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
+
+                    await db_set_round_state(self.game_id, 200)    
+
             elif round_state == 200:
-                #char_list = await db_get_user_char_in_game_list(self.game_id)
-                #print("char_list: " + str(char_list))
+                char_list = await db_get_user_char_in_game_list(self.game_id)
+                print("char_list: " + str(char_list))
+                new_dead_user_chars = await db_get_died_but_not_dead_user_chars(self.game_id)
+                print("new_dead_user_chars: " + str(new_dead_user_chars))
+                for user_char in new_dead_user_chars:
+                    print("user_char dead: " + str(user_char))
+                    await db_set_user_char_to_dead(user_char)
+                    await db_expand_game_log(self.game_id, "<br /> 💀 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " ist gestorben! <br />" )
 
-                pass
+                    
+                
+                
+                await db_set_round_state(self.game_id, 300)    
+
             elif round_state == 300:
-                pass
+                await db_set_round_state(self.game_id, 400)    
             elif round_state == 400:
-                pass
+                await db_set_round_state(self.game_id, 500)    
             elif round_state == 500:
-                pass
+                await db_set_round_state(self.game_id, 600)    
             elif round_state == 600:
                 await db_increase_round_counter(self.game_id)
                 await db_set_round_state(self.game_id, 700)                
@@ -143,7 +158,6 @@ class Consumer(AsyncWebsocketConsumer):
             else:
                 # should not happen
                 print("no round state on known rules")
-                pass
 
             await self.channel_layer.group_send(self.msg_group_name, { 
                                 'type': 'msg_group_send_game_log_update', })
