@@ -54,8 +54,8 @@ class UserChar(models.Model):
 class GameScenes(models.Model): # blueprint of the games
     name = models.CharField(unique=True, max_length=300)
     req_players = models.BigIntegerField(default=1) # anzahl notweniger spieler
-    welcome_text = models.TextField(default='', null=True, blank=True)
-    enemy_name = models.CharField(default='', null=True, blank=True, max_length=300)
+    welcome_text = models.TextField(default="Eine Gefahr zeigt sich im dunkeln...<br />Es raschelt...<br />", null=True, blank=True)
+    enemy_name = models.CharField(default="Der Gegener", null=True, blank=True, max_length=300)
     enemy_hp = models.IntegerField(default=100) 
     enemy_ap =  models.IntegerField(default=10)
     
@@ -103,3 +103,5 @@ class Games(models.Model): # Here we find all information on games that were sta
 class UserCharInGames(models.Model):
     game_id = models.ForeignKey(Games, on_delete=models.CASCADE)
     user_char_id = models.ForeignKey(UserChar, on_delete=models.CASCADE)
+    current_hp = models.IntegerField(default=None, null=True, blank=True)
+    current_ap = models.IntegerField(default=None, null=True, blank=True)

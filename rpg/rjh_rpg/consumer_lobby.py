@@ -442,6 +442,8 @@ class Consumer(AsyncWebsocketConsumer):
                 new_UserCharInGames = UserCharInGames()
                 new_UserCharInGames.game_id = game_id_obj
                 new_UserCharInGames.user_char_id = user_char
+                new_UserCharInGames.current_hp = UserChar.objects.get(name=user_char).hp
+                new_UserCharInGames.current_ap = UserChar.objects.get(name=user_char).ap
                 new_UserCharInGames.save()
 
             gamelog_init_text = "<b>&#128214; &#128172; Intro:</b> <br /> " + str(scene_id_obj[0].welcome_text) + "<br />"
@@ -453,7 +455,8 @@ class Consumer(AsyncWebsocketConsumer):
             # the above is important for ethical and moral reasons ;-) 
 
             enemy_current_hp = int(scene_id_obj[0].enemy_hp)
-            gamelog_init_text = gamelog_init_text + "&#128126; " + str(scene_id_obj[0].enemy_name) + " hat " + str(enemy_current_hp) + " Lebenspunkte. <br /> <br />"
+            enemy_current_ap = int(scene_id_obj[0].enemy_ap)
+            gamelog_init_text = gamelog_init_text + "&#128126; " + str(scene_id_obj[0].enemy_name) + " hat " + str(enemy_current_hp) + " Lebenspunkte und eine Angriffskraft von " + str(enemy_current_ap) + " Punkten.<br /> <br />" 
 
             Games.objects.filter(id=game_id).update(game_log=gamelog_init_text, enemy_current_hp=enemy_current_hp)
 
