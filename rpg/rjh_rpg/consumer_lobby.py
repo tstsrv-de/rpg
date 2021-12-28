@@ -465,7 +465,7 @@ class Consumer(AsyncWebsocketConsumer):
     @database_sync_to_async     
     def db_get_user_chars_in_lobby(self):
         self.scene_id = self.scope['url_route']['kwargs']['scene_id']
-        list_of_user_chars = LobbySlots.objects.filter(game_scene_id=self.scene_id)
+        list_of_user_chars = LobbySlots.objects.filter(game_scene_id=self.scene_id).order_by(id)
         user_char_list = []
         
         for row in list_of_user_chars:
