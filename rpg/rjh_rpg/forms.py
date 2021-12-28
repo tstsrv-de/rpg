@@ -9,5 +9,5 @@ class UserCharForm(forms.ModelForm):
 
     class Meta:
         model = UserChar
-        exclude = ('usernickname',)
+        exclude = ('usernickname', 'hp', 'ap')
         fields = '__all__'

@@ -19,19 +19,33 @@ class User(models.Model):
 class UserChar(models.Model):
     
     class CharSex(models.TextChoices):
-        FEMALE = 'F', gettext_lazy('Frauchen')
-        MALE = 'M', gettext_lazy('Männchen')
-        NONE = '0', gettext_lazy('Keins')
+        FEMALE = 'F', gettext_lazy('Frau')
+        MALE = 'M', gettext_lazy('Mann')
 
     usernickname = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(unique=True,max_length=100)
-    birthplace = models.CharField(max_length=200, null=True, blank=True)
+    Geburtsort = models.CharField(max_length=200, null=True, blank=True)
 
-    char_sex = models.CharField(
+    Geschlecht = models.CharField(
             max_length=1,
             choices=CharSex.choices,
-            default=CharSex.NONE,
+            default=CharSex.FEMALE,
         )
+
+    class Char_Class(models.TextChoices):
+        W = 'W', gettext_lazy('Krieger')  # warrior: hp 200, ap 10
+        P = 'P', gettext_lazy('Priester') # priest:  hp 75,  ap 5
+        M = 'M', gettext_lazy('Zauberer') # mage:    hp 100, ap 20
+
+    Klasse = models.CharField(
+            max_length=1,
+            choices=Char_Class.choices,
+            default=Char_Class.W,
+        )
+    
+    hp = models.IntegerField(default=0) 
+    ap = models.IntegerField(default=0) 
+
 
     def __str__(self): # (TODO!) this maybe the cause of many problems... why do we need this? would it be better w/o? to fetch id's...
         return self.name

@@ -124,6 +124,20 @@ def chars(request):
             if form.is_valid():
                 tmp_form = form.save(commit=False)
                 tmp_form.usernickname = request.user
+                if tmp_form.Klasse == "W":
+                    tmp_form.hp = 200
+                    tmp_form.ap = 10
+                elif tmp_form.Klasse == "P":
+                    tmp_form.hp = 75
+                    tmp_form.ap = 5
+                elif tmp_form.Klasse == "M":
+                    tmp_form.hp = 100
+                    tmp_form.ap = 20
+                else:
+                    # should not happen
+                    pass
+                    
+
                 tmp_form.save()
                 return render(request,'msg_redirect.html',{'msg':'Der Char wurde erfolgreich angelegt!','target':'/chars/'})
             else:
