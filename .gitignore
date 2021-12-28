@@ -145,3 +145,14 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+.local-win-dev-start.bat.~4ee23d88
+doku/.thesis_main.tex.~697a8446
+doku/tex-content/.90-anhang.tex.~1fd7ffc2
+rpg/rjh_rpg/.consumer_game_tools.py.~493f2772
+rpg/rjh_rpg/.consumer_game.py.~ebb4fd1
+rpg/rjh_rpg/.consumer_lobby.py.~4b3f2c94
+rpg/rjh_rpg/.forms.py.~6d070584
+rpg/rjh_rpg/.models.py.~ef9a558
+rpg/rjh_rpg/.views.py.~32e01237
+rpg/templates/.chars.html.~788adbaa
+.gitignore
