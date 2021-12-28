@@ -165,7 +165,7 @@ Vorbereitungen:
 \end{itemize}
 
 
-\subsection{Entwicklung, Montag 27.12.2021:}
+\subsection{Entwicklung, Montag 27.12.2021:} \label{ref-runden-impl}
 
 Weitere Entwicklungen entsprechend der Projekt-Besprechung vom 11.12.2021 (Abbildung \ref{fig:2021-12-11-Projekt-Besprechung}):
 
@@ -186,7 +186,25 @@ Weitere Entwicklungen entsprechend der Projekt-Besprechung vom 11.12.2021 (Abbil
                 \item Gameloop-Schleife nächster Durchlauf [700, zurück zu 100]...
             \end{enumerate}
     Steuerung über "round-state" Hilfsvariable, gespeichert in Games-Tabelle (Default=0, Gameover=990, Win=995). Da der Aufruf der Spiele-Logik über den Websocket-Heartbeat der Spieler erfolgt, müssen die Arbeitsschritte sehr kleinteilig sein und diese laufend in kleinen (kleinsten?) Schritten weggepeichert werden. Möglicherweise ergibt sich ein Sync-Problem (Commit \url{https://git.io/JyRml})
-    \item Zweiter Schritt: HP und AP bei User-Chars implementieren, damit AP aus "round-state 100: Gegner führt Schaden aus" durchgeführt werden kann. 
+    \item Zweiter Schritt: HP und AP bei User-Chars implementieren, damit AP aus "round-state 100: Gegner führt Schaden aus" durchgeführt werden kann (Commit \url{https://git.io/JyRWD}).  
     \end{enumerate}
 \end{itemize}
+
+
+\subsection{Entwicklung, Dienstag 28.12.2021:}
+
+Fortführung der Entwicklungen vom Vortag. Hier insbesondere nun die Implementation der aller Funktionen der Runden- bzw. Spiellogik:
+
+\begin{itemize}
+    \item ...
+\end{itemize}
+
+\section{Noitzen für Reflektion}
+
+\subsection{Rundenbasierter vs. chaotischer Spielablauf}
+
+Der Ansatz die Entwicklung durch den Einsatz eines rundenbasierten Ablaufs bzw. Kampfsystems deutlich zu vereinfachen, muss wohl nach den Entwicklungen vom 27.12.2021 (\ref{ref-runden-impl}) zumindest angezweifelt werden. Denn der Aufwand, der durch die dadurf notwendige Konzeptionierung und Detailplanung entsteht ist nicht zu unterschätzen. Demengegen stünde bei einem chaotischen Spielablauf lediglich das Handling der Events. 
+
+
+
 
