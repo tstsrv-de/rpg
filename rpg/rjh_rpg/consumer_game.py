@@ -111,15 +111,15 @@ class Consumer(AsyncWebsocketConsumer):
                     print ("round_state set to 100")
 
             elif round_state == 100:
-                await db_expand_game_log(self.game_id, "<br /> ⏩ Es beginnt Runde " + str(await db_get_round_counter(self.game_id)) + "! <br />")
-                await db_expand_game_log(self.game_id, " 💥 " + str(await db_get_enemy_name(self.game_id)) + " greift an...<br />" )
+                await db_expand_game_log(self.game_id, "<br /> ⏩ Es beginnt Runde " + str(await db_get_round_counter(self.game_id)) + "! <br /><br />")
+                await db_expand_game_log(self.game_id, " ⚔ " + str(await db_get_enemy_name(self.game_id)) + " greift an...<br />" )
 
                 char_to_hit = await db_get_random_alive_user_char_in_games_id(self.game_id)
                 ap_to_deliver = await db_get_enemy_ap(self.game_id)
                 dmg_dealt = await db_give_dmg_to_user_char(char_to_hit, ap_to_deliver)
                 char_name_to_hit = await db_get_char_name_of_user_char_in_games_id(char_to_hit)
 
-                await db_expand_game_log(self.game_id, " &#x2694; ...und trifft " + char_name_to_hit + " mit " + str(dmg_dealt[2]) + " Schadenspunkten. <br /> &#128148; Die Lebenspunkte von " + char_name_to_hit + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
+                await db_expand_game_log(self.game_id, " 💥 ...und trifft " + char_name_to_hit + " mit " + str(dmg_dealt[2]) + " Schadenspunkten. <br /> 💔 Die Lebenspunkte von " + char_name_to_hit + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
 
                 await db_set_round_state(self.game_id, 200)    
                 
