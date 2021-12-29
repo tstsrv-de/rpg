@@ -103,6 +103,9 @@
     {{ request_user|json_script:"request_user" }}
     
     <script>
+      var last_game_log_content = ""
+      var log_textara = document.querySelector('#game_log_textara');
+
       var game_ws_loc = window.location;
       var game_ws_prot = "ws://";
       if (game_ws_loc.protocol == "https:") {
@@ -142,8 +145,12 @@
           }
       
           if (data.game_msg_type == 'game_log_update') {
+            if (last_game_log_content != data.game_websocket_content) {
               document.querySelector("#game_log_textara").innerHTML =
                   data.game_websocket_content;
+                  last_game_log_content = data.game_websocket_content;
+                  log_textara.scrollTop = log_textara.scrollHeight;
+                }
           }
       
           if (data.game_msg_type == 'game_counter_update') {
@@ -166,8 +173,6 @@
       
       // Game-log
       
-      var log_textara = document.querySelector('#game_log_textara');
-
       var game_timer_helper = 0;
       
       function local_game_loop() {
@@ -180,8 +185,22 @@
               }));
           }
       
-          // allways
-          log_textara.scrollTop = log_textara.scrollHeight;
+          // on 1 
+          if (game_timer_helper == 1) {
+        }          
+
+          // on 2 
+          if (game_timer_helper == 2) {
+            game_socket.send(JSON.stringify({
+                msg: "alive",
+            }));
+        }
+          // on 3
+          if (game_timer_helper == 3) {
+        }          
+        // allways
+
+          
 
           // count to 4 and reset to 0 if it is reached, so that there are 4 "stages" (0..3)
           game_timer_helper = game_timer_helper + 1;

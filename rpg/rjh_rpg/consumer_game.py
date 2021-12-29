@@ -93,7 +93,11 @@ class Consumer(AsyncWebsocketConsumer):
             400 collect and save the next actions from all alive user-chars, proceed only every user-char has a next action set
             500 run the collected actions (make damage, use ability, pass turn), check after each user-char if enemy is alive, if not end game with win-flag 995
             600 increase round_counter + 1
-            700 reset round_state to 100            
+            700 reset round_state and loop to 100
+
+            round-states without looping anymore:
+            990 gaveover / game lost
+            995 game is won
             '''                        
 
             if round_state == 0: 
@@ -139,13 +143,20 @@ class Consumer(AsyncWebsocketConsumer):
                     await db_set_user_char_to_dead(user_char)
                     await db_expand_game_log(self.game_id, "<br /> 💀 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " ist gestorben! <br />" )
 
-                    
-                
-                
                 await db_set_round_state(self.game_id, 300)    
 
+
             elif round_state == 300:
-                await db_set_round_state(self.game_id, 400)    
+                at_least_one_player_alive = await db_get_random_alive_user_char_in_games_id(self.game_id)
+
+                if not at_least_one_player_alive: 
+                    print("Gameover!")
+                    await db_set_round_state(self.game_id, 995)
+                    await db_expand_game_log(self.game_id, "<br /> 🪦 Kein Spieler hat überlebt.  <br /> 🥇 " + str(await db_get_enemy_name(self.game_id)) + " war siegreich. <br /> <br /> <br />")
+
+                else:
+                    await db_set_round_state(self.game_id, 400)
+
             elif round_state == 400:
                 await db_set_round_state(self.game_id, 500)    
             elif round_state == 500:
@@ -155,6 +166,13 @@ class Consumer(AsyncWebsocketConsumer):
                 await db_set_round_state(self.game_id, 700)                
             elif round_state == 700:
                 await db_set_round_state(self.game_id, 100)                
+                
+            elif round_state == 990:
+                pass
+                
+            elif round_state == 995:                
+                pass
+                                
             else:
                 # should not happen
                 print("no round state on known rules")
