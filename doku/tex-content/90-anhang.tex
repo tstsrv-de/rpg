@@ -198,8 +198,19 @@ Fortführung der Entwicklungen vom Vortag. Hier insbesondere nun die Implementat
 \begin{itemize}
     \item Auswahl eines zufälligen, lebenden Spielercharakters und zufügen von Schaden durch den Gegener. Außerdem Erweiterung Runden-/Gameloop und Fortschreiben des Game-Logs (Commit \url{https://git.io/JygDz}).
     \item Nächster Rundenschritt 200: Prüfen ob Spieler gestorben sind und Meldung im Game-Log ausgeben falls in aktueller Runde gestorben (Commit \url{https://git.io/Jya3H}). 
+\end{itemize}
+
+
+\subsection{Entwicklung, Mittwoch 28.12.2021:}
+
+Weitere Implementation von Rundenlogik:
+
+\begin{itemize}
+    \item Rundenschritt 300: Feststellen ob alle Spieler verstorben sind, falls ja in Spielende springen (Commit \url{https://git.io/Jy1Lu}).
+    \item Tests ergaben Probleme beim Spiel mit mehreren Spielern. Die Rundenlogik wird dann gleichzeitig vorangetrieben. Dadurch werden manche Aktionen und Rundenschritte mehrfach ausgeführt. Ein Versuch das Problem mit einem Token (ähnlich einem Semaphor) zu lösen, brachte leider noch keinen abschließenden Erfolg. Der Singleplayer aber, geht fehlerfrei. Das Problem wird daher zurückgestellt und nun zuerst die Entwicklung weiterer Punkte fortgeführt (Commit \url{https://git.io/Jy1qZ}).
     \item ...
 \end{itemize}
+
 
 \section{Noitzen für Reflektion}
 
@@ -207,6 +218,9 @@ Fortführung der Entwicklungen vom Vortag. Hier insbesondere nun die Implementat
 
 Der Ansatz die Entwicklung durch den Einsatz eines rundenbasierten Ablaufs bzw. Kampfsystems deutlich zu vereinfachen, muss wohl nach den Entwicklungen vom 27.12.2021 (\ref{ref-runden-impl}) zumindest angezweifelt werden. Denn der Aufwand, der durch die dadurf notwendige Konzeptionierung und Detailplanung entsteht ist nicht zu unterschätzen. Demengegen stünde bei einem chaotischen Spielablauf lediglich das Handling der Events. 
 
+\subsection{Kleinteilige Aufgabenpakete} 
 
+In der Entwicklung eine überschaubare Anzahl an kleinteiligen bzw. Teilufgaben vor sich zu haben, empfinde ich als sehr hilfreich. Man hat damit einen Überblick über die Arbeit der nächsten Tage. Bei der Entwicklung der Rundenlogik hatte ich durch die Kenntniss um die nächsten Runden-Schritte hier einen guten Überblick. Der Abschluss jeder einzelnen Teil-Aufgabe sorgte da laufend für postive Motivation. 
+Ich vermute, dass dieser Effekt sehr ähnlich bei den agilen Methoden zum tragen kommt und zur Motivation genutzt wird. 
 
 
