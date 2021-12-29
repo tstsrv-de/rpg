@@ -100,7 +100,7 @@
 
 
     {{ game_id|json_script:"game_id" }}
-    {{ request_user|json_script:"request_user" }}
+    {{ request_user_id|json_script:"request_user_id" }}
     
     <script>
       var last_game_log_content = ""
@@ -115,6 +115,10 @@
       const game_id = JSON.parse(
           document.getElementById("game_id").textContent
       );
+      const request_user_id = JSON.parse(
+          document.getElementById("request_user_id").textContent
+      );      
+
       const game_socket = new WebSocket(
           game_ws_prot + window.location.host + "/ws/game-" + game_id + "/"
       );
@@ -182,7 +186,8 @@
           if (game_timer_helper == 0) {
               game_socket.send(JSON.stringify({
                   msg: "alive",
-              }));
+                  request_user_id: request_user_id,                               
+                }));
           }
       
           // on 1 
@@ -193,7 +198,8 @@
           if (game_timer_helper == 2) {
             game_socket.send(JSON.stringify({
                 msg: "alive",
-            }));
+                request_user_id: request_user_id,                 
+              }));
         }
           // on 3
           if (game_timer_helper == 3) {

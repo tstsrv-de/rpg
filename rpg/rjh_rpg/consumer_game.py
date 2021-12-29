@@ -9,12 +9,15 @@ from rjh_rpg.consumer_game_tools import db_get_round_state, db_set_round_state
 from rjh_rpg.consumer_game_tools import db_get_is_round_state_locked, db_set_round_state_locked
 from rjh_rpg.consumer_game_tools import db_increase_round_counter, db_get_round_counter
 from rjh_rpg.consumer_game_tools import db_get_enemy_name, db_get_enemy_ap
-from rjh_rpg.consumer_game_tools import db_get_user_char_in_game_list, db_get_random_alive_user_char_in_games_id, db_give_dmg_to_user_char, db_get_char_name_of_user_char_in_games_id, db_get_died_but_not_dead_user_chars, db_set_user_char_to_dead
+from rjh_rpg.consumer_game_tools import db_get_user_char_in_game_list, db_get_random_alive_user_char_in_games_id, db_give_dmg_to_user_char, db_get_char_name_of_user_char_in_games_id, db_get_died_but_not_dead_user_chars, db_set_user_char_to_dead, db_get_user_char_from_user_id, db_get_first_user_char_of_game_id
 
 class Consumer(AsyncWebsocketConsumer):
     
     mycounter = 0
     round_state_token_is_mine = False
+
+    my_user_char = ""
+    request_user_id = ""
     
     # optimze traffic
     last_game_log_content = ""
@@ -76,6 +79,13 @@ class Consumer(AsyncWebsocketConsumer):
         message = text_data_json['msg']
 
         if message == 'alive':
+            if self.request_user_id == "":
+                self.request_user_id = text_data_json['request_user_id']
+                self.my_user_char = await db_get_user_char_from_user_id(self.game_id, self.request_user_id)
+            
+            
+
+
             # (TODO!) update timestamps, delete old entrys
             # check timestamps, delete old and zombie  entrys
             
@@ -101,17 +111,27 @@ class Consumer(AsyncWebsocketConsumer):
             995 game is won
             '''                        
 
+            # 2021-12-29 16:57 haenno:
             # this part sadly does not work correctly. problem here is that with multiple 
             # clients/players, the rounds are driven at the same time. solution should be
             # a token -- but this token also need to be synced, which brings new promblems.
             # (TODO!) get expert help on that.
 
+            # self.round_state_token_is_mine = False
+            # if await db_get_is_round_state_locked(self.game_id) == False:            
+            #    db_set_round_state_locked(self.game_id, True) 
+            #    self.round_state_token_is_mine = True     
+
+            # 2021-12-29 16:57 haenno:
+            # workaround: only the first user of all the users in the game will drive the rounds
+
             self.round_state_token_is_mine = False
-            if await db_get_is_round_state_locked(self.game_id) == False:
-                db_set_round_state_locked(self.game_id, True) 
-                self.round_state_token_is_mine = True     
-                           
-                
+            if str(self.my_user_char) == await db_get_first_user_char_of_game_id(self.game_id):
+                db_set_round_state_locked(self.game_id, True) # take round-state-token
+                self.round_state_token_is_mine = True
+                print(str(self.my_user_char) + " HAS THE TOKEN and drives the round!")
+
+
             if self.round_state_token_is_mine == True:
                 if round_state == 0: 
                     # switch up to first run of first round
@@ -182,10 +202,8 @@ class Consumer(AsyncWebsocketConsumer):
                     # should not happen
                     print("no round state on known rules")
                 
-                # release round-state-token
-                print("round-state-token released")
-                db_set_round_state_locked(self.game_id, False)
-                self.round_state_token_is_mine = False
+                db_set_round_state_locked(self.game_id, False) # release round-state-token
+                self.round_state_token_is_mine = False 
 
             await self.channel_layer.group_send(self.msg_group_name, { 
                                 'type': 'msg_group_send_game_log_update', })

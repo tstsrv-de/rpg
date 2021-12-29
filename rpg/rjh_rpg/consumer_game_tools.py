@@ -1,4 +1,4 @@
-from rjh_rpg.models import GameScenes, Games, UserCharInGames
+from rjh_rpg.models import GameScenes, Games, UserCharInGames, UserChar, User
 from channels.db import database_sync_to_async
 import random
 
@@ -62,7 +62,7 @@ def db_get_enemy_ap(game_id):
 
 @database_sync_to_async
 def db_get_user_char_in_game_list(game_id):
-    user_chars_in_game = UserCharInGames.objects.filter(game_id=game_id)
+    user_chars_in_game = UserCharInGames.objects.filter(game_id=game_id).order_by('id')
     user_char_in_game_list = [] 
     for user_char in user_chars_in_game:
         user_char_in_game_list.append(user_char.user_char_id)
@@ -106,5 +106,21 @@ def db_get_char_name_of_user_char_in_games_id(user_char_in_games_id):
     char_name = UserCharInGames.objects.get(id=user_char_in_games_id).user_char_id
     return str(char_name)
 
+@database_sync_to_async
+def db_get_user_char_from_user_id(game_id, user_id):
+    this_users_user_chars = []
+    for user_char in UserChar.objects.filter(usernickname=user_id):
+        this_users_user_chars.append(user_char.name)
+    
+    for user_char_in_game_id in UserCharInGames.objects.filter(game_id=game_id):
+        for user_char_of_this_user in this_users_user_chars:
+            if str(user_char_of_this_user) == str(user_char_in_game_id.user_char_id):
+                return user_char_in_game_id.user_char_id
 
+    return None
+
+@database_sync_to_async
+def db_get_first_user_char_of_game_id(game_id):
+    first_user_char_of_game = UserCharInGames.objects.filter(game_id=game_id).order_by('id')
+    return str(first_user_char_of_game[0].user_char_id)
 

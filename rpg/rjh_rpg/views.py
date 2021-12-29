@@ -340,12 +340,12 @@ def game(request, game_id):
 
     game_scene = game_obj.game_scene_id
     image_name = GameScenes.objects.get(name=game_scene).enemy_image
-    print("image_name: " + str(image_name))
+    current_user_id = User.objects.get(id=request.user.id).id
     
     return render(request,'game.html', {
         'game_id': game_id,
         'game_user_char_list' : game_user_char_list,  
-        'request_user'      : str(request.user),
+        'request_user_id'      : str(current_user_id),
         'enemy_image': image_name, 
     })
     
