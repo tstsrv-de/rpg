@@ -14,6 +14,7 @@ from rjh_rpg.consumer_game_tools import db_get_user_char_in_game_list, db_get_ra
 class Consumer(AsyncWebsocketConsumer):
     
     mycounter = 0
+    round_state_token_is_mine = False
     
     # optimze traffic
     last_game_log_content = ""
@@ -100,82 +101,91 @@ class Consumer(AsyncWebsocketConsumer):
             995 game is won
             '''                        
 
-            if round_state == 0: 
-                # switch up to first run of first round
-                round_state_is_locked = await db_get_is_round_state_locked(self.game_id)
-                if round_state_is_locked == True:
-                    # do nothing, wait for others to finish and free round_state
-                    pass
-                else: 
-                    # (TODO!) understand why this works only without await on the lock AND test it with more players (see if lock works at all!)
-                    db_set_round_state_locked(self.game_id, True) 
-                    await db_set_round_state(self.game_id, 100)
+            # this part sadly does not work correctly. problem here is that with multiple 
+            # clients/players, the rounds are driven at the same time. solution should be
+            # a token -- but this token also need to be synced, which brings new promblems.
+            # (TODO!) get expert help on that.
+
+            self.round_state_token_is_mine = False
+            if await db_get_is_round_state_locked(self.game_id) == False:
+                db_set_round_state_locked(self.game_id, True) 
+                self.round_state_token_is_mine = True     
+                           
+                
+            if self.round_state_token_is_mine == True:
+                if round_state == 0: 
+                    # switch up to first run of first round
+                        await db_set_round_state(self.game_id, 100)
+                        await db_increase_round_counter(self.game_id)
+                        print ("round_state set to 100")
+
+                elif round_state == 100:
+                    await db_expand_game_log(self.game_id, "<br /> ⏩ Es beginnt Runde " + str(await db_get_round_counter(self.game_id)) + ": <br /><br />")
+
+                    char_to_hit = await db_get_random_alive_user_char_in_games_id(self.game_id)
+
+                    if not char_to_hit: # failsave in case no player is alive
+                        await db_set_round_state(self.game_id, 300)
+
+                    else:
+                        ap_to_deliver = await db_get_enemy_ap(self.game_id)
+                        dmg_dealt = await db_give_dmg_to_user_char(char_to_hit, ap_to_deliver)
+                        char_name_to_hit = await db_get_char_name_of_user_char_in_games_id(char_to_hit)
+
+                        await db_expand_game_log(self.game_id, " ⚔ " + str(await db_get_enemy_name(self.game_id)) + " greift mit "+ str(ap_to_deliver) +" Angriffspunkten an...<br />" )
+
+                        await db_expand_game_log(self.game_id, " 💥 ...und trifft " + char_name_to_hit + " für " + str(dmg_dealt[2]) + " Schaden. <br /> 💔 Die Lebenspunkte von " + char_name_to_hit + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
+
+                        await db_set_round_state(self.game_id, 200)    
+
+                elif round_state == 200:
+                    char_list = await db_get_user_char_in_game_list(self.game_id)
+                    print("char_list: " + str(char_list))
+                    new_dead_user_chars = await db_get_died_but_not_dead_user_chars(self.game_id)
+                    print("new_dead_user_chars: " + str(new_dead_user_chars))
+                    for user_char in new_dead_user_chars:
+                        print("user_char dead: " + str(user_char))
+                        await db_set_user_char_to_dead(user_char)
+                        await db_expand_game_log(self.game_id, "<br /> 💀 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " ist gestorben! <br />" )
+
+                    await db_set_round_state(self.game_id, 300)    
+
+
+                elif round_state == 300:
+                    at_least_one_player_alive = await db_get_random_alive_user_char_in_games_id(self.game_id)
+
+                    if not at_least_one_player_alive: 
+                        print("Gameover!")
+                        await db_set_round_state(self.game_id, 995)
+                        await db_expand_game_log(self.game_id, "<br /> 🪦 Kein Spieler hat überlebt.  <br /> 🥇 " + str(await db_get_enemy_name(self.game_id)) + " war siegreich. <br /> <br /> <br />")
+
+                    else:
+                        await db_set_round_state(self.game_id, 400)
+
+                elif round_state == 400:
+                    await db_set_round_state(self.game_id, 500)    
+                elif round_state == 500:
+                    await db_set_round_state(self.game_id, 600)    
+                elif round_state == 600:
                     await db_increase_round_counter(self.game_id)
-                    db_set_round_state_locked(self.game_id, False)
-                    print ("round_state set to 100")
-
-            elif round_state == 100:
-                await db_expand_game_log(self.game_id, "<br /> ⏩ Es beginnt Runde " + str(await db_get_round_counter(self.game_id)) + ": <br /><br />")
-
-                char_to_hit = await db_get_random_alive_user_char_in_games_id(self.game_id)
-
-                if not char_to_hit: # failsave in case no player is alive
-                    await db_set_round_state(self.game_id, 300)
-
+                    await db_set_round_state(self.game_id, 700)                
+                elif round_state == 700:
+                    await db_set_round_state(self.game_id, 100)                
+                    
+                elif round_state == 990:
+                    pass
+                    
+                elif round_state == 995:                
+                    pass
+                                    
                 else:
-                    ap_to_deliver = await db_get_enemy_ap(self.game_id)
-                    dmg_dealt = await db_give_dmg_to_user_char(char_to_hit, ap_to_deliver)
-                    char_name_to_hit = await db_get_char_name_of_user_char_in_games_id(char_to_hit)
-
-                    await db_expand_game_log(self.game_id, " ⚔ " + str(await db_get_enemy_name(self.game_id)) + " greift mit "+ str(ap_to_deliver) +" Angriffspunkten an...<br />" )
-
-                    await db_expand_game_log(self.game_id, " 💥 ...und trifft " + char_name_to_hit + " für " + str(dmg_dealt[2]) + " Schaden. <br /> 💔 Die Lebenspunkte von " + char_name_to_hit + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
-
-                    await db_set_round_state(self.game_id, 200)    
-
-            elif round_state == 200:
-                char_list = await db_get_user_char_in_game_list(self.game_id)
-                print("char_list: " + str(char_list))
-                new_dead_user_chars = await db_get_died_but_not_dead_user_chars(self.game_id)
-                print("new_dead_user_chars: " + str(new_dead_user_chars))
-                for user_char in new_dead_user_chars:
-                    print("user_char dead: " + str(user_char))
-                    await db_set_user_char_to_dead(user_char)
-                    await db_expand_game_log(self.game_id, "<br /> 💀 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " ist gestorben! <br />" )
-
-                await db_set_round_state(self.game_id, 300)    
-
-
-            elif round_state == 300:
-                at_least_one_player_alive = await db_get_random_alive_user_char_in_games_id(self.game_id)
-
-                if not at_least_one_player_alive: 
-                    print("Gameover!")
-                    await db_set_round_state(self.game_id, 995)
-                    await db_expand_game_log(self.game_id, "<br /> 🪦 Kein Spieler hat überlebt.  <br /> 🥇 " + str(await db_get_enemy_name(self.game_id)) + " war siegreich. <br /> <br /> <br />")
-
-                else:
-                    await db_set_round_state(self.game_id, 400)
-
-            elif round_state == 400:
-                await db_set_round_state(self.game_id, 500)    
-            elif round_state == 500:
-                await db_set_round_state(self.game_id, 600)    
-            elif round_state == 600:
-                await db_increase_round_counter(self.game_id)
-                await db_set_round_state(self.game_id, 700)                
-            elif round_state == 700:
-                await db_set_round_state(self.game_id, 100)                
+                    # should not happen
+                    print("no round state on known rules")
                 
-            elif round_state == 990:
-                pass
-                
-            elif round_state == 995:                
-                pass
-                                
-            else:
-                # should not happen
-                print("no round state on known rules")
+                # release round-state-token
+                print("round-state-token released")
+                db_set_round_state_locked(self.game_id, False)
+                self.round_state_token_is_mine = False
 
             await self.channel_layer.group_send(self.msg_group_name, { 
                                 'type': 'msg_group_send_game_log_update', })
