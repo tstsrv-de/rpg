@@ -58,7 +58,7 @@ class GameScenes(models.Model): # blueprint of the games
     enemy_name = models.CharField(default="Der Gegener", null=True, blank=True, max_length=300)
     enemy_hp = models.IntegerField(default=100) 
     enemy_ap =  models.IntegerField(default=10)
-    enemy_image = models.TextField(default="hypnotoad.mp4", null=True, blank=True)
+    enemy_image = models.CharField(default="hypnotoad.mp4", null=True, blank=True, max_length=300)
     
     def __str__(self):
         return self.name    
