@@ -124,3 +124,31 @@ def db_get_first_user_char_of_game_id(game_id):
     first_user_char_of_game = UserCharInGames.objects.filter(game_id=game_id).order_by('id')
     return str(first_user_char_of_game[0].user_char_id)
 
+@database_sync_to_async
+def db_set_next_user_char_action(user_char_in_games_id, action_type):
+    return UserCharInGames.objects.filter(id=user_char_in_games_id).update(next_action=action_type)
+
+@database_sync_to_async
+def db_get_user_chars_next_action(user_char_in_games_id):
+    return str(UserCharInGames.objects.get(id=user_char_in_games_id).next_action)
+
+@database_sync_to_async
+def db_get_user_chars_with_no_next_action(game_id):
+    undecided = UserCharInGames.objects.filter(game_id=game_id, user_char_died=False, next_action='')
+    undecided_to_remind = []
+    for user_char in undecided:
+        undecided_to_remind.append(user_char.id)
+    return undecided_to_remind
+
+@database_sync_to_async
+def db_reset_all_next_user_char_actions(game_id):
+    return UserCharInGames.objects.filter(game_id=game_id).update(next_action='', next_action_was_reminded=False)
+
+@database_sync_to_async
+def db_get_user_chars_next_action_was_reminded(user_char_in_games_id):
+    return bool(UserCharInGames.objects.get(id=user_char_in_games_id).next_action_was_reminded)
+
+@database_sync_to_async
+def db_set_next_user_char_action_was_reminded(user_char_in_games_id):
+    return UserCharInGames.objects.filter(id=user_char_in_games_id).update(next_action_was_reminded=True)
+

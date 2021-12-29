@@ -10,6 +10,7 @@ from rjh_rpg.consumer_game_tools import db_get_is_round_state_locked, db_set_rou
 from rjh_rpg.consumer_game_tools import db_increase_round_counter, db_get_round_counter
 from rjh_rpg.consumer_game_tools import db_get_enemy_name, db_get_enemy_ap
 from rjh_rpg.consumer_game_tools import db_get_user_char_in_game_list, db_get_random_alive_user_char_in_games_id, db_give_dmg_to_user_char, db_get_char_name_of_user_char_in_games_id, db_get_died_but_not_dead_user_chars, db_set_user_char_to_dead, db_get_user_char_from_user_id, db_get_first_user_char_of_game_id
+from rjh_rpg.consumer_game_tools import db_set_next_user_char_action, db_get_user_chars_next_action, db_get_user_chars_with_no_next_action, db_reset_all_next_user_char_actions, db_set_next_user_char_action_was_reminded, db_get_user_chars_next_action_was_reminded
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -78,6 +79,30 @@ class Consumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['msg']
 
+        # save next action, but only if the round-state is 400 (collecting actions)
+        if message == 'save_game_action' and await db_get_round_state(self.game_id) == 400:
+            action_type = text_data_json['action_type']
+            user_char_in_games_id = text_data_json['user_char_in_games_id']
+            
+            # only update if no choice has been made
+            if await db_get_user_chars_next_action(user_char_in_games_id) == '':
+                save_return = await db_set_next_user_char_action(user_char_in_games_id, action_type)
+                action_string = ""
+                if action_type == "attack":
+                    action_string = "angreifen"
+                elif action_type == "pass":
+                    action_string = "aussetzen"
+                elif action_type == "ability":
+                    action_string = "seine Spezialfähigkeit einsetzen"
+
+                if save_return == 1:
+                    await db_expand_game_log(self.game_id, "<br /> ✅ " + str(await db_get_char_name_of_user_char_in_games_id(user_char_in_games_id)) + " wird in der nächsten Runde " + action_string + "!<br />" )
+            else:
+                await db_expand_game_log(self.game_id, "<br /> ⏳ " + str(await db_get_char_name_of_user_char_in_games_id(user_char_in_games_id)) + " ist ungeduldig und würde gerne weitermachen...<br />" )
+                
+            
+            
+        
         if message == 'alive':
             if self.request_user_id == "":
                 self.request_user_id = text_data_json['request_user_id']
@@ -129,7 +154,10 @@ class Consumer(AsyncWebsocketConsumer):
             if str(self.my_user_char) == await db_get_first_user_char_of_game_id(self.game_id):
                 db_set_round_state_locked(self.game_id, True) # take round-state-token
                 self.round_state_token_is_mine = True
-                print(str(self.my_user_char) + " HAS THE TOKEN and drives the round!")
+                print(str(self.my_user_char) + " is the first user of the game and drives the round! (TOKEN)")
+            else:
+                print(str(self.my_user_char) + " is not the first user of the game and has to wait. (NO TOKEN)")
+                
 
 
             if self.round_state_token_is_mine == True:
@@ -137,7 +165,7 @@ class Consumer(AsyncWebsocketConsumer):
                     # switch up to first run of first round
                         await db_set_round_state(self.game_id, 100)
                         await db_increase_round_counter(self.game_id)
-                        print ("round_state set to 100")
+
 
                 elif round_state == 100:
                     await db_expand_game_log(self.game_id, "<br /> ⏩ Es beginnt Runde " + str(await db_get_round_counter(self.game_id)) + ": <br /><br />")
@@ -160,11 +188,8 @@ class Consumer(AsyncWebsocketConsumer):
 
                 elif round_state == 200:
                     char_list = await db_get_user_char_in_game_list(self.game_id)
-                    print("char_list: " + str(char_list))
                     new_dead_user_chars = await db_get_died_but_not_dead_user_chars(self.game_id)
-                    print("new_dead_user_chars: " + str(new_dead_user_chars))
                     for user_char in new_dead_user_chars:
-                        print("user_char dead: " + str(user_char))
                         await db_set_user_char_to_dead(user_char)
                         await db_expand_game_log(self.game_id, "<br /> 💀 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " ist gestorben! <br />" )
 
@@ -182,22 +207,42 @@ class Consumer(AsyncWebsocketConsumer):
                     else:
                         await db_set_round_state(self.game_id, 400)
 
-                elif round_state == 400:
-                    await db_set_round_state(self.game_id, 500)    
+
+                elif round_state == 400: # collect and save next actions, see also msg_type 'save_action'
+                    
+                    proceed = True
+                    for user_char in await db_get_user_chars_with_no_next_action(self.game_id):
+                        if await db_get_user_chars_next_action_was_reminded(user_char) == False:
+                            await db_expand_game_log(self.game_id, "<br /> ❓ " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " überlegt konzentriert seinen nächsten Schritt... <br />" )
+                            await db_set_next_user_char_action_was_reminded(user_char)
+                        proceed = False
+                    
+                    if proceed == True:
+                        await db_set_round_state(self.game_id, 500)
+
+
                 elif round_state == 500:
                     await db_set_round_state(self.game_id, 600)    
+
+
                 elif round_state == 600:
                     await db_increase_round_counter(self.game_id)
+                    await db_reset_all_next_user_char_actions(self.game_id)
                     await db_set_round_state(self.game_id, 700)                
+
+
                 elif round_state == 700:
                     await db_set_round_state(self.game_id, 100)                
                     
+
                 elif round_state == 990:
                     pass
                     
+
                 elif round_state == 995:                
                     pass
                                     
+
                 else:
                     # should not happen
                     print("no round state on known rules")
@@ -225,5 +270,4 @@ class Consumer(AsyncWebsocketConsumer):
              
             text_to_add = "Spieler denkt .o0( " + str(msg_to_add) + " )<br />"
             await db_expand_game_log(self.game_id,text_to_add)
-            
-            
+

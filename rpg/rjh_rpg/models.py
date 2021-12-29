@@ -107,3 +107,5 @@ class UserCharInGames(models.Model):
     current_hp = models.IntegerField(default=None, null=True, blank=True)
     current_ap = models.IntegerField(default=None, null=True, blank=True)
     user_char_died = models.BooleanField(default=False)
+    next_action = models.TextField(default='', null=True, blank=True)
+    next_action_was_reminded = models.BooleanField(default=False)

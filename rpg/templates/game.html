@@ -64,33 +64,83 @@
     </tr>
   
     <tr style="height: 50%; width: 100%">
-      <td       style="      background-color: #009690; 
+      <td style=" background-color: #009690; 
       vertical-align: middle; 
-      text-align: center
-      "  >
-
-      <table style="border:1px solid; width: 100% ">
-        <tr>
-      {% for user_char in game_user_char_list %} 
-
-      <td>{{user_char.user_char_id}} </td>
-
-      {% endfor %}
-        </tr> </table>
+      text-align: center; ">
+      <div style="vertical-align: middle;       text-align: center;    margin: auto;">
 
       
+        {% for user_char in game_user_char_list %} 
+        <table style="width: 95%; border-collapse: collapse; margin: 5px; display: inline-table; ">
+        <tr style="border:5px solid; ">
 
-      <input type="text" id="game_log_add_text" name="game_log_add_text">
-      <input type="submit" value="Gedanken ins Gamelog schreiben" onclick="game_log_think();"><br />
-      <br />  
+      <td style="border:1px solid; width:20%"> 
+        <div style=" font-size: 30px;font-size: 4vw;">
+          {% if user_char.klasse == "W" %} 🤺 {% endif %}
+          {% if user_char.klasse == "M" %} 🧙 {% endif %}
+          {% if user_char.klasse == "P" %} 👼 {% endif %}          
+              
+        </div>
+          </td>
+
+      <td style="border:1px solid;  width:60%">
+        
+        <div style=" font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        font-size: 1.4vw;
+        color: #ffffff;  ">
+          {{user_char.name}}
+        </div>
+          <div style=" font-family: Arial, Helvetica, sans-serif;        font-size: 10px;
+          font-size: 0.9vw;
+          color: #ffffff;  ">
+          HP: <b id="current_hp_of_user_char_in_games_id_{{ user_char.user_char_in_games_id }}"></b> / {{user_char.hp}} <br /> 
+          AP: {{user_char.ap}} 
+        </div>
       
-      <input type="submit" value="Spiel beenden" onclick="set_game_to_finished();">
       </td>
-      <td      style="          background-color: #00839B;
+
+      <td style="border:1px solid;  width:20%; ">
+        <div style="font-family: Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        font-size: 1vw;
+        color: #ffffff;">  
+
+        {% if user_char.user_char_id == request_user_id  %} 
+        <input type="submit" value="Angriff" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; background:#ffffff; border:0px; font-size: 14px; font-size: 1.1vw; margin:5px;"> <br />
+        <input type="submit" value="Fähigkeit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%; background:#ffffff; border:0px; font-size: 14px; font-size: 1.1vw; margin:5px;"> <br />
+        <input type="submit" value="Aussetzen" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%; background:#ffffff; border:0px; font-size: 14px; font-size: 1.1vw; margin:5px;"> <br />
+        {% else %}
+
+        <div id="user_char_is_ready_{{ user_char.user_char_in_games_id }}"></div>
+
+        {% endif %}
+      </div>
+      </td>
+
+        </tr> 
+      </table><br />
+      <br />
+        {% endfor %}
+     
+    </div>
+
+
+      
+      </td>
+      <td style="background-color: #00839B;
           vertical-align: middle;
-          text-align: center;      "    >
+          text-align: center;">
   
         <div id="game_counter">0</div>
+
+
+        <input type="text" id="game_log_add_text" name="game_log_add_text" style="border:1px solid; ">
+        <input type="submit" value="Gedanken ins Gamelog schreiben" onclick="game_log_think();">
+        <br />
+        <br />  
+        <input type="submit" value="Spiel beenden" onclick="set_game_to_finished();">
+  
       </td>
     </tr>
   </table>
@@ -139,6 +189,17 @@
         }));
     }     
 
+    function game_action(action_type, user_char_in_games_id) {
+      game_socket.send(JSON.stringify({
+          msg: 'save_game_action',
+          game_id: game_id,
+          action_type: action_type,
+          user_char_in_games_id, user_char_in_games_id,
+      }));
+  }
+
+    
+    
       game_socket.onmessage = function(e) {
           const data = JSON.parse(e.data);
           console.log(data)

@@ -336,16 +336,31 @@ def game(request, game_id):
     # - game is not finished
     # - user is player of this game
     
-    game_user_char_list = UserCharInGames.objects.filter(game_id=game_id).order_by('id')
 
     game_scene = game_obj.game_scene_id
     image_name = GameScenes.objects.get(name=game_scene).enemy_image
     current_user_id = User.objects.get(id=request.user.id).id
     
+    game_user_char_list = []
+    for user_char in UserCharInGames.objects.filter(game_id=game_id).order_by('id'):
+        user_char_details = UserChar.objects.get(name=user_char.user_char_id)
+        game_user_char_list.append({
+            'user_char_in_games_id': user_char.id,
+            'name': user_char.user_char_id,
+            'klasse': user_char_details.Klasse, 
+            'geschlecht': user_char_details.Geschlecht,
+            'hp': user_char_details.hp,
+            'ap': user_char_details.ap,
+            'user_char_id': user_char_details.usernickname.id,
+            }
+        )
+        
+    print("user_char_list_with_details: " + str(game_user_char_list))
+    
     return render(request,'game.html', {
         'game_id': game_id,
         'game_user_char_list' : game_user_char_list,  
-        'request_user_id'      : str(current_user_id),
+        'request_user_id'      : current_user_id,
         'enemy_image': image_name, 
     })
     
