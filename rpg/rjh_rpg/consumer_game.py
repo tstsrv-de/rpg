@@ -264,10 +264,10 @@ class Consumer(AsyncWebsocketConsumer):
                                 'type': 'msg_group_send_endscreen',  })
 
 
-        if message == 'game_log_think':
+        if message == 'game_chat_msg':
             msg_to_add = text_data_json['msg_to_gamelog']
-            print("Gamelog add: " + str(msg_to_add))
-             
-            text_to_add = "Spieler denkt .o0( " + str(msg_to_add) + " )<br />"
-            await db_expand_game_log(self.game_id,text_to_add)
-
+            if msg_to_add != "": 
+                user_id = text_data_json['user_id'] 
+                await db_expand_game_log(self.game_id, "<br /> 💬 " + str(await db_get_user_char_from_user_id(self.game_id, user_id)) + " sagt: \"" + str(msg_to_add) + "\"." )
+                print("Gamelog add: " + str(msg_to_add))  
+ 

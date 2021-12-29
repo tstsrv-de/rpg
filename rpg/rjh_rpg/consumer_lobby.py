@@ -177,17 +177,23 @@ class Consumer(AsyncWebsocketConsumer):
                 game_id = await self.db_start_game(self.scene_id, user_char_list, locked_in_datetime[0])
                 
                 countdown_html = """
-                <h4 style="color:red;">Das Spiel startet!</h4>
-                <h3><a href="/game-**game_id**/">...angemeldete Spieler wechseln <u>jetzt</u> bitte zum Spiel!</a></h1>
+                <h1>Das Spiel startet...</h2>
                 <br />
-                <p style="color:red;">Die übrigen Spieler gehen bitte zurück in die Worldmap <br />oder laden diese Seite für einen Neustart der Lobby erneut. <br />Danke!</p>
+                <h2>...angemeldete Spieler <a href="/game-**game_id**/">wechseln jetzt bitte zum Spiel</a>...</h4>
+                <br />
+                <h4>...alle anderen Spieler gehen bitte zurück in <a href="/worldmap/">die Worldmap</a>...</h4>
+                <h4>...oder rufen <a href="/lobby-**scene_id**/">diese Seite</a> für einen Neustart der Lobby erneut auf... </h4>
+                <br /><br />
                 """
-                countdown_html = countdown_html.replace("**game_id**", str(game_id))
+                countdown_html = countdown_html.replace("**scene_id**", str(self.scene_id))
 
                 try:
                     await self.db_free_all_slots_in_current_lobby()
                 except:
                     pass                
+                
+                html = countdown_html.replace("**game_id**", str(game_id))
+                countdown_html = ""                
                 
                 
 

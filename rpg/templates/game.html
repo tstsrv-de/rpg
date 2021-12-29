@@ -21,35 +21,29 @@
     font-size: 2vw;
     color: #ffffff;">
   
-    <table  cellpadding="0"
-    cellspacing="0"
-    style="height: 100%;
-      width: 100%;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;">
+    <table  cellpadding="0"     cellspacing="0"
+    style="height: 100%;       width: 100%;
+      position: absolute;       top: 0;       bottom: 0;
+      left: 0;       right: 0;">
 
-    <tr style="height: 50%; width: 100%">
+    <tr style="height: 40%; width: 100%">
       <td  style="  background-color: #3EB96A;
           vertical-align: middle;
           text-align: center;
           width:50%;  " >
 
-          <video loop="true" autoplay="autoplay" autoplay muted style="width: 50%;  object-fit: contain;">
+          <video loop="true" autoplay="autoplay" autoplay muted style="max-width: auto; height: 20vw;">
             <source src="../static/img/enemys/{{enemy_image}}"  type="video/mp4" />
             </video>
   
       </td>
-      <td style="background-color: #00A97F; 
-      vertical-align: middle; 
-      text-align: center; width:50%; "  >
+
+      <td style="background-color: #00A97F;   vertical-align: middle;  text-align: center; width:50%; "  rowspan="3">
   
         
         <div id="game_log_textara" style="        margin: 0 auto;
-        width:100%; 
-        height:100%; 
+        width:95%; 
+        height:95%; 
         font-family: monospace;
         font-size: 12px;
         font-size: 1vw;
@@ -62,17 +56,16 @@
     </div>
       </td>
     </tr>
-  
-    <tr style="height: 50%; width: 100%">
-      <td style=" background-color: #009690; 
-      vertical-align: middle; 
-      text-align: center; ">
+
+    <tr style="height: 40%; width: 100%">
+
+      <td style=" background-color: #009690;        vertical-align: middle;        text-align: center; ">
       <div style="vertical-align: middle;       text-align: center;    margin: auto;">
 
       
         {% for user_char in game_user_char_list %} 
-        <table style="width: 95%; border-collapse: collapse; margin: 5px; display: inline-table; ">
-        <tr style="border:5px solid; ">
+        <table style="width: 95%; border-collapse: collapse; margin: 0.5vw; display: inline-table; ">
+        <tr style="border:0.2vw solid; ">
 
       <td style="border:1px solid; width:20%"> 
         <div style=" font-size: 30px;font-size: 4vw;">
@@ -83,33 +76,26 @@
         </div>
           </td>
 
-      <td style="border:1px solid;  width:60%">
+      <td style="border:0.1vw solid;  width:60%">
         
-        <div style=" font-family: Arial, Helvetica, sans-serif;
-        font-size: 14px;
-        font-size: 1.4vw;
-        color: #ffffff;  ">
+        <div style=" font-family: Arial, Helvetica, sans-serif;         font-size: 1.4vw;         color: #ffffff;  ">
           {{user_char.name}}
         </div>
-          <div style=" font-family: Arial, Helvetica, sans-serif;        font-size: 10px;
-          font-size: 0.9vw;
-          color: #ffffff;  ">
-          HP: <b id="current_hp_of_user_char_in_games_id_{{ user_char.user_char_in_games_id }}"></b> / {{user_char.hp}} <br /> 
-          AP: {{user_char.ap}} 
+          <div style=" font-family: Arial, Helvetica, sans-serif;             font-size: 0.9vw;          color: #ffffff;  ">
+          HP: {{user_char.hp}} /  AP: {{user_char.ap}} 
         </div>
       
       </td>
 
       <td style="border:1px solid;  width:20%; ">
         <div style="font-family: Arial, Helvetica, sans-serif;
-        font-size: 10px;
         font-size: 1vw;
         color: #ffffff;">  
 
         {% if user_char.user_char_id == request_user_id  %} 
-        <input type="submit" value="Angriff" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; background:#ffffff; border:0px; font-size: 14px; font-size: 1.1vw; margin:5px;"> <br />
-        <input type="submit" value="Fähigkeit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%; background:#ffffff; border:0px; font-size: 14px; font-size: 1.1vw; margin:5px;"> <br />
-        <input type="submit" value="Aussetzen" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%; background:#ffffff; border:0px; font-size: 14px; font-size: 1.1vw; margin:5px;"> <br />
+        <input type="submit" value="Angriff" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; background:#ffffff; border:0px; font-size: 1.1vw; margin:0.3vw;"> <br />
+        <input type="submit" value="Fähigkeit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%; background:#ffffff; border:0px;  font-size: 1.1vw; margin:0.3vw;"> <br />
+        <input type="submit" value="Aussetzen" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%; background:#ffffff; border:0px;  font-size: 1.1vw; margin:0.3vw;"> <br />
         {% else %}
 
         <div id="user_char_is_ready_{{ user_char.user_char_in_games_id }}"></div>
@@ -128,21 +114,24 @@
 
       
       </td>
-      <td style="background-color: #00839B;
-          vertical-align: middle;
-          text-align: center;">
+
+      
+    </tr>
+
   
-        <div id="game_counter">0</div>
+    <tr style="height: 20%; width: 100%">
 
+      <td style="background-color: #00839B;        vertical-align: middle;          text-align: center;">
+  
+        <input type="text" id="game_chat_msg_text" name="game_chat_msg_text" onkeypress="return game_chat_msg_key(event, {{ request_user_id }})"  style="width: 50%; border:0.1vw solid; background:#ffffff; font-size: 1.1vw; margin:0.3vw;"> 
+        <input type="submit" value="Nachricht senden" onclick="game_chat_msg_click({{ request_user_id }});" style="background:#ffffff; border:0px; font-size: 1.1vw; margin:0.3vw;"> 
 
-        <input type="text" id="game_log_add_text" name="game_log_add_text" style="border:1px solid; ">
-        <input type="submit" value="Gedanken ins Gamelog schreiben" onclick="game_log_think();">
-        <br />
-        <br />  
-        <input type="submit" value="Spiel beenden" onclick="set_game_to_finished();">
+        <br /><input type="submit" value="Dev/Debug: Spiel beenden" onclick="set_game_to_finished();" style="background:#ff0000;"" >
   
       </td>
+
     </tr>
+
   </table>
   
 
@@ -151,9 +140,10 @@
 
     {{ game_id|json_script:"game_id" }}
     {{ request_user_id|json_script:"request_user_id" }}
-    
+     
     <script>
-      var last_game_log_content = ""
+      last_counter_value_update = new Date();
+      var last_game_log_content = "";
       var log_textara = document.querySelector('#game_log_textara');
 
       var game_ws_loc = window.location;
@@ -181,13 +171,21 @@
           }));
       }
      
-      function game_log_think() {
-        var msg_to_gamelog_text = document.querySelector("#game_log_add_text").value
+      function game_chat_msg_click(user_id) {
+        var msg_to_gamelog_text = document.querySelector("#game_chat_msg_text").value
         game_socket.send(JSON.stringify({
-            msg: 'game_log_think',
+            msg: 'game_chat_msg',
             msg_to_gamelog: msg_to_gamelog_text,
+            user_id: user_id,
         }));
+        document.querySelector("#game_chat_msg_text").value = '';
     }     
+
+    function game_chat_msg_key(eventKeyPress, user_id) {
+      if (eventKeyPress.keyCode == 13) {
+        game_chat_msg_click(user_id)
+      }
+  }    
 
     function game_action(action_type, user_char_in_games_id) {
       game_socket.send(JSON.stringify({
@@ -219,8 +217,8 @@
           }
       
           if (data.game_msg_type == 'game_counter_update') {
-              document.querySelector("#game_counter").innerHTML =
-                  data.game_websocket_content;
+            // only useage of this is, to see if the connection is still alive  
+            last_counter_value_update = new Date();
           }
       
           if (data.game_msg_type == 'game_endscreen') {
@@ -253,7 +251,9 @@
       
           // on 1 
           if (game_timer_helper == 1) {
-        }          
+
+
+        }           
 
           // on 2 
           if (game_timer_helper == 2) {
@@ -264,10 +264,19 @@
         }
           // on 3
           if (game_timer_helper == 3) {
+
+
         }          
         // allways
 
-          
+    
+            // check if connection is still alive
+            timediff = new Date() - last_counter_value_update;
+            if (timediff > 2000) {
+              console.log("We lost connection since (sec): " + timediff/1000);  
+              window.alert("Die Verbindung zum Server wurde getrennt. \nBitte lade die Seite neu. \nDas Spiel sollte dann weitergehen.");
+              clearInterval(gameLoopInterval);
+            }      
 
           // count to 4 and reset to 0 if it is reached, so that there are 4 "stages" (0..3)
           game_timer_helper = game_timer_helper + 1;
@@ -279,7 +288,7 @@
       
       }
       
-      setInterval(local_game_loop, 500);
+      var gameLoopInterval = setInterval(local_game_loop, 500);
 
 
     </script>
