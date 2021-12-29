@@ -208,7 +208,16 @@ Weitere Implementation von Rundenlogik:
 \begin{itemize}
     \item Rundenschritt 300: Feststellen ob alle Spieler verstorben sind, falls ja in Spielende springen (Commit \url{https://git.io/Jy1Lu}).
     \item Tests ergaben Probleme beim Spiel mit mehreren Spielern. Die Rundenlogik wird dann gleichzeitig vorangetrieben. Dadurch werden manche Aktionen und Rundenschritte mehrfach ausgeführt. Ein Versuch das Problem mit einem Token (ähnlich einem Semaphor) zu lösen, brachte leider noch keinen abschließenden Erfolg. Der Singleplayer aber, geht fehlerfrei. Das Problem wird daher zurückgestellt und nun zuerst die Entwicklung weiterer Punkte fortgeführt (Commit \url{https://git.io/Jy1qZ}).
-    \item ...
+    \item Als Workaround für oben genanntes Problem im Mulitplayer wurde nun eingestellt, dass immer nur der erste Spieler eines Spiels die Rundenlogik vorantreibt. Das ist etwas mehr fehleranfällig als eine korrekte Tokenlösung, wird für das Projekt hier aber vorerst ausreichend sein (Commit \url{https://git.io/Jy1su}).
+    \item Umfangreiche Erweiterungen und Anpassungen für das Anzeigen der User-Chars auf der Spieleseite, darstellen und aussteuern der Aktions-Buttons, das einsammeln der Aktionen in der Datenbank und ebenso bereits das zurücksetzen beim Rundenwechsel (Commit \url{https://git.io/JyDlp}).
+
+    \begin{figure}[H]
+        \centering
+        \caption[]{29.12.2021: Bildschirmfoto zum Entwicklungsstand mit Runden-Status 400.}
+        \label{fig:2021-12-29-Bildschirmfoto-Entwicklungsstand-Runden-Status-400.png}
+        \includegraphics[width=0.7\textwidth]{2021-12-29-Bildschirmfoto-Entwicklungsstand-Runden-Status-400.png}
+    \end{figure}
+
 \end{itemize}
 
 
