@@ -238,8 +238,17 @@ Offen sind nun als nächste Schritte noch:
     \item Charakterentwicklung bei Win implementieren.
     \item Würfel bei Schaden bzw. Angriff implementieren.
     \item Aggrotabelle und verbundene Funktionen implementieren.
+    \item Erweiterung der Infrastruktur aus Scripten, Anleitungen und des Git-Repos hin zum laden eines Default-Datensatzes (JSON-Datei) mit nutzbaren Spieldaten (insbesondere für Testzwecke und Nutzungen durch Dritte).
 \end{enumerate}
 
+
+\subsection{Entwicklung, Freitag 30.12.2021:}
+
+Abarbeiten der zuletzt genannten, nächsten Schirtte. Hier: 
+
+\begin{itemize}
+    \item Die Charakterentwicklung wird mit Erfahrungspunkten gelöst: Durch Aktionen im Spiel bzw. Kampf (Schaden bekmmen, Schaden austeilen, Fähigkeiten nutzen) bekommen die entsprechenden Charaktere sofort entsprechende Erfahrungspunkte gutgeschrieben. Wird das Spiel gewonnen, werden alle von allen teilnehmenden Spielern in dieser Runde erspielten Erfarungspunkte noch einmal verdoppelt und jedem der Spieler gutgeschrieben. Verwendet werden können diese Erfahrungspunkte dann in der Charakteransicht um damit z.B. Lebenspunkte (HP) oder Angriffspunkte (AP) zu erhöhen (Commit \url{https://git.io/Jy7gl}).
+\end{itemize}
 
 
 \section{Noitzen für Reflektion}
