@@ -15,11 +15,7 @@
 
 
 
-    <div id="game_websocket_content_rx" style="
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    font-size: 2vw;
-    color: #ffffff;">
+    <div id="game_websocket_content_rx" style="font-family: Arial, Helvetica, sans-serif;  font-size: 2vw;     color: #ffffff;">
   
     <table  cellpadding="0"     cellspacing="0"
     style="height: 100%;       width: 100%;
@@ -93,9 +89,9 @@
         color: #ffffff;">  
 
         {% if user_char.user_char_id == request_user_id  %} 
-        <input type="submit" value="Angriff" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; background:#ffffff; border:0px; font-size: 1.1vw; margin:0.3vw;"> <br />
-        <input type="submit" value="Fähigkeit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%; background:#ffffff; border:0px;  font-size: 1.1vw; margin:0.3vw;"> <br />
-        <input type="submit" value="Aussetzen" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%; background:#ffffff; border:0px;  font-size: 1.1vw; margin:0.3vw;"> <br />
+        <input type="submit" value="Angriff" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; color: #000000; background:#ffffff; border:0px; font-size: 1.1vw; margin:0.3vw;"> <br />
+        <input type="submit" value="Fähigkeit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%;  color: #000000; background:#ffffff; border:0px;  font-size: 1.1vw; margin:0.3vw;"> <br />
+        <input type="submit" value="Aussetzen" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%;  color: #000000;  background:#ffffff; border:0px;  font-size: 1.1vw; margin:0.3vw;"> <br />
         {% else %}
 
         <div id="user_char_is_ready_{{ user_char.user_char_in_games_id }}"></div>
@@ -123,8 +119,8 @@
 
       <td style="background-color: #00839B;        vertical-align: middle;          text-align: center;">
   
-        <input type="text" id="game_chat_msg_text" name="game_chat_msg_text" onkeypress="return game_chat_msg_key(event, {{ request_user_id }})"  style="width: 50%; border:0.1vw solid; background:#ffffff; font-size: 1.1vw; margin:0.3vw;"> 
-        <input type="submit" value="Nachricht senden" onclick="game_chat_msg_click({{ request_user_id }});" style="background:#ffffff; border:0px; font-size: 1.1vw; margin:0.3vw;"> 
+        <input type="text" id="game_chat_msg_text" name="game_chat_msg_text" onkeypress="return game_chat_msg_key(event, {{ request_user_id }})"  style="width: 50%; border:0.1vw solid;  color: #000000;  background:#ffffff; font-size: 1.1vw; margin:0.3vw;"> 
+        <input type="submit" value="Nachricht senden" onclick="game_chat_msg_click({{ request_user_id }});" style="background:#ffffff;   color: #000000; border:0px; font-size: 1.1vw; margin:0.3vw;"> 
 
         <br /><input type="submit" value="Dev/Debug: Spiel beenden" onclick="set_game_to_finished();" style="background:#ff0000;"" >
   

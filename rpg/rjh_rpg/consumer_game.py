@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
@@ -12,6 +13,8 @@ from rjh_rpg.consumer_game_tools import db_get_enemy_name, db_get_enemy_ap
 from rjh_rpg.consumer_game_tools import db_get_user_char_in_game_list, db_get_random_alive_user_char_in_games_id, db_give_dmg_to_user_char, db_get_char_name_of_user_char_in_games_id, db_get_died_but_not_dead_user_chars, db_set_user_char_to_dead, db_get_user_char_from_user_id, db_get_first_user_char_of_game_id, db_get_alive_user_chars
 from rjh_rpg.consumer_game_tools import db_set_next_user_char_action, db_get_user_chars_next_action, db_get_user_chars_with_no_next_action, db_reset_all_next_user_char_actions, db_set_next_user_char_action_was_reminded, db_get_user_chars_next_action_was_reminded
 from rjh_rpg.consumer_game_tools import db_get_user_char_ap, db_give_dmg_to_enemy
+from rjh_rpg.consumer_game_tools import db_get_end_msg_shown, db_set_end_msg_to_shown
+from rjh_rpg.consumer_game_tools import db_give_xp_to_user_char, db_get_user_char_this_game_xp, db_give_bonus_xp_to_user_char
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -135,6 +138,7 @@ class Consumer(AsyncWebsocketConsumer):
             round-states without looping anymore:
             990 gaveover / game lost
             995 game is won
+            999 show link to exit
             '''                        
 
             # 2021-12-29 16:57 haenno:
@@ -162,10 +166,14 @@ class Consumer(AsyncWebsocketConsumer):
 
 
             if self.round_state_token_is_mine == True:
+                enemy_name = await db_get_enemy_name(self.game_id)
                 if round_state == 0: 
-                    # switch up to first run of first round
-                        await db_set_round_state(self.game_id, 100)
-                        await db_increase_round_counter(self.game_id)
+                    # switch up to first run of first round and give 1 xp for gamestart to everyone
+                    for user_char in await db_get_alive_user_chars(self.game_id):
+                        await db_give_xp_to_user_char(user_char, 1)
+
+                    await db_set_round_state(self.game_id, 100)
+                    await db_increase_round_counter(self.game_id)
 
 
                 elif round_state == 100:
@@ -182,7 +190,7 @@ class Consumer(AsyncWebsocketConsumer):
                         dmg_dealt = await db_give_dmg_to_user_char(char_to_hit, ap_to_deliver)
                         char_name_to_hit = await db_get_char_name_of_user_char_in_games_id(char_to_hit)
 
-                        await db_expand_game_log(self.game_id, " ⚔ " + str(await db_get_enemy_name(self.game_id)) + " greift mit "+ str(ap_to_deliver) +" Angriffspunkten an...<br />" )
+                        await db_expand_game_log(self.game_id, " ⚔ " + enemy_name + " greift mit "+ str(ap_to_deliver) +" Angriffspunkten an...<br />" )
 
                         await db_expand_game_log(self.game_id, " 💥 ...und trifft " + char_name_to_hit + " für " + str(dmg_dealt[2]) + " Schaden. <br /> 💔 Die Lebenspunkte von " + char_name_to_hit + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
 
@@ -190,7 +198,6 @@ class Consumer(AsyncWebsocketConsumer):
 
 
                 elif round_state == 200:
-                    char_list = await db_get_user_char_in_game_list(self.game_id)
                     new_dead_user_chars = await db_get_died_but_not_dead_user_chars(self.game_id)
                     for user_char in new_dead_user_chars:
                         await db_set_user_char_to_dead(user_char)
@@ -202,10 +209,9 @@ class Consumer(AsyncWebsocketConsumer):
                 elif round_state == 300:
                     at_least_one_player_alive = await db_get_random_alive_user_char_in_games_id(self.game_id)
 
+                    # the game is lost!
                     if not at_least_one_player_alive: 
-                        print("Gameover!")
-                        await db_set_round_state(self.game_id, 995)
-                        await db_expand_game_log(self.game_id, "<br /> 🪦 Kein Spieler hat überlebt.  <br /> 🥇 " + str(await db_get_enemy_name(self.game_id)) + " war siegreich. <br /> <br /> <br />")
+                        await db_set_round_state(self.game_id, 990)
 
                     else:
                         await db_set_round_state(self.game_id, 400)
@@ -229,7 +235,6 @@ class Consumer(AsyncWebsocketConsumer):
                     
                     alive_user_chars = await db_get_alive_user_chars(self.game_id)
                     enemy_last_hp = ""
-                    enemy_name = await db_get_enemy_name(self.game_id)
                     for user_char in alive_user_chars:
                         next_action = await db_get_user_chars_next_action(user_char)
                         
@@ -238,11 +243,14 @@ class Consumer(AsyncWebsocketConsumer):
 
                         elif next_action == "attack":
                             user_char_ap = await db_get_user_char_ap(user_char)
-                            await db_expand_game_log(self.game_id, "<br /> 🥊 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " greift " + str(enemy_name) + " mit " + str(user_char_ap) + "  Angriffspunkten an...  <br />" )
+                            await db_expand_game_log(self.game_id, "<br /> 🥊 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " greift " + enemy_name + " mit " + str(user_char_ap) + "  Angriffspunkten an...  <br />" )
                             
                             dmg_dealt = await db_give_dmg_to_enemy(self.game_id, user_char_ap)
                             
                             await db_expand_game_log(self.game_id, " 💥 ...und trifft " + enemy_name + " für " + str(dmg_dealt[2]) + " Schaden. <br /> 💔 Die Lebenspunkte von " + enemy_name + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
+                            
+                            await db_give_xp_to_user_char(user_char, dmg_dealt[2])
+                            
                             enemy_last_hp = dmg_dealt[1]
                             if enemy_last_hp == 0:
                                 break
@@ -251,10 +259,8 @@ class Consumer(AsyncWebsocketConsumer):
                             await db_expand_game_log(self.game_id, "<br /> 🎁 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " ist an der Reihe, zögert kurz und setzt dann seine Spezialfähigkeit ein...  <br />" )
                             # (TODO!) Implement abilitys
                             
-                        # enemy dead? then --> win                        
-   
+                    # enemy dead? then --> win, else: proceed
                     if enemy_last_hp == 0 and enemy_last_hp != "":
-                        await db_expand_game_log(self.game_id, "<br /> 👏 " + enemy_name + " wurde besiegt! 🥳 🎉 🎊 🪅 🍻 ")
                         await db_set_round_state(self.game_id, 995)
                     else:
                         await db_set_round_state(self.game_id, 600)    
@@ -272,13 +278,54 @@ class Consumer(AsyncWebsocketConsumer):
 
                 elif round_state == 990:
                     print("game ends - gameover!")            
+                    await db_expand_game_log(self.game_id, "<br /> 🪦 Kein Spieler hat überlebt.  <br /> 🥇 " + enemy_name + " war siegreich. ")
 
+                    await db_expand_game_log(self.game_id, "<br /><br /> 💰 Trotzdem gab es Erfahrungspunkte:")
                     
+                    char_list = await db_get_user_char_in_game_list(self.game_id)
+                    for user_char in char_list:
+                        xp_earned = await db_get_user_char_this_game_xp(user_char)
+                        await db_expand_game_log(self.game_id, "<br />     ➡️ " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + ": " + str(xp_earned) + " XP")
+                    
+                    await db_set_round_state(self.game_id, 999)
+
+
+
 
                 elif round_state == 995:    
-                    print("game ends - win!")            
+                    print("game ends - win!")
 
-                                    
+                    await db_expand_game_log(self.game_id, "<br /> 👏 " + enemy_name + " wurde besiegt! 🥳 🎉 🎊 🪅 🍻 ")
+                    await db_set_round_state(self.game_id, 999)
+
+                    await db_expand_game_log(self.game_id, "<br /><br /> 💰💰💰 Dafür gibt es Erfahrungspunkte mit Bonus:")
+                    
+                    total_xp_of_game = 0
+                    
+                    char_list = await db_get_user_char_in_game_list(self.game_id)
+                    for user_char in char_list:
+                        xp_earned = await db_get_user_char_this_game_xp(user_char)
+                        total_xp_of_game = total_xp_of_game + xp_earned
+                        print("total_xp_of_game:" + str(total_xp_of_game))
+
+                    for user_char in char_list:
+                        xp_earned = await db_get_user_char_this_game_xp(user_char)
+                        await db_give_bonus_xp_to_user_char(user_char, (total_xp_of_game*2))
+                        
+                        await db_expand_game_log(self.game_id, "<br />     ➡️ " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + ": " + str(xp_earned) + " XP plus " + str(total_xp_of_game*2) + " XP Bonus!")
+
+
+
+
+                elif round_state == 999:
+                    print("show endscreen!")
+                    if await db_get_end_msg_shown(self.game_id) == True: 
+                        pass
+                    else:
+                        await db_set_end_msg_to_shown(self.game_id)
+                        close_button = """<input type="submit" value="Spiel abschließen" onclick="set_game_to_finished();" style="background:#ffffff;  color: #000000; "" >"""
+                        await db_expand_game_log(self.game_id,"<br /><br />Bitte schließt das Spiel nun ab: " + close_button)
+
 
                 else:
                     # should not happen

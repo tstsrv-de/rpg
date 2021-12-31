@@ -38,6 +38,8 @@ urlpatterns = [
     path('lobby-<int:scene_id>/', views.lobby, name='lobby'),
     
     path('game-<int:game_id>/', views.game, name='game'),
+    
+    path('xp-to-<str:hpap>-<int:user_char_id>/', views.hpap, name='hpap'),
 
     # path('scene/', views.scene, name='scene'), # main game
 

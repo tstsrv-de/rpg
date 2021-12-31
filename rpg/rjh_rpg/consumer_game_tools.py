@@ -65,7 +65,7 @@ def db_get_user_char_in_game_list(game_id):
     user_chars_in_game = UserCharInGames.objects.filter(game_id=game_id).order_by('id')
     user_char_in_game_list = [] 
     for user_char in user_chars_in_game:
-        user_char_in_game_list.append(user_char.user_char_id)
+        user_char_in_game_list.append(user_char.id)
     return user_char_in_game_list
 
 @database_sync_to_async
@@ -175,3 +175,40 @@ def db_give_dmg_to_enemy(game_id, ap_to_deliver):
     dmg_taken = last_hp - new_hp
     Games.objects.filter(id=game_id).update(enemy_current_hp=new_hp)
     return (last_hp, new_hp, dmg_taken)
+
+@database_sync_to_async
+def db_get_end_msg_shown(game_id):
+    return bool(Games.objects.get(id=game_id).game_end_msg_shown)
+
+@database_sync_to_async
+def db_set_end_msg_to_shown(game_id):
+    return Games.objects.filter(id=game_id).update(game_end_msg_shown=True)
+
+
+@database_sync_to_async
+def db_give_xp_to_user_char(user_char_in_games_id, xp):
+    last_game_xp = UserCharInGames.objects.get(id=user_char_in_games_id).user_chars_xp_of_this_game_id
+    new_game_xp = last_game_xp + int(xp)
+    update_game_xp = UserCharInGames.objects.filter(id=user_char_in_games_id).update(user_chars_xp_of_this_game_id=new_game_xp)
+
+    user_char_id = UserCharInGames.objects.get(id=user_char_in_games_id).user_char_id.id
+    last_char_xp = UserChar.objects.get(id=user_char_id).xp_to_spend
+    new_char_xp = last_char_xp + int(xp)
+    update_char_xp = UserChar.objects.filter(id=user_char_id).update(xp_to_spend=new_char_xp)
+    
+    return update_char_xp + update_game_xp
+
+@database_sync_to_async
+def db_get_user_char_this_game_xp(user_char_in_games_id):
+    return int(UserCharInGames.objects.get(id=user_char_in_games_id).user_chars_xp_of_this_game_id)
+
+@database_sync_to_async
+def db_give_bonus_xp_to_user_char(user_char_in_games_id, xp):
+
+    user_char_id = UserCharInGames.objects.get(id=user_char_in_games_id).user_char_id.id
+    last_char_xp = UserChar.objects.get(id=user_char_id).xp_to_spend
+    new_char_xp = last_char_xp + int(xp)
+    update_char_xp = UserChar.objects.filter(id=user_char_id).update(xp_to_spend=new_char_xp)
+    
+    return update_char_xp
+

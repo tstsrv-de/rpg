@@ -363,6 +363,32 @@ def game(request, game_id):
         'request_user_id'      : current_user_id,
         'enemy_image': image_name, 
     })
-    
-    
+ 
+def hpap(request, hpap, user_char_id):
+    if not request.user.is_authenticated:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
+
+    if not UserChar.objects.filter(id=user_char_id).exists():
+        return render(request,'msg_redirect.html',{'msg':'Dieser Charakter existiert nicht!','target':'/chars/'})
+ 
+    is_users_char = False
+    curr_users_user_char_list = UserChar.objects.filter(usernickname=User.objects.get(id=request.user.id))
+    for user_char in curr_users_user_char_list:
+        if user_char.id == user_char_id:
+            is_users_char = True
+            
+    if not is_users_char:
+        return render(request,'msg_redirect.html',{'msg':'Dieser Charakter gehört dir nicht!','target':'/chars/'})
+
+    curr_xp = UserChar.objects.get(id=user_char_id).xp_to_spend
+    if curr_xp >= 1:
+        if hpap == "ap":
+            curr_ap = UserChar.objects.get(id=user_char_id).ap
+            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp-1), ap=(curr_ap+1))
+        elif hpap == "hp":
+            curr_hp = UserChar.objects.get(id=user_char_id).hp
+            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp-1), hp=(curr_hp+1))
+
+    return redirect('chars')
+
  

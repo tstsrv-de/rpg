@@ -44,7 +44,8 @@ class UserChar(models.Model):
         )
     
     hp = models.IntegerField(default=0) 
-    ap = models.IntegerField(default=0) 
+    ap = models.IntegerField(default=0)
+    xp_to_spend =  models.IntegerField(default=0)
 
 
     def __str__(self): # (TODO!) this maybe the cause of many problems... why do we need this? would it be better w/o? to fetch id's...
@@ -100,6 +101,7 @@ class Games(models.Model): # Here we find all information on games that were sta
     round_state = models.IntegerField(default=0, null=True, blank=True)
     round_state_locked = models.BooleanField(default=False, null=True, blank=True)
     round_counter = models.IntegerField(default=0, null=True, blank=True)
+    game_end_msg_shown = models.BooleanField(default=False)
     
 class UserCharInGames(models.Model):
     game_id = models.ForeignKey(Games, on_delete=models.CASCADE)
@@ -109,3 +111,4 @@ class UserCharInGames(models.Model):
     user_char_died = models.BooleanField(default=False)
     next_action = models.TextField(default='', null=True, blank=True)
     next_action_was_reminded = models.BooleanField(default=False)
+    user_chars_xp_of_this_game_id = models.IntegerField(default=0)
