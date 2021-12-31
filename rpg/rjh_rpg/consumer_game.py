@@ -9,8 +9,9 @@ from rjh_rpg.consumer_game_tools import db_get_round_state, db_set_round_state
 from rjh_rpg.consumer_game_tools import db_get_is_round_state_locked, db_set_round_state_locked
 from rjh_rpg.consumer_game_tools import db_increase_round_counter, db_get_round_counter
 from rjh_rpg.consumer_game_tools import db_get_enemy_name, db_get_enemy_ap
-from rjh_rpg.consumer_game_tools import db_get_user_char_in_game_list, db_get_random_alive_user_char_in_games_id, db_give_dmg_to_user_char, db_get_char_name_of_user_char_in_games_id, db_get_died_but_not_dead_user_chars, db_set_user_char_to_dead, db_get_user_char_from_user_id, db_get_first_user_char_of_game_id
+from rjh_rpg.consumer_game_tools import db_get_user_char_in_game_list, db_get_random_alive_user_char_in_games_id, db_give_dmg_to_user_char, db_get_char_name_of_user_char_in_games_id, db_get_died_but_not_dead_user_chars, db_set_user_char_to_dead, db_get_user_char_from_user_id, db_get_first_user_char_of_game_id, db_get_alive_user_chars
 from rjh_rpg.consumer_game_tools import db_set_next_user_char_action, db_get_user_chars_next_action, db_get_user_chars_with_no_next_action, db_reset_all_next_user_char_actions, db_set_next_user_char_action_was_reminded, db_get_user_chars_next_action_was_reminded
+from rjh_rpg.consumer_game_tools import db_get_user_char_ap, db_give_dmg_to_enemy
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -96,9 +97,9 @@ class Consumer(AsyncWebsocketConsumer):
                     action_string = "seine Spezialfähigkeit einsetzen"
 
                 if save_return == 1:
-                    await db_expand_game_log(self.game_id, "<br /> ✅ " + str(await db_get_char_name_of_user_char_in_games_id(user_char_in_games_id)) + " wird in der nächsten Runde " + action_string + "!<br />" )
+                    await db_expand_game_log(self.game_id, "<br /> ✅ " + str(await db_get_char_name_of_user_char_in_games_id(user_char_in_games_id)) + " wird in der nächsten Runde " + action_string + "!" )
             else:
-                await db_expand_game_log(self.game_id, "<br /> ⏳ " + str(await db_get_char_name_of_user_char_in_games_id(user_char_in_games_id)) + " ist ungeduldig und würde gerne weitermachen...<br />" )
+                await db_expand_game_log(self.game_id, "<br /> ⏳ " + str(await db_get_char_name_of_user_char_in_games_id(user_char_in_games_id)) + " ist ungeduldig und würde gerne weitermachen..." )
                 
             
             
@@ -170,7 +171,8 @@ class Consumer(AsyncWebsocketConsumer):
                 elif round_state == 100:
                     await db_expand_game_log(self.game_id, "<br /> ⏩ Es beginnt Runde " + str(await db_get_round_counter(self.game_id)) + ": <br /><br />")
 
-                    char_to_hit = await db_get_random_alive_user_char_in_games_id(self.game_id)
+                    # (TODO!) Implement selection based on aggro-table instand of random char
+                    char_to_hit = await db_get_random_alive_user_char_in_games_id(self.game_id) 
 
                     if not char_to_hit: # failsave in case no player is alive
                         await db_set_round_state(self.game_id, 300)
@@ -185,6 +187,7 @@ class Consumer(AsyncWebsocketConsumer):
                         await db_expand_game_log(self.game_id, " 💥 ...und trifft " + char_name_to_hit + " für " + str(dmg_dealt[2]) + " Schaden. <br /> 💔 Die Lebenspunkte von " + char_name_to_hit + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
 
                         await db_set_round_state(self.game_id, 200)    
+
 
                 elif round_state == 200:
                     char_list = await db_get_user_char_in_game_list(self.game_id)
@@ -213,16 +216,48 @@ class Consumer(AsyncWebsocketConsumer):
                     proceed = True
                     for user_char in await db_get_user_chars_with_no_next_action(self.game_id):
                         if await db_get_user_chars_next_action_was_reminded(user_char) == False:
-                            await db_expand_game_log(self.game_id, "<br /> ❓ " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " überlegt konzentriert seinen nächsten Schritt... <br />" )
+                            await db_expand_game_log(self.game_id, "<br /> ❓ " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " überlegt konzentriert seinen nächsten Schritt... " )
                             await db_set_next_user_char_action_was_reminded(user_char)
                         proceed = False
                     
                     if proceed == True:
+                        await db_expand_game_log(self.game_id, "<br />")
                         await db_set_round_state(self.game_id, 500)
 
 
-                elif round_state == 500:
-                    await db_set_round_state(self.game_id, 600)    
+                elif round_state == 500: # run the collected actions
+                    
+                    alive_user_chars = await db_get_alive_user_chars(self.game_id)
+                    enemy_last_hp = ""
+                    enemy_name = await db_get_enemy_name(self.game_id)
+                    for user_char in alive_user_chars:
+                        next_action = await db_get_user_chars_next_action(user_char)
+                        
+                        if next_action == "pass":
+                            await db_expand_game_log(self.game_id, "<br /> 😴 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " ist an der Reihe, schaut aber nur verlegen nach unten...  <br />" )
+
+                        elif next_action == "attack":
+                            user_char_ap = await db_get_user_char_ap(user_char)
+                            await db_expand_game_log(self.game_id, "<br /> 🥊 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " greift " + str(enemy_name) + " mit " + str(user_char_ap) + "  Angriffspunkten an...  <br />" )
+                            
+                            dmg_dealt = await db_give_dmg_to_enemy(self.game_id, user_char_ap)
+                            
+                            await db_expand_game_log(self.game_id, " 💥 ...und trifft " + enemy_name + " für " + str(dmg_dealt[2]) + " Schaden. <br /> 💔 Die Lebenspunkte von " + enemy_name + " sinken von " + str(dmg_dealt[0]) + " auf " + str(dmg_dealt[1]) + ". <br />")
+                            enemy_last_hp = dmg_dealt[1]
+                            if enemy_last_hp == 0:
+                                break
+                            
+                        elif next_action == "ability":
+                            await db_expand_game_log(self.game_id, "<br /> 🎁 " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + " ist an der Reihe, zögert kurz und setzt dann seine Spezialfähigkeit ein...  <br />" )
+                            # (TODO!) Implement abilitys
+                            
+                        # enemy dead? then --> win                        
+   
+                    if enemy_last_hp == 0 and enemy_last_hp != "":
+                        await db_expand_game_log(self.game_id, "<br /> 👏 " + enemy_name + " wurde besiegt! 🥳 🎉 🎊 🪅 🍻 ")
+                        await db_set_round_state(self.game_id, 995)
+                    else:
+                        await db_set_round_state(self.game_id, 600)    
 
 
                 elif round_state == 600:
@@ -236,11 +271,13 @@ class Consumer(AsyncWebsocketConsumer):
                     
 
                 elif round_state == 990:
-                    pass
+                    print("game ends - gameover!")            
+
                     
 
-                elif round_state == 995:                
-                    pass
+                elif round_state == 995:    
+                    print("game ends - win!")            
+
                                     
 
                 else:

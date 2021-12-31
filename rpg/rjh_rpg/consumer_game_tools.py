@@ -86,6 +86,14 @@ def db_get_died_but_not_dead_user_chars(game_id):
     return new_deads
 
 @database_sync_to_async
+def db_get_alive_user_chars(game_id):
+    fresh_died_user_chars = UserCharInGames.objects.filter(game_id=game_id, current_hp__gte=0, user_char_died=False).order_by('id')
+    alive_user_chars = []
+    for user_char in fresh_died_user_chars:
+        alive_user_chars.append(user_char.id)
+    return alive_user_chars
+
+@database_sync_to_async
 def db_set_user_char_to_dead(user_char_in_games_id):
     return UserCharInGames.objects.filter(id=user_char_in_games_id).update(user_char_died=True)
 
@@ -93,7 +101,7 @@ def db_set_user_char_to_dead(user_char_in_games_id):
 @database_sync_to_async
 def db_give_dmg_to_user_char(user_char_in_games_id, ap_to_deliver):
     last_hp = UserCharInGames.objects.get(id=user_char_in_games_id).current_hp
-    ap_to_deliver = random.randint(int(ap_to_deliver * 0.5), int(ap_to_deliver * 1.5))
+    ap_to_deliver = random.randint(int(ap_to_deliver * 0.5), int(ap_to_deliver * 1.0)) # (TODO!) Replace with dice
     new_hp = last_hp - int(ap_to_deliver)
     if new_hp < 0:
         new_hp = 0
@@ -152,3 +160,18 @@ def db_get_user_chars_next_action_was_reminded(user_char_in_games_id):
 def db_set_next_user_char_action_was_reminded(user_char_in_games_id):
     return UserCharInGames.objects.filter(id=user_char_in_games_id).update(next_action_was_reminded=True)
 
+
+@database_sync_to_async
+def db_get_user_char_ap(user_char_in_games_id):
+    return int(str(UserCharInGames.objects.get(id=user_char_in_games_id).current_ap))
+
+@database_sync_to_async
+def db_give_dmg_to_enemy(game_id, ap_to_deliver):
+    last_hp = Games.objects.get(id=game_id).enemy_current_hp
+    ap_to_deliver = random.randint(int(ap_to_deliver * 0.5), int(ap_to_deliver * 1.0)) # (TODO!) Replace with dice
+    new_hp = last_hp - int(ap_to_deliver)
+    if new_hp < 0:
+        new_hp = 0
+    dmg_taken = last_hp - new_hp
+    Games.objects.filter(id=game_id).update(enemy_current_hp=new_hp)
+    return (last_hp, new_hp, dmg_taken)
