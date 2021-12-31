@@ -97,7 +97,7 @@ class Consumer(AsyncWebsocketConsumer):
                     action_string = "seine Spezialfähigkeit einsetzen"
 
                 if save_return == 1:
-                    await db_expand_game_log(self.game_id, "<br /> ✅ " + str(await db_get_char_name_of_user_char_in_games_id(user_char_in_games_id)) + " wird in der nächsten Runde " + action_string + "!" )
+                    await db_expand_game_log(self.game_id, "<br /> ✅ " + str(await db_get_char_name_of_user_char_in_games_id(user_char_in_games_id)) + " wird gleich " + action_string + "!" )
             else:
                 await db_expand_game_log(self.game_id, "<br /> ⏳ " + str(await db_get_char_name_of_user_char_in_games_id(user_char_in_games_id)) + " ist ungeduldig und würde gerne weitermachen..." )
                 
