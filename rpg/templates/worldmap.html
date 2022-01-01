@@ -13,7 +13,7 @@
 
             {% if game_scenes_list %}
             <div align="center">
-                <h1>Worldmap...</h1>
+                <div style="font-size: 8vw;">🗺️</div>
 
             <form action="{% url 'lobby_jumper' %}" method="POST" id="interest-select" class="form-inline">
             <div class="form-group">
@@ -24,12 +24,14 @@
                         <option value={{scene.id}}>{{scene.name}} (Spieler im Chat: {{ scene.players_in_chat_counter }}, davon spielbereit: {{ scene.waiting_players }}/{{ scene.req_players }})</option>
                     {% endfor %}
                     </select> 
-                    <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">
-                    <input class="btn btn-primary" type="submit" value="&#10145; Lobby der Szene betreten!"/>
+                    <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}"><br />
+                    <br />
+                    <input class="btn btn-primary" type="submit" value="Spiel auswählen und Lobby betreten..."/>
                     </div>
             </form>
             </div>
             <br />
+            <br />            <br />
 
                     {% else %}
                     <p>Es gibt keine Szenen!</p>

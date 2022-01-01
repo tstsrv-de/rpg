@@ -65,7 +65,7 @@ def db_get_user_char_in_game_list(game_id):
     user_chars_in_game = UserCharInGames.objects.filter(game_id=game_id).order_by('id')
     user_char_in_game_list = [] 
     for user_char in user_chars_in_game:
-        user_char_in_game_list.append(user_char.user_char_id)
+        user_char_in_game_list.append(user_char.id)
     return user_char_in_game_list
 
 @database_sync_to_async
@@ -86,6 +86,14 @@ def db_get_died_but_not_dead_user_chars(game_id):
     return new_deads
 
 @database_sync_to_async
+def db_get_alive_user_chars(game_id):
+    fresh_died_user_chars = UserCharInGames.objects.filter(game_id=game_id, current_hp__gte=0, user_char_died=False).order_by('id')
+    alive_user_chars = []
+    for user_char in fresh_died_user_chars:
+        alive_user_chars.append(user_char.id)
+    return alive_user_chars
+
+@database_sync_to_async
 def db_set_user_char_to_dead(user_char_in_games_id):
     return UserCharInGames.objects.filter(id=user_char_in_games_id).update(user_char_died=True)
 
@@ -93,7 +101,7 @@ def db_set_user_char_to_dead(user_char_in_games_id):
 @database_sync_to_async
 def db_give_dmg_to_user_char(user_char_in_games_id, ap_to_deliver):
     last_hp = UserCharInGames.objects.get(id=user_char_in_games_id).current_hp
-    ap_to_deliver = random.randint(int(ap_to_deliver * 0.5), int(ap_to_deliver * 1.5))
+    ap_to_deliver = random.randint(int(ap_to_deliver * 0.5), int(ap_to_deliver * 1.0)) # (TODO!) Replace with dice
     new_hp = last_hp - int(ap_to_deliver)
     if new_hp < 0:
         new_hp = 0
@@ -151,4 +159,56 @@ def db_get_user_chars_next_action_was_reminded(user_char_in_games_id):
 @database_sync_to_async
 def db_set_next_user_char_action_was_reminded(user_char_in_games_id):
     return UserCharInGames.objects.filter(id=user_char_in_games_id).update(next_action_was_reminded=True)
+
+
+@database_sync_to_async
+def db_get_user_char_ap(user_char_in_games_id):
+    return int(str(UserCharInGames.objects.get(id=user_char_in_games_id).current_ap))
+
+@database_sync_to_async
+def db_give_dmg_to_enemy(game_id, ap_to_deliver):
+    last_hp = Games.objects.get(id=game_id).enemy_current_hp
+    ap_to_deliver = random.randint(int(ap_to_deliver * 0.5), int(ap_to_deliver * 1.0)) # (TODO!) Replace with dice
+    new_hp = last_hp - int(ap_to_deliver)
+    if new_hp < 0:
+        new_hp = 0
+    dmg_taken = last_hp - new_hp
+    Games.objects.filter(id=game_id).update(enemy_current_hp=new_hp)
+    return (last_hp, new_hp, dmg_taken)
+
+@database_sync_to_async
+def db_get_end_msg_shown(game_id):
+    return bool(Games.objects.get(id=game_id).game_end_msg_shown)
+
+@database_sync_to_async
+def db_set_end_msg_to_shown(game_id):
+    return Games.objects.filter(id=game_id).update(game_end_msg_shown=True)
+
+
+@database_sync_to_async
+def db_give_xp_to_user_char(user_char_in_games_id, xp):
+    last_game_xp = UserCharInGames.objects.get(id=user_char_in_games_id).user_chars_xp_of_this_game_id
+    new_game_xp = last_game_xp + int(xp)
+    update_game_xp = UserCharInGames.objects.filter(id=user_char_in_games_id).update(user_chars_xp_of_this_game_id=new_game_xp)
+
+    user_char_id = UserCharInGames.objects.get(id=user_char_in_games_id).user_char_id.id
+    last_char_xp = UserChar.objects.get(id=user_char_id).xp_to_spend
+    new_char_xp = last_char_xp + int(xp)
+    update_char_xp = UserChar.objects.filter(id=user_char_id).update(xp_to_spend=new_char_xp)
+    
+    return update_char_xp + update_game_xp
+
+@database_sync_to_async
+def db_get_user_char_this_game_xp(user_char_in_games_id):
+    return int(UserCharInGames.objects.get(id=user_char_in_games_id).user_chars_xp_of_this_game_id)
+
+@database_sync_to_async
+def db_give_bonus_xp_to_user_char(user_char_in_games_id, xp):
+
+    user_char_id = UserCharInGames.objects.get(id=user_char_in_games_id).user_char_id.id
+    last_char_xp = UserChar.objects.get(id=user_char_id).xp_to_spend
+    new_char_xp = last_char_xp + int(xp)
+    update_char_xp = UserChar.objects.filter(id=user_char_id).update(xp_to_spend=new_char_xp)
+    
+    return update_char_xp
 

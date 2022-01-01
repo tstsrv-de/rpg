@@ -201,7 +201,7 @@ Fortführung der Entwicklungen vom Vortag. Hier insbesondere nun die Implementat
 \end{itemize}
 
 
-\subsection{Entwicklung, Mittwoch 28.12.2021:}
+\subsection{Entwicklung, Mittwoch 29.12.2021:}
 
 Weitere Implementation von Rundenlogik:
 
@@ -223,6 +223,34 @@ Weitere Implementation von Rundenlogik:
 \end{itemize}
 
 
+\subsection{Entwicklung, Donnerstag 30.12.2021:}
+
+Abschließender Schritt in der Implementation der Rundenlogik:
+
+\begin{itemize}
+    \item Die Schadensfunktion für Spieler wurde eingebaut: Damit kann dem Gegner nun Schaden zugefügt werden. Außerdem Prüfung auf Tod des Gegners incl. entsprechender Medlung (Commit \url{https://git.io/Jy9E7}).
+\end{itemize}
+
+Offen sind nun als nächste Schritte noch:
+\begin{enumerate}
+    \item Fähigkeiten der Spieler in Rundenlogik implementieren.
+    \item Abschlussbildschirm für Win und Gameover konzeptionieren und implementieren. 
+    \item Charakterentwicklung bei Win implementieren.
+    \item Würfel bei Schaden bzw. Angriff implementieren.
+    \item Aggrotabelle und verbundene Funktionen implementieren.
+    \item Erweiterung der Infrastruktur aus Scripten, Anleitungen und des Git-Repos hin zum laden eines Default-Datensatzes (JSON-Datei) mit nutzbaren Spieldaten (insbesondere für Testzwecke und Nutzungen durch Dritte).
+\end{enumerate}
+
+
+\subsection{Entwicklung, Freitag 30.12.2021:}
+
+Abarbeiten der zuletzt genannten, nächsten Schirtte. Hier: 
+
+\begin{itemize}
+    \item Die Charakterentwicklung wird mit Erfahrungspunkten gelöst: Durch Aktionen im Spiel bzw. Kampf (Schaden bekmmen, Schaden austeilen, Fähigkeiten nutzen) bekommen die entsprechenden Charaktere sofort entsprechende Erfahrungspunkte gutgeschrieben. Wird das Spiel gewonnen, werden alle von allen teilnehmenden Spielern in dieser Runde erspielten Erfarungspunkte noch einmal verdoppelt und jedem der Spieler gutgeschrieben. Verwendet werden können diese Erfahrungspunkte dann in der Charakteransicht um damit z.B. Lebenspunkte (HP) oder Angriffspunkte (AP) zu erhöhen (Commit \url{https://git.io/Jy7gl}).
+\end{itemize}
+
+
 \section{Noitzen für Reflektion}
 
 \subsection{Rundenbasierter vs. chaotischer Spielablauf}
@@ -234,4 +262,8 @@ Der Ansatz die Entwicklung durch den Einsatz eines rundenbasierten Ablaufs bzw. 
 In der Entwicklung eine überschaubare Anzahl an kleinteiligen bzw. Teilufgaben vor sich zu haben, empfinde ich als sehr hilfreich. Man hat damit einen Überblick über die Arbeit der nächsten Tage. Bei der Entwicklung der Rundenlogik hatte ich durch die Kenntniss um die nächsten Runden-Schritte hier einen guten Überblick. Der Abschluss jeder einzelnen Teil-Aufgabe sorgte da laufend für postive Motivation. 
 Ich vermute, dass dieser Effekt sehr ähnlich bei den agilen Methoden zum tragen kommt und zur Motivation genutzt wird. 
 
+\subsection{Stichwortsammlung für Refektion}
 
+\begin{itemize}
+    \item Projektaufteilung: So abstimmen, dass verschiedene Arbeitsschritte gleichzeitig von verschiedenen Personen bearbeitet werden können.  
+\end{itemize}
