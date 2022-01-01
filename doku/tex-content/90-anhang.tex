@@ -236,6 +236,7 @@ Offen sind nun als nächste Schritte noch:
     \item Fähigkeiten der Spieler in Rundenlogik implementieren.
     \item Abschlussbildschirm für Sieg und Gameover konzeptionieren und implementieren. 
     \item Charakterentwicklung bei Sieg implementieren.
+    \item Erweiterung der Infrastruktur aus Scripten, Anleitungen und des Git-Repos hin zum laden eines Default-Datensatzes (JSON-Datei) mit nutzbaren Spieldaten (insbesondere für Testzwecke und Nutzungen durch Dritte).
 \end{enumerate}
 
 
@@ -254,13 +255,14 @@ Nach kurzer Abstimmung und Vorstellung meiner Ergebnisse bei Julian, letzte Anpa
 
 \begin{itemize}
     \item Ausgabe der erhaltenen XP beschleunigt: Es werden nun immer 10\% (aufgrundet auf die nächste Ganzzahl) der XP ausgegeben (Commit \url{https://git.io/JSTIq}).
-    \item Einbau der Charakter-Fähigkeiten (Commit \url{}):
+    \item Einbau der Charakter-Fähigkeiten (Commit \url{https://git.io/JSkKJ}):
     \begin{itemize}
         \item Priester: Gruppe heilen=Alle HP erhöhen
         \item Zauberer: Schaden der Gruppe erhöhen=Alle AP erhöhen
         \item Krieger: Gegner blocken=AP Gegner verringern
     \end{itemize} 
     Damit die Fähigkeiten über mehrere Runden wirken können, musste eine Hilfstabelle angelegt werden: "AbilitysToApply". Hieraus werden zum Rundenwechsel die jeweils anzuwendenden Fähigkeiten gelesen und auf die relevaten Zahlen gewirkt. 
+    \item Beispieldaten hinzugefügt und automatisches laden in die Datenbank über die local/dev-Skripte eingefügt (Commit \url{https://github.com/tstsrv-de/rpg/commit/1bfa99e89ddf2dbe817bdee2c870d1ddbe4f23c1}).
 \end{itemize} 
 
 
@@ -280,6 +282,7 @@ Ich vermute, dass dieser Effekt sehr ähnlich bei den agilen Methoden zum tragen
 
 \begin{itemize}
     \item Projektaufteilung: So abstimmen, dass verschiedene Arbeitsschritte gleichzeitig von verschiedenen Personen bearbeitet werden können.  
+    \item Lernkurve und Codequalität: Eigentlich müsste man am Ende eines Projektes stets noch einmal von Vorne anfangen. Allein um alles zu korrigieren bzw. anzupassen, was im Projektverlauf gelernt wurde.
 \end{itemize}
 
 
@@ -289,7 +292,6 @@ Da der Umfang dieser Projekt beschränkt ist, können nicht alle erdachten Funkt
 \begin{enumerate}
     \item Würfel bei Schaden bzw. Angriff implementieren.
     \item Aggrotabelle und verbundene Funktionen implementieren.
-    \item Erweiterung der Infrastruktur aus Scripten, Anleitungen und des Git-Repos hin zum laden eines Default-Datensatzes (JSON-Datei) mit nutzbaren Spieldaten (insbesondere für Testzwecke und Nutzungen durch Dritte).
     \item Transfer von Konstanten aus dem Code in eine Hilfstabelle für leichtere Anpassbarkeit später. Beispiele: \begin{itemize}
         \item Lebenspunkte und Angriffspunkte neuer Charaktere
         \item Faktoren bei der Berechnung von Erfahrungspunkten

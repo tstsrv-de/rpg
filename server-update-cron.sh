@@ -14,6 +14,7 @@ then
     chmod +x /home/rjhadmin/tstsrv/*.sh >> /home/rjhadmin/cronlog.txt
     docker-compose --project-directory /home/rjhadmin/tstsrv/ run rpg python rpg/manage.py makemigrations >> /home/rjhadmin/cronlog.txt
     docker-compose --project-directory /home/rjhadmin/tstsrv/ run rpg python rpg/manage.py migrate >> /home/rjhadmin/cronlog.txt
+    docker-compose --project-directory /home/rjhadmin/tstsrv/ run rpg python rpg/manage.py loaddata db_sample_data.json >> /home/rjhadmin/cronlog.txt
     docker-compose --project-directory /home/rjhadmin/tstsrv/ start rpg >> /home/rjhadmin/cronlog.txt
     # echo "$now --> RPG update > Update done!"
 else
