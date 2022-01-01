@@ -464,7 +464,7 @@ class Consumer(AsyncWebsocketConsumer):
             enemy_current_ap = int(scene_id_obj[0].enemy_ap)
             gamelog_init_text = gamelog_init_text + "&#128126; " + str(scene_id_obj[0].enemy_name) + " hat " + str(enemy_current_hp) + " Lebenspunkte und eine Angriffskraft von " + str(enemy_current_ap) + " Punkten.<br /> <br />" 
 
-            Games.objects.filter(id=game_id).update(game_log=gamelog_init_text, enemy_current_hp=enemy_current_hp)
+            Games.objects.filter(id=game_id).update(game_log=gamelog_init_text, enemy_current_hp=enemy_current_hp, enemy_current_ap=enemy_current_ap)
 
         return game_id
 

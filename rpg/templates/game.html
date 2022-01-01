@@ -41,10 +41,9 @@
         width:95%; 
         height:95%; 
         font-family: monospace;
-        font-size: 12px;
-        font-size: 1vw;
+        font-size: 0.7vw;
         text-align: left;
-        border:0px;
+        border:0vw;
         overflow-y: scroll;">
   
   
@@ -63,8 +62,8 @@
         <table style="width: 95%; border-collapse: collapse; margin: 0.5vw; display: inline-table; ">
         <tr style="border:0.2vw solid; ">
 
-      <td style="border:1px solid; width:20%"> 
-        <div style=" font-size: 30px;font-size: 4vw;">
+      <td style="border:0.1vw solid; width:20%"> 
+        <div style="font-size: 4vw;">
           {% if user_char.klasse == "W" %} 🤺 {% endif %}
           {% if user_char.klasse == "M" %} 🧙 {% endif %}
           {% if user_char.klasse == "P" %} 👼 {% endif %}          
@@ -83,15 +82,15 @@
       
       </td>
 
-      <td style="border:1px solid;  width:20%; ">
+      <td style="border:0.1vw solid;  width:20%; ">
         <div style="font-family: Arial, Helvetica, sans-serif;
         font-size: 1vw;
         color: #ffffff;">  
 
         {% if user_char.user_char_id == request_user_id  %} 
-        <input type="submit" value="Angriff" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; color: #000000; background:#ffffff; border:0px; font-size: 1.1vw; margin:0.3vw;"> <br />
-        <input type="submit" value="Fähigkeit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%;  color: #000000; background:#ffffff; border:0px;  font-size: 1.1vw; margin:0.3vw;"> <br />
-        <input type="submit" value="Aussetzen" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%;  color: #000000;  background:#ffffff; border:0px;  font-size: 1.1vw; margin:0.3vw;"> <br />
+        <input type="submit" value="Angriff" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; color: #000000; background:#ffffff; border:0vw; font-size: 1.1vw; margin:0.3vw;"> <br />
+        <input type="submit" value="Fähigkeit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%;  color: #000000; background:#ffffff; border:0vw;  font-size: 1.1vw; margin:0.3vw;"> <br />
+        <input type="submit" value="Aussetzen" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%;  color: #000000;  background:#ffffff; border:0vw;  font-size: 1.1vw; margin:0.3vw;"> <br />
         {% else %}
 
         <div id="user_char_is_ready_{{ user_char.user_char_in_games_id }}"></div>
@@ -120,7 +119,7 @@
       <td style="background-color: #00839B;        vertical-align: middle;          text-align: center;">
   
         <input type="text" id="game_chat_msg_text" name="game_chat_msg_text" onkeypress="return game_chat_msg_key(event, {{ request_user_id }})"  style="width: 50%; border:0.1vw solid;  color: #000000;  background:#ffffff; font-size: 1.1vw; margin:0.3vw;"> 
-        <input type="submit" value="Nachricht senden" onclick="game_chat_msg_click({{ request_user_id }});" style="background:#ffffff;   color: #000000; border:0px; font-size: 1.1vw; margin:0.3vw;"> 
+        <input type="submit" value="Nachricht senden" onclick="game_chat_msg_click({{ request_user_id }});" style="background:#ffffff;   color: #000000; border:0vw; font-size: 1.1vw; margin:0.3vw;"> 
 
         <br /><input type="submit" value="Dev/Debug: Spiel beenden" onclick="set_game_to_finished();" style="background:#ff0000;"" >
   
@@ -268,7 +267,7 @@
     
             // check if connection is still alive
             timediff = new Date() - last_counter_value_update;
-            if (timediff > 2000) {
+            if (timediff > 6000) {
               console.log("We lost connection since (sec): " + timediff/1000);  
               window.alert("Die Verbindung zum Server wurde getrennt. \nBitte lade die Seite neu. \nDas Spiel sollte dann weitergehen.");
               clearInterval(gameLoopInterval);

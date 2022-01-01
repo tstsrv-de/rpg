@@ -234,21 +234,35 @@ Abschließender Schritt in der Implementation der Rundenlogik:
 Offen sind nun als nächste Schritte noch:
 \begin{enumerate}
     \item Fähigkeiten der Spieler in Rundenlogik implementieren.
-    \item Abschlussbildschirm für Win und Gameover konzeptionieren und implementieren. 
-    \item Charakterentwicklung bei Win implementieren.
-    \item Würfel bei Schaden bzw. Angriff implementieren.
-    \item Aggrotabelle und verbundene Funktionen implementieren.
-    \item Erweiterung der Infrastruktur aus Scripten, Anleitungen und des Git-Repos hin zum laden eines Default-Datensatzes (JSON-Datei) mit nutzbaren Spieldaten (insbesondere für Testzwecke und Nutzungen durch Dritte).
+    \item Abschlussbildschirm für Sieg und Gameover konzeptionieren und implementieren. 
+    \item Charakterentwicklung bei Sieg implementieren.
 \end{enumerate}
 
 
-\subsection{Entwicklung, Freitag 30.12.2021:}
+\subsection{Entwicklung, Freitag 31.12.2021:}
 
 Abarbeiten der zuletzt genannten, nächsten Schirtte. Hier: 
 
 \begin{itemize}
     \item Die Charakterentwicklung wird mit Erfahrungspunkten gelöst: Durch Aktionen im Spiel bzw. Kampf (Schaden bekmmen, Schaden austeilen, Fähigkeiten nutzen) bekommen die entsprechenden Charaktere sofort entsprechende Erfahrungspunkte gutgeschrieben. Wird das Spiel gewonnen, werden alle von allen teilnehmenden Spielern in dieser Runde erspielten Erfarungspunkte noch einmal verdoppelt und jedem der Spieler gutgeschrieben. Verwendet werden können diese Erfahrungspunkte dann in der Charakteransicht um damit z.B. Lebenspunkte (HP) oder Angriffspunkte (AP) zu erhöhen (Commit \url{https://git.io/Jy7gl}).
 \end{itemize}
+
+
+\subsection{Entwicklung, Montag 01.01.2022:}
+
+Nach kurzer Abstimmung und Vorstellung meiner Ergebnisse bei Julian, letzte Anpassungen bzw. Entwicklungen: 
+
+\begin{itemize}
+    \item Ausgabe der erhaltenen XP beschleunigt: Es werden nun immer 10\% (aufgrundet auf die nächste Ganzzahl) der XP ausgegeben (Commit \url{https://git.io/JSTIq}).
+    \item Einbau der Charakter-Fähigkeiten (Commit \url{}):
+    \begin{itemize}
+        \item Priester: Gruppe heilen=Alle HP erhöhen
+        \item Zauberer: Schaden der Gruppe erhöhen=Alle AP erhöhen
+        \item Krieger: Gegner blocken=AP Gegner verringern
+    \end{itemize} 
+    Damit die Fähigkeiten über mehrere Runden wirken können, musste eine Hilfstabelle angelegt werden: "AbilitysToApply". Hieraus werden zum Rundenwechsel die jeweils anzuwendenden Fähigkeiten gelesen und auf die relevaten Zahlen gewirkt. 
+\end{itemize} 
+
 
 
 \section{Noitzen für Reflektion}
@@ -267,3 +281,19 @@ Ich vermute, dass dieser Effekt sehr ähnlich bei den agilen Methoden zum tragen
 \begin{itemize}
     \item Projektaufteilung: So abstimmen, dass verschiedene Arbeitsschritte gleichzeitig von verschiedenen Personen bearbeitet werden können.  
 \end{itemize}
+
+
+\section{Ideen für Erweiterungen über diese Projektarbeit hinaus}
+
+Da der Umfang dieser Projekt beschränkt ist, können nicht alle erdachten Funktionen umgesetzt werden. Einige Ideen, sollen aber nicht ungenannt bleiben: 
+\begin{enumerate}
+    \item Würfel bei Schaden bzw. Angriff implementieren.
+    \item Aggrotabelle und verbundene Funktionen implementieren.
+    \item Erweiterung der Infrastruktur aus Scripten, Anleitungen und des Git-Repos hin zum laden eines Default-Datensatzes (JSON-Datei) mit nutzbaren Spieldaten (insbesondere für Testzwecke und Nutzungen durch Dritte).
+    \item Transfer von Konstanten aus dem Code in eine Hilfstabelle für leichtere Anpassbarkeit später. Beispiele: \begin{itemize}
+        \item Lebenspunkte und Angriffspunkte neuer Charaktere
+        \item Faktoren bei der Berechnung von Erfahrungspunkten
+        \item Faktoren bei der Berechnung des Schadens
+    \end{itemize}
+\end{enumerate}
+

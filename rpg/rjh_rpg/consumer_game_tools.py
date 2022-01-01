@@ -1,6 +1,7 @@
-from rjh_rpg.models import GameScenes, Games, UserCharInGames, UserChar, User
+from rjh_rpg.models import GameScenes, Games, UserCharInGames, UserChar, User, AbilitysToApply
 from channels.db import database_sync_to_async
 import random
+from math import ceil
 
 @database_sync_to_async
 def db_set_game_id_to_finished(game_id):
@@ -55,7 +56,15 @@ def db_get_enemy_name(game_id):
     return str(GameScenes.objects.get(name=game_scene_id).enemy_name)
 
 @database_sync_to_async
-def db_get_enemy_ap(game_id):
+def db_get_enemy_current_ap(game_id):
+    return int(Games.objects.get(id=game_id).enemy_current_ap)
+
+@database_sync_to_async
+def db_set_enemy_current_ap(game_id, new_ap):
+    return Games.objects.filter(id=game_id).update(enemy_current_ap=new_ap)
+
+@database_sync_to_async
+def db_get_enemy_base_ap(game_id):
     game_scene_id = Games.objects.get(id=game_id).game_scene_id
     return int(GameScenes.objects.get(name=game_scene_id).enemy_ap)
 
@@ -162,8 +171,34 @@ def db_set_next_user_char_action_was_reminded(user_char_in_games_id):
 
 
 @database_sync_to_async
-def db_get_user_char_ap(user_char_in_games_id):
-    return int(str(UserCharInGames.objects.get(id=user_char_in_games_id).current_ap))
+def db_get_user_char_current_ap(user_char_in_games_id):
+    return UserCharInGames.objects.get(id=user_char_in_games_id).current_ap
+
+@database_sync_to_async
+def db_get_user_char_base_ap(user_char_in_games_id):
+    user_char_in_games_id = UserCharInGames.objects.get(id=user_char_in_games_id).user_char_id.id
+    base_ap = UserChar.objects.get(id=user_char_in_games_id).ap
+    return int(base_ap)
+
+@database_sync_to_async
+def db_set_user_char_current_ap(user_char_in_games_id, new_ap):
+    return UserCharInGames.objects.filter(id=user_char_in_games_id).update(current_ap=new_ap)
+
+@database_sync_to_async
+def db_get_user_char_base_hp(user_char_in_games_id):
+    user_char_in_games_id = UserCharInGames.objects.get(id=user_char_in_games_id).user_char_id.id
+    base_hp = UserChar.objects.get(id=user_char_in_games_id).hp
+    return int(base_hp)
+
+@database_sync_to_async
+def db_set_user_char_current_hp(user_char_in_games_id, new_hp):
+    return UserCharInGames.objects.filter(id=user_char_in_games_id).update(current_hp=new_hp)
+
+@database_sync_to_async
+def db_get_user_char_current_hp(user_char_in_games_id):
+    return UserCharInGames.objects.get(id=user_char_in_games_id).current_hp
+
+
 
 @database_sync_to_async
 def db_give_dmg_to_enemy(game_id, ap_to_deliver):
@@ -186,7 +221,9 @@ def db_set_end_msg_to_shown(game_id):
 
 
 @database_sync_to_async
-def db_give_xp_to_user_char(user_char_in_games_id, xp):
+def db_give_xp_to_user_char(user_char_in_games_id, xp_to_give):
+    # factor to slow char progress down
+    xp = ceil(xp_to_give * 0.2)
     last_game_xp = UserCharInGames.objects.get(id=user_char_in_games_id).user_chars_xp_of_this_game_id
     new_game_xp = last_game_xp + int(xp)
     update_game_xp = UserCharInGames.objects.filter(id=user_char_in_games_id).update(user_chars_xp_of_this_game_id=new_game_xp)
@@ -211,4 +248,38 @@ def db_give_bonus_xp_to_user_char(user_char_in_games_id, xp):
     update_char_xp = UserChar.objects.filter(id=user_char_id).update(xp_to_spend=new_char_xp)
     
     return update_char_xp
+
+
+@database_sync_to_async
+def db_get_abiliy_of_user_char(user_char_in_games_id):
+    user_char_id = UserCharInGames.objects.get(id=user_char_in_games_id).user_char_id.id
+    abiliy_of_user_char = UserChar.objects.get(id=user_char_id).Klasse
+    return str(abiliy_of_user_char)
+
+@database_sync_to_async
+def db_add_abiliy_of_user_char_to_round(game_id, user_char_in_games_id, round_number):
+    ability_to_add = AbilitysToApply()
+    ability_to_add.game_id = Games.objects.get(id=game_id)
+    ability_to_add.user_char_id = UserCharInGames.objects.get(id=user_char_in_games_id)
+    ability_to_add.round_number = round_number
+    ability_to_add.ability_was_applyed = False
+    return ability_to_add.save()
+
+@database_sync_to_async
+def db_get_next_not_applied_abiliy_of_round(game_id, round_number):
+    try:
+        next_user_char_in_games_id = AbilitysToApply.objects.filter(game_id=game_id, round_number=round_number, ability_was_applyed=False)
+        return (next_user_char_in_games_id[0].id, next_user_char_in_games_id[0].user_char_id)
+    except:
+        return None
+
+@database_sync_to_async
+def db_set_next_action_to_apply_to_done(next_action_id):
+    return AbilitysToApply.objects.filter(id=next_action_id).update(ability_was_applyed=True)    
+
+
+
+
+
+
 

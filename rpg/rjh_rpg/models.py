@@ -98,6 +98,7 @@ class Games(models.Model): # Here we find all information on games that were sta
     chat_log = models.TextField(default='', null=True, blank=True)
     game_log = models.TextField(default='', null=True, blank=True)
     enemy_current_hp = models.IntegerField(default=None, null=True, blank=True)
+    enemy_current_ap = models.IntegerField(default=None, null=True, blank=True)
     round_state = models.IntegerField(default=0, null=True, blank=True)
     round_state_locked = models.BooleanField(default=False, null=True, blank=True)
     round_counter = models.IntegerField(default=0, null=True, blank=True)
@@ -112,3 +113,10 @@ class UserCharInGames(models.Model):
     next_action = models.TextField(default='', null=True, blank=True)
     next_action_was_reminded = models.BooleanField(default=False)
     user_chars_xp_of_this_game_id = models.IntegerField(default=0)
+
+class AbilitysToApply(models.Model):
+    game_id = models.ForeignKey(Games, on_delete=models.CASCADE)
+    user_char_id = models.ForeignKey(UserCharInGames, on_delete=models.CASCADE)
+    round_number = models.IntegerField(default=0)
+    ability_was_applyed = models.BooleanField(default=False)
+    
