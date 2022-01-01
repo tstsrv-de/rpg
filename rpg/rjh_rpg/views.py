@@ -384,13 +384,13 @@ def hpap(request, hpap, user_char_id):
 
     curr_xp = UserChar.objects.get(id=user_char_id).xp_to_spend
     if curr_xp >= 1:
-        curr_xp =  ceil(curr_xp * 0.1)
+        curr_xp_to_spend =  ceil(curr_xp * 0.1)
         if hpap == "ap":
             curr_ap = UserChar.objects.get(id=user_char_id).ap
-            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp-1), ap=(curr_ap+1))
+            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), ap=(curr_ap + curr_xp_to_spend))
         elif hpap == "hp":
             curr_hp = UserChar.objects.get(id=user_char_id).hp
-            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp-1), hp=(curr_hp+1))
+            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), hp=(curr_hp + curr_xp_to_spend))
 
     return redirect('chars')
 
