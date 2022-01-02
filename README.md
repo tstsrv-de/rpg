@@ -6,7 +6,7 @@
 - Open a terminal, create an empty directory and change into it
 - Clone git repo into the current directory with ``git clone git@github.com:tstsrv-de/rpg.git .``
 - Copy *example.env* to *.env** in basedir with ``copy example.env .env`` or ``cp example.env .env``
-- Also copy *rpg/rpg/example.env* to *rpg/rpg/.env* in *rpg/rpg/*-folder with ``copy rpg/rpg/example.env rpg/rpg/.env`` or ``cp rpg/rpg/example.env rpg/rpg/.env``
+- Also copy *rpg/rpg/example.env* to *rpg/rpg/.env* in *rpg/rpg/*-folder with ``copy "rpg/rpg/example.env" "rpg/rpg/.env"`` or ``cp rpg/rpg/example.env rpg/rpg/.env``
 - Start building of the docker container:
   ``docker-compose -f local-dev-docker-compose.yml build``
 - Start the containers with:
@@ -26,3 +26,7 @@
 - Create local superuser with:
   ``docker-compose -f local-dev-docker-compose.yml exec rpg python rpg/manage.py createsuperuser``
 - Open and login to admin: <http://localhost:8000/admin>
+
+### Scripts for following usage 
+
+If you plan to use this local *installation* after this install, just use the scripts ``local-dev-start.bat`` or ``local-dev-start.sh``. On each start they will apply migrations, load sample data to the database, and start the docker containers (Django server and the database) back up again. Also it will the terminal open, so that you can see all the (error-)messages and output from Django and the database.
