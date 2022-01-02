@@ -2,6 +2,7 @@ from rjh_rpg.models import GameScenes, Games, UserCharInGames, UserChar, User, A
 from channels.db import database_sync_to_async
 import random
 from math import ceil
+from rjh_rpg.rpg_tools import rpg_websocket_get_config, rpg_get_config
 
 @database_sync_to_async
 def db_set_game_id_to_finished(game_id):
@@ -110,7 +111,7 @@ def db_set_user_char_to_dead(user_char_in_games_id):
 @database_sync_to_async
 def db_give_dmg_to_user_char(user_char_in_games_id, ap_to_deliver):
     last_hp = UserCharInGames.objects.get(id=user_char_in_games_id).current_hp
-    ap_to_deliver = random.randint(int(ap_to_deliver * 0.5), int(ap_to_deliver * 1.0)) # (TODO!) Replace with dice
+    ap_to_deliver = random.randint(int(ap_to_deliver * rpg_get_config("dmg_min")), int(ap_to_deliver * rpg_get_config("dmg_max"))) # (TODO!) Maybe later replace with dice
     new_hp = last_hp - int(ap_to_deliver)
     if new_hp < 0:
         new_hp = 0
@@ -203,7 +204,7 @@ def db_get_user_char_current_hp(user_char_in_games_id):
 @database_sync_to_async
 def db_give_dmg_to_enemy(game_id, ap_to_deliver):
     last_hp = Games.objects.get(id=game_id).enemy_current_hp
-    ap_to_deliver = random.randint(int(ap_to_deliver * 0.5), int(ap_to_deliver * 1.0)) # (TODO!) Replace with dice
+    ap_to_deliver = random.randint(int(ap_to_deliver * rpg_get_config("dmg_min")), int(ap_to_deliver * rpg_get_config("dmg_max")))  # (TODO!) Maybe later replace with dice
     new_hp = last_hp - int(ap_to_deliver)
     if new_hp < 0:
         new_hp = 0
@@ -223,7 +224,7 @@ def db_set_end_msg_to_shown(game_id):
 @database_sync_to_async
 def db_give_xp_to_user_char(user_char_in_games_id, xp_to_give):
     # factor to slow char progress down
-    xp = ceil(xp_to_give * 0.2)
+    xp = ceil(xp_to_give * rpg_get_config("xp_to_give_factor"))
     last_game_xp = UserCharInGames.objects.get(id=user_char_in_games_id).user_chars_xp_of_this_game_id
     new_game_xp = last_game_xp + int(xp)
     update_game_xp = UserCharInGames.objects.filter(id=user_char_in_games_id).update(user_chars_xp_of_this_game_id=new_game_xp)

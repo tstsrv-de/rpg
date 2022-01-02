@@ -18,6 +18,7 @@ from rjh_rpg.consumer_game_tools import db_get_end_msg_shown, db_set_end_msg_to_
 from rjh_rpg.consumer_game_tools import db_give_xp_to_user_char, db_get_user_char_this_game_xp, db_give_bonus_xp_to_user_char
 from rjh_rpg.consumer_game_tools import db_get_abiliy_of_user_char, db_add_abiliy_of_user_char_to_round, db_get_next_not_applied_abiliy_of_round, db_set_next_action_to_apply_to_done
 from rjh_rpg.consumer_game_tools import db_get_enemy_base_ap, db_get_user_char_base_ap, db_get_user_char_base_hp, db_set_user_char_current_hp, db_set_user_char_current_ap, db_get_user_char_current_hp
+from rjh_rpg.rpg_tools import rpg_websocket_get_config
 
 class Consumer(AsyncWebsocketConsumer):
 
@@ -115,11 +116,9 @@ class Consumer(AsyncWebsocketConsumer):
             # check timestamps, delete old and zombie  entrys
             
             self.mycounter = self.mycounter + 1
-            print("alive, game-id: " + str(self.game_id) + " self_game_id: " + str(self.game_id) +  " and counter " + str(self.mycounter))
 
             # round state is used to run through the rounds, depending on their states
             round_state = await db_get_round_state(self.game_id)
-            print ("current round_state: " + str(round_state))
 
             ''' # see doku, development 27.12.2021, essance is: 
             0 inital for new games
@@ -199,10 +198,11 @@ class Consumer(AsyncWebsocketConsumer):
                             
                             # Warrior = block damage
                             if ability_to_apply == "W":
-                                await db_expand_game_log(self.game_id, " 🍬 Ein Effekt von " + user_char_name + " wirkt: " + enemy_name + " wird in dieser Runde 10% weniger Angriffspunkte haben... <br /> ")
+                                effect_strength = await rpg_websocket_get_config("ability_w_effect_strength")
+                                await db_expand_game_log(self.game_id, " 🍬 Ein Effekt von " + user_char_name + " wirkt: " + enemy_name + " wird in dieser Runde "+str(int(effect_strength*100))+"% weniger Angriffspunkte haben... <br /> ")
 
                                 enemy_current_ap = await db_get_enemy_current_ap(self.game_id)
-                                new_ennemy_ap = enemy_current_ap - ceil(enemy_base_ap * 0.1)
+                                new_ennemy_ap = enemy_current_ap - ceil(enemy_base_ap * effect_strength)
                                 if new_ennemy_ap < 1:
                                     new_ennemy_ap = 1
                                 await db_set_enemy_current_ap(self.game_id, new_ennemy_ap)
@@ -210,32 +210,36 @@ class Consumer(AsyncWebsocketConsumer):
 
                             # Priest = heal
                             elif ability_to_apply == "P":
-                                await db_expand_game_log(self.game_id, " 💚 Ein Effekt von " + user_char_name + " wirkt: Die Spieler werden in dieser um 20% Ihrer Lebenspunkte geheilt... <br /> ")
+                                effect_strength = await rpg_websocket_get_config("ability_p_effect_strength")
+                                await db_expand_game_log(self.game_id, " 💚 Ein Effekt von " + user_char_name + " wirkt: Die Spieler werden in dieser um "+str(int(effect_strength*100))+"% Ihrer Lebenspunkte geheilt... <br /> ")
                                 
                                 alive_user_chars = await db_get_alive_user_chars(self.game_id)
                                 for user_char in alive_user_chars:
                                     this_user_char_base_hp = await db_get_user_char_base_hp(user_char)
                                     this_user_char_current_hp = await db_get_user_char_current_hp(user_char)
                                     this_user_char_name = await db_get_char_name_of_user_char_in_games_id(user_char)
-                                    heal = ceil(this_user_char_base_hp * 0.1)                                    
+                                    heal = ceil(this_user_char_base_hp * effect_strength)                                    
                                     new_hp = this_user_char_current_hp + heal
                                     if new_hp > this_user_char_base_hp:
-                                        new_hp = this_user_char_base_hp
-                                        await db_expand_game_log(self.game_id, " 💚 ..." + this_user_char_name + " hatte bereits volle Lebenspunkte! <br />")
+                                        new_hp = this_user_char_base_hp                                    
+
+                                    if this_user_char_current_hp == this_user_char_base_hp:
+                                        await db_expand_game_log(self.game_id, " 💚 ..." + this_user_char_name + " hatte bereits volle Lebenspunkte! <br />")                                        
                                     else:
                                         await db_expand_game_log(self.game_id, " 💚 ..." + this_user_char_name + " erhält " + str(heal) + " Lebenspunkte und hat jetzt wieder " + str(new_hp) + " Lebenspunkte! <br />")
                                         await db_set_user_char_current_hp(user_char, new_hp)
 
                             # Mage = boost group damage
                             elif ability_to_apply == "M":
-                                await db_expand_game_log(self.game_id, " 🚀 Ein Effekt von " + user_char_name + " wirkt: Alle Spieler werden in dieser Runde 10% mehr Angriffspunkte haben... <br /> ")
+                                effect_strength = await rpg_websocket_get_config("ability_m_effect_strength")
+                                await db_expand_game_log(self.game_id, " 🚀 Ein Effekt von " + user_char_name + " wirkt: Alle Spieler werden in dieser Runde "+str(int(effect_strength*100))+"% mehr Angriffspunkte haben... <br /> ")
 
                                 alive_user_chars = await db_get_alive_user_chars(self.game_id)
                                 for user_char in alive_user_chars:
                                     this_user_char_base_ap = await db_get_user_char_base_ap(user_char)
                                     this_user_char_current_ap = await db_get_user_char_current_ap(user_char)
                                     this_user_char_name = await db_get_char_name_of_user_char_in_games_id(user_char)
-                                    damage_boost = ceil(this_user_char_base_ap * 0.1)                                    
+                                    damage_boost = ceil(this_user_char_base_ap * effect_strength)                                    
                                     new_ap = this_user_char_current_ap + damage_boost
                                     await db_set_user_char_current_ap(user_char, new_ap)
                                     await db_expand_game_log(self.game_id, " 🚀 ... " + this_user_char_name + " hat damit in dieser Runde " + str(new_ap) + " Angriffspunkte! <br /> ")
@@ -329,28 +333,32 @@ class Consumer(AsyncWebsocketConsumer):
                             await db_give_xp_to_user_char(user_char, await db_get_user_char_base_ap(user_char))
                             
                             '''
-                            W -> warrior: reduce ap of enemy: next 3 rounds 10% less ap
-                            M -> mage: increase ap of group: next 3 rounds 10% more ap
-                            P -> priest: increase hp of group: next 2 rounds 20% more hp
+                            W -> warrior: reduce ap of enemy: next X rounds Y less ap
+                            M -> mage: increase ap of group: next X rounds Y more ap
+                            P -> priest: increase hp of group: next X rounds Y more hp
                             '''
                             ability = await db_get_abiliy_of_user_char(user_char)
 
                             if ability == "W":
-                                await db_expand_game_log(self.game_id, " 🎁 ..." + enemy_name + " wird in den nächsten 3 Runden jeweils 10% weniger Angriffspunkte haben! <br /> ")
-                                await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+1)
-                                await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+2)
-                                await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+3)
+                                effect_strength = await rpg_websocket_get_config("ability_w_effect_strength")
+                                duration_in_rounds = await rpg_websocket_get_config("ability_w_duration_rounds")
+                                await db_expand_game_log(self.game_id, " 🎁 ..." + enemy_name + " wird in den nächsten "+str(duration_in_rounds)+" Runden jeweils "+str(int(effect_strength*100))+"% weniger Angriffspunkte haben! <br /> ")
+                                for i in range(duration_in_rounds):
+                                    await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+(i+1))
 
                             elif ability == "P":
-                                await db_expand_game_log(self.game_id, " 🎁 ... die Gruppe wird in den nächsten 2 Runden um 20% Ihrer Lebenspunkte geheilt! <br /> ")
-                                await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+1)
-                                await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+2)
+                                effect_strength = await rpg_websocket_get_config("ability_p_effect_strength")
+                                duration_in_rounds = await rpg_websocket_get_config("ability_p_duration_rounds")
+                                await db_expand_game_log(self.game_id, " 🎁 ... die Gruppe wird in den nächsten "+str(duration_in_rounds)+" Runden um "+str(int(effect_strength*100))+"% Ihrer Lebenspunkte geheilt! <br /> ")
+                                for i in range(duration_in_rounds):
+                                    await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+(i+1))
 
                             elif ability == "M":
-                                await db_expand_game_log(self.game_id, " 🎁 ... die Gruppe wird in den nächsten 3 Runden jeweils 10% mehr Angriffspunkte haben! <br /> ")
-                                await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+1)
-                                await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+2)
-                                await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+3)
+                                effect_strength = await rpg_websocket_get_config("ability_m_effect_strength")
+                                duration_in_rounds = await rpg_websocket_get_config("ability_m_duration_rounds")
+                                await db_expand_game_log(self.game_id, " 🎁 ... die Gruppe wird in den nächsten "+str(duration_in_rounds)+" Runden jeweils "+str(int(effect_strength*100))+"% mehr Angriffspunkte haben! <br /> ")
+                                for i in range(duration_in_rounds):
+                                    await db_add_abiliy_of_user_char_to_round(self.game_id, user_char, current_round+(i+1))
 
                     # enemy dead? then --> win, else: proceed
                     if enemy_last_hp == 0 and enemy_last_hp != "":
@@ -370,7 +378,6 @@ class Consumer(AsyncWebsocketConsumer):
                     
 
                 elif round_state == 990:
-                    print("game ends - gameover!")            
                     await db_expand_game_log(self.game_id, "<br /> 🪦 Kein Spieler hat überlebt.  <br /> 🥇 " + enemy_name + " war siegreich. ")
 
                     await db_expand_game_log(self.game_id, "<br /><br /> 💰 Trotzdem gab es Erfahrungspunkte:")
@@ -386,7 +393,6 @@ class Consumer(AsyncWebsocketConsumer):
 
 
                 elif round_state == 995:    
-                    print("game ends - win!")
 
                     await db_expand_game_log(self.game_id, "<br /> 👏 " + enemy_name + " wurde besiegt! 🥳 🎉 🎊 🪅 🍻 ")
                     await db_set_round_state(self.game_id, 999)
@@ -399,19 +405,20 @@ class Consumer(AsyncWebsocketConsumer):
                     for user_char in char_list:
                         xp_earned = await db_get_user_char_this_game_xp(user_char)
                         total_xp_of_game = total_xp_of_game + xp_earned
-                        print("total_xp_of_game:" + str(total_xp_of_game))
+                        bonus_xp = ceil(total_xp_of_game * await rpg_websocket_get_config("factor_bonus_xp_on_win"))
 
                     for user_char in char_list:
                         xp_earned = await db_get_user_char_this_game_xp(user_char)
-                        await db_give_bonus_xp_to_user_char(user_char, (total_xp_of_game*2))
                         
-                        await db_expand_game_log(self.game_id, "<br />     ➡️ " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + ": " + str(xp_earned) + " XP plus " + str(total_xp_of_game*2) + " XP Bonus!")
+                        await db_give_bonus_xp_to_user_char(user_char, bonus_xp)
+                        
+                        await db_expand_game_log(self.game_id, "<br />     ➡️ " + str(await db_get_char_name_of_user_char_in_games_id(user_char)) + ": " + str(xp_earned) + " XP plus " + str(bonus_xp) + " XP Bonus!")
 
 
 
 
                 elif round_state == 999:
-                    print("show endscreen!")
+
                     if await db_get_end_msg_shown(self.game_id) == True: 
                         pass
                     else:
@@ -419,10 +426,6 @@ class Consumer(AsyncWebsocketConsumer):
                         close_button = """<input type="submit" value="Spiel abschließen" onclick="set_game_to_finished();" style="background:#ffffff;  color: #000000; "" >"""
                         await db_expand_game_log(self.game_id,"<br /><br />Bitte schließt das Spiel nun ab: " + close_button)
 
-
-                else:
-                    # should not happen
-                    print("no round state on known rules")
                 
                 db_set_round_state_locked(self.game_id, False) # release round-state-token
                 self.round_state_token_is_mine = False 

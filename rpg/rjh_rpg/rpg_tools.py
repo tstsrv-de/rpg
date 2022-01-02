@@ -4,6 +4,7 @@ from rjh_rpg.models import GameState
 from rjh_rpg.models import UserCharInGames
 from rjh_rpg.models import Games
 from rjh_rpg.models import MyRpgConfig
+from channels.db import database_sync_to_async
 
 
 def rpg_user_is_player_of_this_game_id(game_id, request_user):
@@ -58,7 +59,7 @@ def rpg_user_char_name_to_id(user_char_name):
 def rpg_game_id_is_finished(game_id):
     return Games.objects.get(id=game_id).game_finished
     
-def GetMyRpgConfig(config_to_get):
+def rpg_get_config(config_to_get):
 
     try: 
         config_type = MyRpgConfig.objects.get(name=config_to_get).type
@@ -77,4 +78,7 @@ def GetMyRpgConfig(config_to_get):
     except:
         return None
 
+@database_sync_to_async
+def rpg_websocket_get_config(config_to_get):
+    return rpg_get_config(config_to_get)
 

@@ -18,7 +18,7 @@ from rjh_rpg.models import UserCharInGames
 
 from rjh_rpg.rpg_tools import rpg_user_has_active_game
 from rjh_rpg.rpg_tools import rpg_user_is_player_of_this_game_id
-from rjh_rpg.rpg_tools import GetMyRpgConfig
+from rjh_rpg.rpg_tools import rpg_get_config
 
 from math import ceil
 
@@ -128,14 +128,14 @@ def chars(request):
                 tmp_form = form.save(commit=False)
                 tmp_form.usernickname = request.user
                 if tmp_form.Klasse == "W":
-                    tmp_form.hp = 200
-                    tmp_form.ap = 10
+                    tmp_form.hp = rpg_get_config("char_class_w_base_hp")
+                    tmp_form.ap = rpg_get_config("char_class_w_base_ap")
                 elif tmp_form.Klasse == "P":
-                    tmp_form.hp = 75
-                    tmp_form.ap = 5
+                    tmp_form.hp = rpg_get_config("char_class_p_base_hp")
+                    tmp_form.ap = rpg_get_config("char_class_p_base_ap")
                 elif tmp_form.Klasse == "M":
-                    tmp_form.hp = 100
-                    tmp_form.ap = 20
+                    tmp_form.hp = rpg_get_config("char_class_m_base_hp")
+                    tmp_form.ap = rpg_get_config("char_class_m_base_ap")
                 else:
                     # should not happen
                     pass
@@ -357,9 +357,7 @@ def game(request, game_id):
             'user_char_id': user_char_details.usernickname.id,
             }
         )
-        
-    print("user_char_list_with_details: " + str(game_user_char_list))
-    
+  
     return render(request,'game.html', {
         'game_id': game_id,
         'game_user_char_list' : game_user_char_list,  
@@ -385,7 +383,7 @@ def hpap(request, hpap, user_char_id):
 
     curr_xp = UserChar.objects.get(id=user_char_id).xp_to_spend
     if curr_xp >= 1:
-        curr_xp_to_spend =  ceil(curr_xp * GetMyRpgConfig("xp_to_spend_factor"))
+        curr_xp_to_spend =  ceil(curr_xp * rpg_get_config("xp_to_spend_factor"))
         if hpap == "ap":
             curr_ap = UserChar.objects.get(id=user_char_id).ap
             UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), ap=(curr_ap + curr_xp_to_spend))

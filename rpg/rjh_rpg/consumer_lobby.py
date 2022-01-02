@@ -10,6 +10,7 @@ from django.db.models.functions import Now
 from datetime import datetime, time
 from rjh_rpg.models import Games
 from rjh_rpg.models import UserCharInGames
+from rjh_rpg.rpg_tools import rpg_websocket_get_config
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -147,7 +148,7 @@ class Consumer(AsyncWebsocketConsumer):
         if countdown == "":  # no countdown, clear html part in template
             countdown_html = ''
         else:  # countdown is running
-            countdown = (int(countdown) -6) * -1
+            countdown = (int(countdown) - await rpg_websocket_get_config("lobby_countdown_duration")) * -1
 
             countdown_html = """
             <p style="color:**countdown_color**;">**seconds** Sekunden bis Spielstart!</p>
@@ -484,7 +485,6 @@ class Consumer(AsyncWebsocketConsumer):
         self.scene_id = self.scope['url_route']['kwargs']['scene_id']
         try:
             delelte_slots_in_lobby = LobbySlots.objects.filter(game_scene_id=self.scene_id).delete()
-            print("delelte_slots_in_lobby:" + str(delelte_slots_in_lobby))
         except:
             pass
         

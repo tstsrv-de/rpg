@@ -8,7 +8,6 @@ from channels.db import database_sync_to_async
 class Consumer(AsyncWebsocketConsumer):
     
     async def connect(self):
-        #self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.msg_group_name = 'wmtc'
 
         await self.channel_layer.group_add(

@@ -7,7 +7,7 @@
       "req_players": 1,
       "welcome_text": "Arzt: \"Sie haben Krebs und Sie haben Alzheimer.\" <br />\r\n<br />\r\nPatient: \"Na Gott sei dank kein Krebs.\"<br />\r\n<br />",
       "enemy_name": "Zoidberg",
-      "enemy_hp": 100,
+      "enemy_hp": 40,
       "enemy_ap": 10,
       "enemy_image": "moar.mp4"
     }
@@ -64,6 +64,7 @@
       "enemy_image": "lasercat.mp4"
     }
   },
+
   {
     "model": "rjh_rpg.myrpgconfig",
     "pk": 1,
@@ -72,6 +73,176 @@
       "type": "float",
       "value": "0.5",
       "hint": "used in views.py in 'hpap' function to speed up the process of spending xp. instead of spend one xp at a time, this takes a percentage of the total value of available xp and spends them. \r\nthis is the factor to calculate it."
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 2,
+    "fields": {
+      "name": "char_class_m_base_hp",
+      "type": "int",
+      "value": "100",
+      "hint": "default hp for a new char, class mage"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 3,
+    "fields": {
+      "name": "char_class_m_base_ap",
+      "type": "int",
+      "value": "25",
+      "hint": "default ap for a new char, class mage"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 4,
+    "fields": {
+      "name": "char_class_p_base_ap",
+      "type": "int",
+      "value": "5",
+      "hint": "default ap for a new char, class priest"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 5,
+    "fields": {
+      "name": "char_class_p_base_hp",
+      "type": "int",
+      "value": "75",
+      "hint": "default hp for a new char, class priest"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 6,
+    "fields": {
+      "name": "char_class_w_base_hp",
+      "type": "int",
+      "value": "200",
+      "hint": "default hp for a new char, class warrior"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 7,
+    "fields": {
+      "name": "char_class_w_base_ap",
+      "type": "int",
+      "value": "15",
+      "hint": "default ap for a new char, class warrior"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 8,
+    "fields": {
+      "name": "lobby_countdown_duration",
+      "type": "int",
+      "value": "6",
+      "hint": "duration in seconds for the countdown in the lobby before start."
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 9,
+    "fields": {
+      "name": "factor_bonus_xp_on_win",
+      "type": "float",
+      "value": "2.0",
+      "hint": "if a game is won, this factor is used to calculate the bonus xp to all players (xp of all players of the game * this factor)"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 10,
+    "fields": {
+      "name": "dmg_min",
+      "type": "float",
+      "value": "0.5",
+      "hint": "minimun damage that is given based on the ap of char or enemy"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 11,
+    "fields": {
+      "name": "dmg_max",
+      "type": "float",
+      "value": "1.0",
+      "hint": "maximum damage that is given based on the ap of char or enemy"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 12,
+    "fields": {
+      "name": "xp_to_give_factor",
+      "type": "float",
+      "value": "0.3",
+      "hint": "factor that is being used when giving a char xp. mostly the number that comes in is damage given or the ap of a char when unsing its special ability."
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 13,
+    "fields": {
+      "name": "ability_m_duration_rounds",
+      "type": "int",
+      "value": "3",
+      "hint": "mage ability will be applyed to this number of next rounds"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 14,
+    "fields": {
+      "name": "ability_p_duration_rounds",
+      "type": "int",
+      "value": "5",
+      "hint": "priest ability will be applyed to this number of next rounds"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 15,
+    "fields": {
+      "name": "ability_w_duration_rounds",
+      "type": "int",
+      "value": "3",
+      "hint": "warrior ability will be applyed to this number of next rounds"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 16,
+    "fields": {
+      "name": "ability_w_effect_strength",
+      "type": "float",
+      "value": "0.12",
+      "hint": "strength of the warrior ability in percent (written in float, 0.1 = 10%, 0.5 = 50%)"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 17,
+    "fields": {
+      "name": "ability_p_effect_strength",
+      "type": "float",
+      "value": "0.05",
+      "hint": "strength of the priest ability in percent (written in float, 0.1 = 10%, 0.5 = 50%)"
+    }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 18,
+    "fields": {
+      "name": "ability_m_effect_strength",
+      "type": "float",
+      "value": "0.3",
+      "hint": "strength of the mage ability in percent (written in float, 0.1 = 10%, 0.5 = 50%)"
     }
   }
 ]
