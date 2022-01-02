@@ -34,6 +34,8 @@ class Consumer(AsyncWebsocketConsumer):
     </tr>
     </table>
     
+    <p><b>Tipp:</b> Um an einem Spiel teilzunehmen, klicke oben auf "<i>Platz belegen</i>"!</p>
+    
     """
     
     html_jump_to_game = """
