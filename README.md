@@ -3,10 +3,11 @@
 ## Short howto for local testing and/or dev useage
 
 - Install git and docker
-- Clone git repo to local system from <https://github.com/tstsrv-de/rpg>
-- Copy ``example.env`` to ``.env`` in basedir **and** ``/rpg/rpg/``-folder
-- Open a terminal, change directory to cloned git repo
-- Run:
+- Open a terminal, create an empty directory and change into it
+- Clone git repo into the current directory with ``git clone git@github.com:tstsrv-de/rpg.git .``
+- Copy *example.env* to *.env** in basedir with ``copy example.env .env`` or ``cp example.env .env``
+- Also copy *rpg/rpg/example.env* to *rpg/rpg/.env* in *rpg/rpg/*-folder with ``copy rpg/rpg/example.env rpg/rpg/.env`` or ``cp rpg/rpg/example.env rpg/rpg/.env``
+- Start building of the docker container:
   ``docker-compose -f local-dev-docker-compose.yml build``
 - Start the containers with:
   ``docker-compose -f local-dev-docker-compose.yml up -d``
