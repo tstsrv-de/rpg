@@ -9,6 +9,7 @@ from rjh_rpg.models import LobbySlots
 from rjh_rpg.models import Games
 from rjh_rpg.models import UserCharInGames
 from rjh_rpg.models import AbilitysToApply
+from rjh_rpg.models import MyRpgConfig
 
 admin.site.register(UserChar)
 admin.site.register(GameState)
@@ -18,3 +19,4 @@ admin.site.register(LobbySlots)
 admin.site.register(Games)
 admin.site.register(UserCharInGames)
 admin.site.register(AbilitysToApply)
+admin.site.register(MyRpgConfig)

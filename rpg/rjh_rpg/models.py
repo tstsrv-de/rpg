@@ -120,3 +120,8 @@ class AbilitysToApply(models.Model):
     round_number = models.IntegerField(default=0)
     ability_was_applyed = models.BooleanField(default=False)
     
+class MyRpgConfig(models.Model):
+    name = models.CharField(max_length=150, unique=True)
+    type = models.CharField(max_length=10, null=True, blank=True) # ie. int, float, str
+    value = models.CharField(max_length=150, null=True, blank=True)
+    hint = models.TextField(default='', null=True, blank=True) # explanation of the config value and its limits

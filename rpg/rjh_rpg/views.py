@@ -18,6 +18,7 @@ from rjh_rpg.models import UserCharInGames
 
 from rjh_rpg.rpg_tools import rpg_user_has_active_game
 from rjh_rpg.rpg_tools import rpg_user_is_player_of_this_game_id
+from rjh_rpg.rpg_tools import MyRpgConfig
 
 from math import ceil
 

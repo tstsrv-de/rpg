@@ -8,10 +8,8 @@ git -C /home/rjhadmin/tstsrv/ pull
 docker-compose --project-directory /home/rjhadmin/tstsrv/ down
 
 # optional: delete also all images and prune local-data, then build with no-cache 
-#docker rmi $(docker images -q) 
-#docker system prune -a --volumes
 #docker stop $(docker ps -a -q)
-#docker rm $(docker ps -a -q)
+#docker system prune -a --volumes
 #docker-compose --project-directory /home/rjhadmin/tstsrv/ build --no-cache
 
 docker-compose --project-directory /home/rjhadmin/tstsrv/ build 
