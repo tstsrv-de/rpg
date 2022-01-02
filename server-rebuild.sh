@@ -16,4 +16,8 @@ docker-compose --project-directory /home/rjhadmin/tstsrv/ down
 
 docker-compose --project-directory /home/rjhadmin/tstsrv/ build 
 docker-compose --project-directory /home/rjhadmin/tstsrv/ up -d
+docker-compose --project-directory /home/rjhadmin/tstsrv/ exec rpg python rpg/manage.py makemigrations
+docker-compose --project-directory /home/rjhadmin/tstsrv/ exec rpg python rpg/manage.py migrate 
+docker-compose --project-directory /home/rjhadmin/tstsrv/ exec rpg python rpg/manage.py loaddata db_sample_data.json 
+    
 chmod +x /home/rjhadmin/tstsrv/*.sh
