@@ -58,19 +58,19 @@ def rpg_user_char_name_to_id(user_char_name):
 def rpg_game_id_is_finished(game_id):
     return Games.objects.get(id=game_id).game_finished
     
-def rpg_config(config_to_get):
+def GetMyRpgConfig(config_to_get):
 
     try: 
-        config_type = RpgConfig.objects.get(name=config_to_get).type
+        config_type = MyRpgConfig.objects.get(name=config_to_get).type
     
         if config_type == "int":
-            return int(RpgConfig.objects.get(name=config_to_get).value)
+            return int(MyRpgConfig.objects.get(name=config_to_get).value)
 
         elif config_type == "str":
-            return str(RpgConfig.objects.get(name=config_to_get).value)
+            return str(MyRpgConfig.objects.get(name=config_to_get).value)
 
         elif config_type == "float":
-            return float(RpgConfig.objects.get(name=config_to_get).value)
+            return float(MyRpgConfig.objects.get(name=config_to_get).value)
 
         else:
             return None

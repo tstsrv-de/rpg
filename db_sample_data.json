@@ -63,5 +63,15 @@
       "enemy_ap": 100,
       "enemy_image": "lasercat.mp4"
     }
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 1,
+    "fields": {
+      "name": "xp_to_spend_factor",
+      "type": "float",
+      "value": "0.5",
+      "hint": "used in views.py in 'hpap' function to speed up the process of spending xp. instead of spend one xp at a time, this takes a percentage of the total value of available xp and spends them. \r\nthis is the factor to calculate it."
+    }
   }
 ]

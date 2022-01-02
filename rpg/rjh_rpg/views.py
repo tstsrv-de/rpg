@@ -18,7 +18,7 @@ from rjh_rpg.models import UserCharInGames
 
 from rjh_rpg.rpg_tools import rpg_user_has_active_game
 from rjh_rpg.rpg_tools import rpg_user_is_player_of_this_game_id
-from rjh_rpg.rpg_tools import MyRpgConfig
+from rjh_rpg.rpg_tools import GetMyRpgConfig
 
 from math import ceil
 
@@ -385,7 +385,7 @@ def hpap(request, hpap, user_char_id):
 
     curr_xp = UserChar.objects.get(id=user_char_id).xp_to_spend
     if curr_xp >= 1:
-        curr_xp_to_spend =  ceil(curr_xp * 0.1)
+        curr_xp_to_spend =  ceil(curr_xp * GetMyRpgConfig("xp_to_spend_factor"))
         if hpap == "ap":
             curr_ap = UserChar.objects.get(id=user_char_id).ap
             UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), ap=(curr_ap + curr_xp_to_spend))
