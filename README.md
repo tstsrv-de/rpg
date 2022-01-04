@@ -5,8 +5,8 @@
 - Install git and docker
 - Open a terminal, create an empty directory and change into it
 - Clone git repo into the current directory with ``git clone git@github.com:tstsrv-de/rpg.git .``
-- Copy *example.env* to *.env** in basedir with ``copy example.env .env`` or ``cp example.env .env``
-- Also copy *rpg/rpg/example.env* to *rpg/rpg/.env* in *rpg/rpg/*-folder with ``copy "rpg/rpg/example.env" "rpg/rpg/.env"`` or ``cp rpg/rpg/example.env rpg/rpg/.env``
+- Copy *example.env* to *.env** in basedir with  ``copy example.env .env`` (on 🪟) or ``cp example.env .env`` (on 🍎 and 🐧)
+- Also copy *rpg/rpg/example.env* to *rpg/rpg/.env* in *rpg/rpg/*-folder with ``copy "rpg/rpg/example.env" "rpg/rpg/.env"`` (on 🪟) or ``cp rpg/rpg/example.env rpg/rpg/.env`` (on 🍎 and 🐧)
 - Start building of the docker container:
   ``docker-compose -f local-dev-docker-compose.yml build``
 - Start the containers with:
@@ -29,4 +29,4 @@
 
 ### Scripts for following usage 
 
-If you plan to use this local *installation* after this install, just use the scripts ``local-dev-start.bat`` or ``local-dev-start.sh``. On each start they will apply migrations, load sample data to the database, and start the docker containers (Django server and the database) back up again. Also it will the terminal open, so that you can see all the (error-)messages and output from Django and the database.
+If you want to keep using this local *installation*, just use on of the scripts ``local-dev-start.bat`` (on 🪟)  or ``local-dev-start.sh``  (on 🍎 and 🐧) to start it back up again. On each start they will collect and apply migrations, load sample data to the database from the *.json file in the base-dir and start the docker containers (Django server and the database) back up again. Also it will keep the terminal open, so that you can see all the (error-)messages and output from Django and the database.
