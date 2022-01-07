@@ -83,3 +83,5 @@ services:
       - traefik.http.routers.deskshare.entrypoints=https
       - traefik.http.routers.deskshare.tls=true
       - traefik.http.routers.deskshare.tls.certresolver=letsencrypt
+    ports:
+      - 8500:8500      
