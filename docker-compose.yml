@@ -71,3 +71,15 @@ services:
       - traefik.http.routers.rpg.entrypoints=https
       - traefik.http.routers.rpg.tls=true
       - traefik.http.routers.rpg.tls.certresolver=${CERT_RESOLVER}
+
+# Part for 'deskshare' from Max and Co...
+
+  deskshare:
+    build: 
+      context: /home/rjhadmin/deskshare
+      dockerfile: Dockerfile
+    labels:
+      - traefik.http.routers.deskshare.rule=Host(`deskshare.tstsrv.de`)
+      - traefik.http.routers.deskshare.entrypoints=https
+      - traefik.http.routers.deskshare.tls=true
+      - traefik.http.routers.deskshare.tls.certresolver=letsencrypt
