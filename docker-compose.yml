@@ -3,8 +3,6 @@ services:
 
   traefik:
     image: traefik:2.5.4
-    networks:
-      - proxy
     command:
       # Try to enable this if something isn't working. 
       # Chances are, Traefik will tell you why.
@@ -15,7 +13,6 @@ services:
       - --entrypoints.https.address=:443
 
       - --providers.docker=true
-      
 
       - --api=true
 
@@ -28,7 +25,6 @@ services:
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
     labels:
       # Redirect all HTTP traffic to HTTPS
-      - traefik.docker.network=proxy      
       - traefik.http.routers.to-https.rule=HostRegexp(`{host:.+}`)
       - traefik.http.routers.to-https.entrypoints=http
       - traefik.http.routers.to-https.middlewares=to-https
@@ -68,8 +64,6 @@ services:
       - .:/code
     depends_on:
       - db
-    networks:
-      - proxy
     ports:
       - 8200:8200
     labels:
@@ -77,7 +71,3 @@ services:
       - traefik.http.routers.rpg.entrypoints=https
       - traefik.http.routers.rpg.tls=true
       - traefik.http.routers.rpg.tls.certresolver=${CERT_RESOLVER}
-
-networks:
-  proxy:
-    external: true
