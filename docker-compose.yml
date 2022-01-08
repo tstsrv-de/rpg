@@ -74,14 +74,26 @@ services:
 
 # Part for 'deskshare' from Max and Co...
 
-  deskshare:
-    build: 
-      context: /home/rjhadmin/deskshare
-      dockerfile: Dockerfile
+
+  database:
+    image: mysql:8.0
+    container_name: dsapi_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 23131001
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    security_opt:
+     - seccomp:unconfined
+    volumes:
+     - ./db-dump:/docker-entrypoint-initdb.d
+    ports:
+    - "3306:3306"
+
+  api:
+    build: ./DeskShareApi
+    links:
+      - database
     labels:
       - traefik.http.routers.deskshare.rule=Host(`deskshare.tstsrv.de`)
       - traefik.http.routers.deskshare.entrypoints=https
       - traefik.http.routers.deskshare.tls=true
       - traefik.http.routers.deskshare.tls.certresolver=letsencrypt
-    ports:
-      - 8500:8500      
