@@ -279,8 +279,12 @@ def db_set_next_action_to_apply_to_done(next_action_id):
     return AbilitysToApply.objects.filter(id=next_action_id).update(ability_was_applyed=True)    
 
 
+@database_sync_to_async
+def db_get_win_text(game_id):
+    game_scene_id = Games.objects.get(id=game_id).game_scene_id
+    return str(GameScenes.objects.get(name=game_scene_id).win_text)
 
-
-
-
-
+@database_sync_to_async
+def db_get_gameover_text(game_id):
+    game_scene_id = Games.objects.get(id=game_id).game_scene_id
+    return str(GameScenes.objects.get(name=game_scene_id).gameover_text)

@@ -19,6 +19,7 @@ from rjh_rpg.consumer_game_tools import db_give_xp_to_user_char, db_get_user_cha
 from rjh_rpg.consumer_game_tools import db_get_abiliy_of_user_char, db_add_abiliy_of_user_char_to_round, db_get_next_not_applied_abiliy_of_round, db_set_next_action_to_apply_to_done
 from rjh_rpg.consumer_game_tools import db_get_enemy_base_ap, db_get_user_char_base_ap, db_get_user_char_base_hp, db_set_user_char_current_hp, db_set_user_char_current_ap, db_get_user_char_current_hp
 from rjh_rpg.rpg_tools import rpg_websocket_get_config
+from rjh_rpg.consumer_game_tools import db_get_win_text, db_get_gameover_text
 
 class Consumer(AsyncWebsocketConsumer):
 
@@ -377,7 +378,11 @@ class Consumer(AsyncWebsocketConsumer):
                     await db_set_round_state(self.game_id, 50)                
                     
 
-                elif round_state == 990:
+                # Gameover
+                elif round_state == 990: 
+                    
+                    await db_expand_game_log(self.game_id, "<br /> 💬 " + await db_get_gameover_text(self.game_id))
+                    
                     await db_expand_game_log(self.game_id, "<br /> 🪦 Kein Spieler hat überlebt.  <br /> 🥇 " + enemy_name + " war siegreich. ")
 
                     await db_expand_game_log(self.game_id, "<br /><br /> 💰 Trotzdem gab es Erfahrungspunkte:")
@@ -392,8 +397,11 @@ class Consumer(AsyncWebsocketConsumer):
 
 
 
+                # Win
                 elif round_state == 995:    
 
+                    await db_expand_game_log(self.game_id, "<br /> 💬 " + await db_get_win_text(self.game_id))
+                    
                     await db_expand_game_log(self.game_id, "<br /> 👏 " + enemy_name + " wurde besiegt! 🥳 🎉 🎊 🪅 🍻 ")
                     await db_set_round_state(self.game_id, 999)
 

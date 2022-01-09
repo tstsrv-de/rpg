@@ -455,12 +455,14 @@ class Consumer(AsyncWebsocketConsumer):
                 new_UserCharInGames.current_ap = UserChar.objects.get(name=user_char).ap
                 new_UserCharInGames.save()
 
-            gamelog_init_text = "<b>&#128214; &#128172; Intro:</b> <br /> " + str(scene_id_obj[0].welcome_text) + "<br /><br />"
+            gamelog_init_text = "<b> 💬 Intro:</b> <br /> " + str(scene_id_obj[0].welcome_text)
 
             for user_char in user_char_list:
                 gamelog_init_text = gamelog_init_text + "&#127918; " + str(user_char) + " kommt ins Spiel... <br />"
+                
+            gamelog_init_text = gamelog_init_text + "<br />&#128126; " + str(scene_id_obj[0].enemy_name) + " sagt: \"<i>" + str(scene_id_obj[0].boss_welcome_text) + "</i>\"<br />"
 
-            gamelog_init_text = gamelog_init_text + "<br />&#128126; " + str(scene_id_obj[0].enemy_name) + " sieht euch und beginnt einen Angriff! <br />"
+            gamelog_init_text = gamelog_init_text + "<br />&#128126; " + str(scene_id_obj[0].enemy_name) + " beginnt einen Angriff! <br />"
             # the above is important for ethical and moral reasons ;-) 
 
             enemy_current_hp = int(scene_id_obj[0].enemy_hp)

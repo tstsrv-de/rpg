@@ -56,6 +56,9 @@ class GameScenes(models.Model): # blueprint of the games
     name = models.CharField(unique=True, max_length=300)
     req_players = models.BigIntegerField(default=1) # number of required players
     welcome_text = models.TextField(default="Eine Gefahr zeigt sich im dunkeln...<br />Es raschelt...<br />", null=True, blank=True)
+    boss_welcome_text = models.TextField(default="Keine Frage, heute ist das Ende euerer Tage!", null=True, blank=True)    
+    win_text = models.TextField(default="Yay...<br />Ein gutes Ende...<br />", null=True, blank=True)    
+    gameover_text = models.TextField(default="Leider kein Glück...<br />Vielleicht beim nächsten mal...<br />", null=True, blank=True)    
     enemy_name = models.CharField(default="Der Gegener", null=True, blank=True, max_length=300)
     enemy_hp = models.IntegerField(default=100) 
     enemy_ap =  models.IntegerField(default=10)
