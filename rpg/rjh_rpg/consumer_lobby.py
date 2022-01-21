@@ -10,6 +10,7 @@ from django.db.models.functions import Now
 from datetime import datetime, time
 from rjh_rpg.models import Games
 from rjh_rpg.models import UserCharInGames
+from rjh_rpg.rpg_tools import rpg_websocket_get_config
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -32,6 +33,8 @@ class Consumer(AsyncWebsocketConsumer):
     html_table_bottom = """
     </tr>
     </table>
+    
+    <p><b>Tipp:</b> Um an einem Spiel teilzunehmen, klicke oben auf "<i>Platz belegen</i>"!</p>
     
     """
     
@@ -147,7 +150,7 @@ class Consumer(AsyncWebsocketConsumer):
         if countdown == "":  # no countdown, clear html part in template
             countdown_html = ''
         else:  # countdown is running
-            countdown = (int(countdown) -6) * -1
+            countdown = (int(countdown) - await rpg_websocket_get_config("lobby_countdown_duration")) * -1
 
             countdown_html = """
             <p style="color:**countdown_color**;">**seconds** Sekunden bis Spielstart!</p>
@@ -177,17 +180,23 @@ class Consumer(AsyncWebsocketConsumer):
                 game_id = await self.db_start_game(self.scene_id, user_char_list, locked_in_datetime[0])
                 
                 countdown_html = """
-                <h4 style="color:red;">Das Spiel startet!</h4>
-                <h3><a href="/game-**game_id**/">...angemeldete Spieler wechseln <u>jetzt</u> bitte zum Spiel!</a></h1>
+                <h1>Das Spiel startet...</h2>
                 <br />
-                <p style="color:red;">Die übrigen Spieler gehen bitte zurück in die Worldmap <br />oder laden diese Seite für einen Neustart der Lobby erneut. <br />Danke!</p>
+                <h2>...angemeldete Spieler <a href="/game-**game_id**/">wechseln jetzt bitte zum Spiel</a>...</h4>
+                <br />
+                <h4>...alle anderen Spieler gehen bitte zurück in <a href="/worldmap/">die Worldmap</a>...</h4>
+                <h4>...oder rufen <a href="/lobby-**scene_id**/">diese Seite</a> für einen Neustart der Lobby erneut auf... </h4>
+                <br /><br />
                 """
-                countdown_html = countdown_html.replace("**game_id**", str(game_id))
+                countdown_html = countdown_html.replace("**scene_id**", str(self.scene_id))
 
                 try:
                     await self.db_free_all_slots_in_current_lobby()
                 except:
                     pass                
+                
+                html = countdown_html.replace("**game_id**", str(game_id))
+                countdown_html = ""                
                 
                 
 
@@ -446,26 +455,28 @@ class Consumer(AsyncWebsocketConsumer):
                 new_UserCharInGames.current_ap = UserChar.objects.get(name=user_char).ap
                 new_UserCharInGames.save()
 
-            gamelog_init_text = "<b>&#128214; &#128172; Intro:</b> <br /> " + str(scene_id_obj[0].welcome_text) + "<br />"
+            gamelog_init_text = "<b> 💬 Intro:</b> <br /> " + str(scene_id_obj[0].welcome_text)
 
             for user_char in user_char_list:
                 gamelog_init_text = gamelog_init_text + "&#127918; " + str(user_char) + " kommt ins Spiel... <br />"
+                
+            gamelog_init_text = gamelog_init_text + "<br />&#128126; " + str(scene_id_obj[0].enemy_name) + " sagt: \"<i>" + str(scene_id_obj[0].boss_welcome_text) + "</i>\"<br />"
 
-            gamelog_init_text = gamelog_init_text + "&#128126; " + str(scene_id_obj[0].enemy_name) + " sieht euch und beginnt einen Angriff! <br />"
+            gamelog_init_text = gamelog_init_text + "<br />&#128126; " + str(scene_id_obj[0].enemy_name) + " beginnt einen Angriff! <br />"
             # the above is important for ethical and moral reasons ;-) 
 
             enemy_current_hp = int(scene_id_obj[0].enemy_hp)
             enemy_current_ap = int(scene_id_obj[0].enemy_ap)
             gamelog_init_text = gamelog_init_text + "&#128126; " + str(scene_id_obj[0].enemy_name) + " hat " + str(enemy_current_hp) + " Lebenspunkte und eine Angriffskraft von " + str(enemy_current_ap) + " Punkten.<br /> <br />" 
 
-            Games.objects.filter(id=game_id).update(game_log=gamelog_init_text, enemy_current_hp=enemy_current_hp)
+            Games.objects.filter(id=game_id).update(game_log=gamelog_init_text, enemy_current_hp=enemy_current_hp, enemy_current_ap=enemy_current_ap)
 
         return game_id
 
     @database_sync_to_async     
     def db_get_user_chars_in_lobby(self):
         self.scene_id = self.scope['url_route']['kwargs']['scene_id']
-        list_of_user_chars = LobbySlots.objects.filter(game_scene_id=self.scene_id)
+        list_of_user_chars = LobbySlots.objects.filter(game_scene_id=self.scene_id).order_by('id')
         user_char_list = []
         
         for row in list_of_user_chars:
@@ -478,7 +489,6 @@ class Consumer(AsyncWebsocketConsumer):
         self.scene_id = self.scope['url_route']['kwargs']['scene_id']
         try:
             delelte_slots_in_lobby = LobbySlots.objects.filter(game_scene_id=self.scene_id).delete()
-            print("delelte_slots_in_lobby:" + str(delelte_slots_in_lobby))
         except:
             pass
         

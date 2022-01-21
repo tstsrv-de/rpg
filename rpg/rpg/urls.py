@@ -29,19 +29,13 @@ urlpatterns = [
     path('chars/', views.chars, name='chars'),
     path('user_profile/', views.user_profile, name='user_profile'),
 
-    # Game/World URLs
-    # checks for 1) login of user and 2) single use of char - if ok:
-    # set gamestate and show worldmap
     path('worldmap/', views.worldmap, name='worldmap'),
 
     path('lobby_jumper/', views.lobby_jumper, name='lobby_jumper'),
     path('lobby-<int:scene_id>/', views.lobby, name='lobby'),
     
     path('game-<int:game_id>/', views.game, name='game'),
+    
+    path('xp-to-<str:hpap>-<int:user_char_id>/', views.hpap, name='hpap'),
 
-    # path('scene/', views.scene, name='scene'), # main game
-
-    # from YT chat howto:
-    # path('<str:room_name>/', views.room, name='room'),
-    # hängt sonst auf /chat/ rum
 ]

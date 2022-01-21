@@ -7,19 +7,15 @@
 <br />
 {% endif %}
 
-<h1>Chars...</h1>
+{% if user.is_authenticated %}
 
 <div class="container text-center">
+<table width="100%">
+    <tr>
+        <td>
 
-{% if user.is_authenticated %}
-<p>Hi, {{ user.get_username }}!<br /></p>
+        {% if chars %} 
 
-        {% if chars %} <!-- (TODO!) Wenn ein Char bereits aktiv ist -- Keine Auswahl zulassen, sondern logout oder wiedereinstieg anbieten -->
-        hier sind deine Chars: 
-
-        <br />
-        <br />
-        <br />
         <div class="table-responsive">
         <table class="table table-bordered table-striped">
         
@@ -28,15 +24,27 @@
         
             <td>
             <p>
-            Name: {{ char.name }} <br />
-            Klasse: {{ char.Klasse }} <br />
+            <b>{{ char.name }}</b> <br />
+            Klasse:
+            <div style=" font-size: 30px;font-size: 4vw;">
+                {% if char.Klasse == "W" %} 🤺 {% endif %}
+                {% if char.Klasse == "M" %} 🧙 {% endif %}
+                {% if char.Klasse == "P" %} 👼 {% endif %} 
+            </div>
+            <br />
             <br />
             Lebenspunkte: {{ char.hp }} <br />
             Angriffskraft:  {{ char.ap }} <br />
             <br />
-            Geburtsort: {{ char.Geburtsort }} <br />
+            <!--Geburtsort: {{ char.Geburtsort }} <br /> 
             Geschlecht: {{ char.Geschlecht }} <br />
-
+            <br />--> 
+            Verfügbare XP: {{ char.xp_to_spend }} <br />
+            {% if char.xp_to_spend >= 1 %} <br />
+            <a href="/xp-to-hp-{{char.id}}/">Lebenspunkte erhöhen</a> <br />
+            <a href="/xp-to-ap-{{char.id}}/">Angriffskraft erhöhen</a> 
+            {% endif %}
+     
             
             </p>
         
@@ -67,6 +75,7 @@ Du hast noch eine aktive Chars oder Szene. Bitte setze diese erst zurück &#1014
 <form action="{% url 'worldmap' %}" method="POST" id="interest-select" class="form-inline">
  <div class="form-group">
         {% csrf_token %}
+        <h4>Wähle einen Charakter aus, um die Weltkarte zu betreten...</h4>
 
         <select id="char_id" name="char" class="form-control">
         <!--<option disabled selected> Charakter auswählen... </option>--> <!-- muss noch raus solange er ohne auswahl das form absendet -->
@@ -79,23 +88,38 @@ Du hast noch eine aktive Chars oder Szene. Bitte setze diese erst zurück &#1014
   </form>
 
         {% else %}
-        <p>du hast noch keine Chars!</p>
+        <h2>Du hast noch keine Charaktere...</h2>
+
+        Lege hier einen neuen an 👍
         {% endif %}
   {% endif %}
 
+
+
+        </td>
+    </tr>
+</table>
+<br />
+<br />
+<table width="100%">
+    <tr>
+        <td>
+            <h3>Neuen Charakter anlegen:</h3>
+            
+            <form method="POST">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <input type="submit" value="Charakter anlegen" class="btn btn-primary" >
+            </form>
+        </td>
+
+</tr>
+</table>
+
+
+
 </div>
 
-
-
-<br />
-<br />
-<p>Hier kannst du einen neuen Char anlegen:<br /></p>
-<form method="POST">
-    {{ form.as_p }}
-    {% csrf_token %}
-    <input type="submit" value="Char anlegen" class="btn btn-primary" >
-
-</form>
 
 {% else %}
 <p>Hi! Wenn du spielen willst, log dich bitte erst ein. </p>

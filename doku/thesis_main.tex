@@ -14,7 +14,7 @@ Julian  (Matrikelnummer 12345)} % Autor
 \newcommand{\myHochschulName}{FOM Hochschule für Oekonomie \& Management Essen} % Name der Hochschule
 \newcommand{\myHochschulStandort}{Siegen} % Standort der Hochschule
 \newcommand{\myStudiengang}{Wirtschaftsinformatik} % Studiengang
-\newcommand{\myThesisArt}{Seminararbeit als Projektdokumentation} % Art der Arbeit
+\newcommand{\myThesisArt}{Projektdokumentation als Seminararbeit} % Art der Arbeit
 \newcommand{\myAkademischerGrad}{Bachelor of Science (B. Sc.)} % Zu erlangender akademische Grad
 \newcommand{\myFirma}{Mustermann GmbH} % Firma
 
@@ -255,6 +255,29 @@ Julian  (Matrikelnummer 12345)} % Autor
 \fancyhead[C]{\thepage} % Seitenzahl oben, mittig, entsprechend Leitfaden ohne Striche beidseits
 \renewcommand{\headrulewidth}{0.4pt} % Waagerechte Linie unterhalb des Kopfbereiches anzeigen. Alternativ weg: \renewcommand{\headrulewidth}{0pt}
 
+
+%-----------------------------------
+% Glossar
+%-----------------------------------
+\usepackage{glossaries}
+\glstoctrue %Auskommentieren, damit das Glossar nicht im Inhaltsverzeichnis angezeigt wird.
+\makenoidxglossaries
+
+
+
+
+
+
+% Glossar-Einträge
+
+\newglossaryentry{Matchmaking}{name={Matchmaking},description={Das Matchmaking umfasst bei Mulitplayerspielen das Zusammenfinden oder auch automatische Zusammenstellen von verschiedenen Mitspielenden zu einem Spiel}}
+
+
+
+
+
+
+
 \begin{document} % Start the document here
 
 \pagenumbering{Roman}								% Seitennumerierung auf römisch umstellen
@@ -334,16 +357,23 @@ Julian  (Matrikelnummer 12345)} % Autor
 %\addcontentsline{toc}{section}{Abkürzungsverzeichnis} % Falls das Abkürzungsverzeichnis im Inhaltsverzeichnis angezeigt werden soll einkommentieren.
 \section*{Abkürzungsverzeichnis} % Abkürzungsverzeichnis
 
-\begin{acronym}[WoWi]\itemsep0pt %der Parameter in Klammern sollte die längste Abkürzung sein. Damit wird der Abstand zwischen Abkürzung und Übersetzung festgelegt
-	\acro{PoC}{Proof of Concept}
-	\acro{WoWi}{Wohnungswirtschaft}
+\begin{acronym}[Stack]\itemsep0pt %der Parameter in Klammern sollte die längste Abkürzung sein. Damit wird der Abstand zwischen Abkürzung und Übersetzung festgelegt
+	\acro{Stack}{Software-, Technologie- oder Lösungsstack}
+
 \end{acronym}
 \newpage
 
+%-----------------------------------
+% Glossar
+%-----------------------------------
+\printnoidxglossaries
+\newpage
+
+% Hauptteil
+
+
 \pagenumbering{arabic} % Seitennummerierung auf arabisch und ab 1 beginnend umstellen
 \setcounter{page}{1}
-
-
 
 
 
@@ -356,6 +386,10 @@ Julian  (Matrikelnummer 12345)} % Autor
 % Abschnite der Arbeit
 %----------------------------
 
+\input{tex-content/20-einleitung}
+\newpage
+
+
 \input{tex-content/30-aufgabenbeschreibung}
 \newpage
 
@@ -366,6 +400,9 @@ Julian  (Matrikelnummer 12345)} % Autor
 \newpage
 
 \input{tex-content/60-vorstellung-ergebnisse}
+\input{tex-content/65-vorstellung-ergebnisse-rico}
+\input{tex-content/66-vorstellung-ergebnisse-julian}
+\input{tex-content/67-vorstellung-ergebnisse-henning}
 \newpage
 
 \input{tex-content/70-reflektion}
@@ -389,7 +426,7 @@ Julian  (Matrikelnummer 12345)} % Autor
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}} %
 	\renewcommand{\thesection}{\AppendixName\ \arabic{section}}
 	\renewcommand\thesubsection{\AppendixName\ \arabic{section}.\arabic{subsection}}
-	\input{tex-content/90-anhang}
+	\input{tex-content/90-anhang-henning}
 
 	% \input{tex-content/99-tex_muster_und_hilfen}
 

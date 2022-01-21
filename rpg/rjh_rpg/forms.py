@@ -5,9 +5,7 @@ from rjh_rpg.models import User, UserChar
 
 class UserCharForm(forms.ModelForm):
 
-    #text = forms.CharField(widget=forms.Textarea)
-
     class Meta:
         model = UserChar
-        exclude = ('usernickname', 'hp', 'ap')
+        exclude = ('usernickname', 'hp', 'ap', 'xp_to_spend', 'Geburtsort', 'Geschlecht')
         fields = '__all__'

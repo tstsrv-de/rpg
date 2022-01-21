@@ -18,6 +18,9 @@ from rjh_rpg.models import UserCharInGames
 
 from rjh_rpg.rpg_tools import rpg_user_has_active_game
 from rjh_rpg.rpg_tools import rpg_user_is_player_of_this_game_id
+from rjh_rpg.rpg_tools import rpg_get_config
+
+from math import ceil
 
 def signup(request):
     if request.user.is_authenticated:
@@ -125,14 +128,14 @@ def chars(request):
                 tmp_form = form.save(commit=False)
                 tmp_form.usernickname = request.user
                 if tmp_form.Klasse == "W":
-                    tmp_form.hp = 200
-                    tmp_form.ap = 10
+                    tmp_form.hp = rpg_get_config("char_class_w_base_hp")
+                    tmp_form.ap = rpg_get_config("char_class_w_base_ap")
                 elif tmp_form.Klasse == "P":
-                    tmp_form.hp = 75
-                    tmp_form.ap = 5
+                    tmp_form.hp = rpg_get_config("char_class_p_base_hp")
+                    tmp_form.ap = rpg_get_config("char_class_p_base_ap")
                 elif tmp_form.Klasse == "M":
-                    tmp_form.hp = 100
-                    tmp_form.ap = 20
+                    tmp_form.hp = rpg_get_config("char_class_m_base_hp")
+                    tmp_form.ap = rpg_get_config("char_class_m_base_ap")
                 else:
                     # should not happen
                     pass
@@ -336,13 +339,58 @@ def game(request, game_id):
     # - game is not finished
     # - user is player of this game
     
-    game_user_char_list = UserCharInGames.objects.filter(game_id=game_id)
+
+    game_scene = game_obj.game_scene_id
+    image_name = GameScenes.objects.get(name=game_scene).enemy_image
+    current_user_id = User.objects.get(id=request.user.id).id
     
+    game_user_char_list = []
+    for user_char in UserCharInGames.objects.filter(game_id=game_id).order_by('id'):
+        user_char_details = UserChar.objects.get(name=user_char.user_char_id)
+        game_user_char_list.append({
+            'user_char_in_games_id': user_char.id,
+            'name': user_char.user_char_id,
+            'klasse': user_char_details.Klasse, 
+            'geschlecht': user_char_details.Geschlecht,
+            'hp': user_char_details.hp,
+            'ap': user_char_details.ap,
+            'user_char_id': user_char_details.usernickname.id,
+            }
+        )
+  
     return render(request,'game.html', {
         'game_id': game_id,
         'game_user_char_list' : game_user_char_list,  
-        'request_user'      : str(request.user),
+        'request_user_id'      : current_user_id,
+        'enemy_image': image_name, 
     })
-    
-    
+ 
+def hpap(request, hpap, user_char_id):
+    if not request.user.is_authenticated:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
+
+    if not UserChar.objects.filter(id=user_char_id).exists():
+        return render(request,'msg_redirect.html',{'msg':'Dieser Charakter existiert nicht!','target':'/chars/'})
+ 
+    is_users_char = False
+    curr_users_user_char_list = UserChar.objects.filter(usernickname=User.objects.get(id=request.user.id))
+    for user_char in curr_users_user_char_list:
+        if user_char.id == user_char_id:
+            is_users_char = True
+            
+    if not is_users_char:
+        return render(request,'msg_redirect.html',{'msg':'Dieser Charakter gehört dir nicht!','target':'/chars/'})
+
+    curr_xp = UserChar.objects.get(id=user_char_id).xp_to_spend
+    if curr_xp >= 1:
+        curr_xp_to_spend =  ceil(curr_xp * rpg_get_config("xp_to_spend_factor"))
+        if hpap == "ap":
+            curr_ap = UserChar.objects.get(id=user_char_id).ap
+            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), ap=(curr_ap + curr_xp_to_spend))
+        elif hpap == "hp":
+            curr_hp = UserChar.objects.get(id=user_char_id).hp
+            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), hp=(curr_hp + curr_xp_to_spend))
+
+    return redirect('chars')
+
  
