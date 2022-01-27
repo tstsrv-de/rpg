@@ -255,6 +255,29 @@ Julian  (Matrikelnummer 12345)} % Autor
 \fancyhead[C]{\thepage} % Seitenzahl oben, mittig, entsprechend Leitfaden ohne Striche beidseits
 \renewcommand{\headrulewidth}{0.4pt} % Waagerechte Linie unterhalb des Kopfbereiches anzeigen. Alternativ weg: \renewcommand{\headrulewidth}{0pt}
 
+
+%-----------------------------------
+% Glossar
+%-----------------------------------
+\usepackage{glossaries}
+\glstoctrue %Auskommentieren, damit das Glossar nicht im Inhaltsverzeichnis angezeigt wird.
+\makenoidxglossaries
+
+
+
+
+
+
+% Glossar-Einträge
+
+\newglossaryentry{Matchmaking}{name={Matchmaking},description={Das Matchmaking umfasst bei Mulitplayerspielen das Zusammenfinden oder auch automatische Zusammenstellen von verschiedenen Mitspielenden zu einem Spiel}}
+
+
+
+
+
+
+
 \begin{document} % Start the document here
 
 \pagenumbering{Roman}								% Seitennumerierung auf römisch umstellen
@@ -334,16 +357,23 @@ Julian  (Matrikelnummer 12345)} % Autor
 %\addcontentsline{toc}{section}{Abkürzungsverzeichnis} % Falls das Abkürzungsverzeichnis im Inhaltsverzeichnis angezeigt werden soll einkommentieren.
 \section*{Abkürzungsverzeichnis} % Abkürzungsverzeichnis
 
-\begin{acronym}[WoWi]\itemsep0pt %der Parameter in Klammern sollte die längste Abkürzung sein. Damit wird der Abstand zwischen Abkürzung und Übersetzung festgelegt
-	\acro{PoC}{Proof of Concept}
-	\acro{WoWi}{Wohnungswirtschaft}
+\begin{acronym}[Stack]\itemsep0pt %der Parameter in Klammern sollte die längste Abkürzung sein. Damit wird der Abstand zwischen Abkürzung und Übersetzung festgelegt
+	\acro{Stack}{Software-, Technologie- oder Lösungsstack}
+
 \end{acronym}
 \newpage
 
+%-----------------------------------
+% Glossar
+%-----------------------------------
+\printnoidxglossaries
+\newpage
+
+% Hauptteil
+
+
 \pagenumbering{arabic} % Seitennummerierung auf arabisch und ab 1 beginnend umstellen
 \setcounter{page}{1}
-
-
 
 
 
