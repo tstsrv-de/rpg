@@ -119,6 +119,8 @@ def chars(request):
         
         current_user = User.objects.get(id=request.user.id)
         active_char = GameState.objects.filter(char_user=current_user)
+        xp_to_ap_rate = rpg_get_config("xp_ap_conversion_factor")
+        xp_to_hp_rate = rpg_get_config("xp_hp_conversion_factor")
 
         form = UserCharForm()
         
@@ -146,7 +148,7 @@ def chars(request):
             else:
                 pass
         
-        return render(request, 'chars.html', {'chars': char_list, 'form': form, 'active_char' : active_char})
+        return render(request, 'chars.html', {'chars': char_list, 'form': form, 'active_char' : active_char, 'xp_ap' : xp_to_ap_rate, 'xp_hp' : xp_to_hp_rate })
 
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
@@ -386,10 +388,12 @@ def hpap(request, hpap, user_char_id):
         curr_xp_to_spend =  ceil(curr_xp * rpg_get_config("xp_to_spend_factor"))
         if hpap == "ap":
             curr_ap = UserChar.objects.get(id=user_char_id).ap
-            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), ap=(curr_ap + curr_xp_to_spend))
+            new_ap = (curr_ap + ceil(curr_xp_to_spend * rpg_get_config("xp_ap_conversion_factor")))
+            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), ap=new_ap)
         elif hpap == "hp":
             curr_hp = UserChar.objects.get(id=user_char_id).hp
-            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), hp=(curr_hp + curr_xp_to_spend))
+            new_hp = (curr_hp + ceil(curr_xp_to_spend * rpg_get_config("xp_hp_conversion_factor")))
+            UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), hp=new_hp)
 
     return redirect('chars')
 

@@ -41,8 +41,8 @@
             <br />--> 
             Verfügbare XP: {{ char.xp_to_spend }} <br />
             {% if char.xp_to_spend >= 1 %} <br />
-            <a href="/xp-to-hp-{{char.id}}/">Lebenspunkte erhöhen</a> <br />
-            <a href="/xp-to-ap-{{char.id}}/">Angriffskraft erhöhen</a> 
+            <a href="/xp-to-hp-{{char.id}}/">Lebenspunkte erhöhen</a> (1 XP = {{ xp_hp }} HP) <br />
+            <a href="/xp-to-ap-{{char.id}}/">Angriffskraft erhöhen</a>  (1 XP = {{ xp_ap }} AP)
             {% endif %}
      
             
