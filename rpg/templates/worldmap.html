@@ -87,7 +87,7 @@ function send_msg(e) {
 
 var textarea = document.getElementById('chat-text');
 setInterval(function(){
-    chatSocket.send(JSON.stringify({'ul': 'heatbeat', }));
+    chatSocket.send(JSON.stringify({'ul': 'heatbeat', 'char_id': {{char_id}} }));
     textarea.scrollTop = textarea.scrollHeight;
 }, 500);
 

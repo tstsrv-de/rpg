@@ -5,6 +5,7 @@ from rjh_rpg.models import UserCharInGames
 from rjh_rpg.models import Games
 from rjh_rpg.models import MyRpgConfig
 from channels.db import database_sync_to_async
+from django.db.models.functions import Now
 
 
 def rpg_user_is_player_of_this_game_id(game_id, request_user):
@@ -82,3 +83,15 @@ def rpg_get_config(config_to_get):
 def rpg_websocket_get_config(config_to_get):
     return rpg_get_config(config_to_get)
 
+def rpg_user_char_chat_heartbeat(char_id):
+    # last_chat_heartbeat
+    try:
+        print("char_id:" + str(char_id))
+        GameState.objects.filter(char=char_id).update(last_chat_heartbeat=Now())
+    except:
+        return None
+
+
+@database_sync_to_async
+def rpg_websocket_user_char_chat_heartbeat(char_id):    
+    return rpg_user_char_chat_heartbeat(char_id)

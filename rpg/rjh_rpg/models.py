@@ -82,6 +82,7 @@ class GameState(models.Model):
     char = models.OneToOneField(UserChar, on_delete=models.CASCADE, unique=True)
     place = models.IntegerField(default=0) # 0 = weltmap, n > 0 = laufende_game_id
     charLogin = models.DateTimeField(default=datetime.now) 
+    last_chat_heartbeat = models.DateTimeField(default=datetime.now, null=True, blank=True) 
     char_user = models.OneToOneField(settings.AUTH_USER_MODEL, unique=True, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):

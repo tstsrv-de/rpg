@@ -264,5 +264,15 @@
       "value": "0.5",
       "hint": "conversion rate when spending ap (written in float, 0.1 = 10%, 0.5 = 50%). when 1: 1xp=1ap, when 0.5: 1xp=0.5ap."
     }
-  }  
+  },
+  {
+    "model": "rjh_rpg.myrpgconfig",
+    "pk": 20,
+    "fields": {
+      "name": "chat_timeout",
+      "type": "int",
+      "value": "5",
+      "hint": "time in seconds before a user/char gets deletet from the chat userlist in the worldmap and the lobby."
+    }
+  }    
 ]

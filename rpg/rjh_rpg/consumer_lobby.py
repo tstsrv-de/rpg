@@ -11,6 +11,7 @@ from datetime import datetime, time
 from rjh_rpg.models import Games
 from rjh_rpg.models import UserCharInGames
 from rjh_rpg.rpg_tools import rpg_websocket_get_config
+from rjh_rpg.rpg_tools  import rpg_websocket_user_char_chat_heartbeat
 
 class Consumer(AsyncWebsocketConsumer):
     
@@ -222,6 +223,12 @@ class Consumer(AsyncWebsocketConsumer):
         if message == 'heartbeat':
             # (TODO!) update timestamps, delete old entrys
             # check timestamps, delete old and zombie  entrys
+            
+            try:
+                heartbeat_char_id = text_data_json['char_id']
+                await rpg_websocket_user_char_chat_heartbeat(heartbeat_char_id)
+            except:
+                pass            
            
             # check if all slots are taken
             req_players = await self.db_get_num_players()
