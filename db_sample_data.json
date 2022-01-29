@@ -267,7 +267,7 @@
   },
   {
     "model": "rjh_rpg.myrpgconfig",
-    "pk": 20,
+    "pk": 21,
     "fields": {
       "name": "chat_timeout",
       "type": "int",
