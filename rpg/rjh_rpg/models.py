@@ -129,3 +129,6 @@ class MyRpgConfig(models.Model):
     type = models.CharField(max_length=10, null=True, blank=True) # ie. int, float, str
     value = models.CharField(max_length=150, null=True, blank=True)
     hint = models.TextField(default='', null=True, blank=True) # explanation of the config value and its limits
+    
+    def __str__(self):
+        return str(self.name)
