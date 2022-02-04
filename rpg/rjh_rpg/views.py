@@ -307,6 +307,8 @@ def lobby(request, scene_id):
     GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
     char_id = str(GameState_char_obj[0].char.id)
 
+    intro_image_name = GameScenes.objects.get(id=scene_id).intro_image 
+
     GameState.objects.filter(char=char_id).update(place=scene_id)
 
     usr_obj = UserChar.objects.get(id=char_id)
@@ -317,6 +319,7 @@ def lobby(request, scene_id):
             'char_id': char_id,
             'scene_id': scene_id,
             'char_name': char_name,
+            'intro_image': intro_image_name,
         }
     )
 

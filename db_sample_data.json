@@ -3,62 +3,70 @@
     "model": "rjh_rpg.gamescenes",
     "pk": 5,
     "fields": {
-      "name": "Einzelspieler Level 1: Flussbett",
+      "name": "Am Rande des Dunkelwaldes",
       "req_players": 1,
       "welcome_text": "Arzt: \"Sie haben Krebs und Sie haben Alzheimer.\" <br />\r\n<br />\r\nPatient: \"Na Gott sei dank kein Krebs.\"<br />\r\n<br />",
-      "enemy_name": "Zoidberg",
+      "enemy_name": "Schrecklicher Warg",
       "enemy_hp": 40,
       "enemy_ap": 10,
-      "enemy_image": "moar.mp4"
+      "enemy_image": "warg_3840x2160.mp4",
+      "enemy_dead_image": "warg_background_3840x2160.jpg",
+      "intro_image": "woods_edge_3840x2160.jpg"
     }
   },
   {
     "model": "rjh_rpg.gamescenes",
     "pk": 1,
     "fields": {
-      "name": "Einzelspieler Level 3: Dixi-Klo",
+      "name": "Das Alte Anwesen",
       "req_players": 1,
       "welcome_text": "Was ist rot und sitzt auf dem Klo? Eine Klomate! <br />\r\n <br />\r\nWie nennt man einen intelligenten Toilettenbenutzer? Klugscheißer! <br />\r\n <br />\r\nIch wollte kürzlich ein Klo anrufen, doch es war besetzt! <br />\r\n <br />",
-      "enemy_name": "Golgothan",
+      "enemy_name": "Blutrünstiger Vampirfürst",
       "enemy_hp": 1000,
       "enemy_ap": 200,
-      "enemy_image": "golgothan.mp4"
+      "enemy_image": "vampire_3840x2160.mp4",
+      "enemy_dead_image": "vampire_background_3840x2160.jpg",
+      "intro_image": "manor_3840x2160.jpg"
     }
   },
   {
     "model": "rjh_rpg.gamescenes",
     "pk": 2,
     "fields": {
-      "name": "Multiplayer: Frösche",
-      "req_players": 2,
+      "name": "Der Ascheberg",
+      "req_players": 1,
       "welcome_text": "Ein Informatiker findet im Wald einen sprechenden Frosch und steckt ihn in die Tasche. Nach einer Weile sagt der Frosch: „Hallo, ich bin eine verzauberte Prinzessin. Wenn du mich küsst, erfülle ich dir einen Wunsch.“ <br />\r\n <br />\r\nDer Informatiker nimmt den Frosch aus der Tasche, lächelt und steckt ihn wieder zurück. Nach einer Weile meldet sich der Frosch nochmal: „Hallo, hast du mich nicht richtig verstanden?“ <br />\r\n <br />\r\nDer Informatiker nimmt den Frosch heraus, lächelt wieder und sagt: „Also, ich bin Informatiker… für eine Freundin habe ich keine Zeit, aber ein sprechender Frosch ist cool!“ <br />\r\n <br />",
-      "enemy_name": "Hypnosefrosch",
+      "enemy_name": "Roter Drache Ascheschwinge",
       "enemy_hp": 190,
       "enemy_ap": 40,
-      "enemy_image": "hypnotoad.mp4"
+      "enemy_image": "dragon_3840x2160.mp4",
+      "enemy_dead_image": "dragon_background_3840x2160.jpg",
+      "intro_image": "volcano_3840x2160.jpg"
     }
   },
   {
     "model": "rjh_rpg.gamescenes",
     "pk": 3,
     "fields": {
-      "name": "Multiplayer: Bäckerei",
+      "name": "Die verlassene Mine",
       "req_players": 3,
       "welcome_text": "Ich habe gestern ein Brötchen angerufen, aber es war belegt… <br /> \r\n<br /> \r\nWomit backen Schlümpfe? – Garga-Mehl.<br /> \r\n<br /> \r\nWas ist der Unterschied zwischen dir und Brot? Brot kann schimmeln.<br /> \r\n<br />",
-      "enemy_name": "Bernd das Brot",
+      "enemy_name": "Widerliches Wurmwesen",
       "enemy_hp": 500,
       "enemy_ap": 150,
-      "enemy_image": "toast.mp4"
+      "enemy_image": "worm_3840x2160.mp4",
+      "enemy_dead_image": "worm_background_3840x2160.jpg",
+      "intro_image": "mine_3840x2160.jpg"
     }
   },
   {
     "model": "rjh_rpg.gamescenes",
     "pk": 4,
     "fields": {
-      "name": "Einzelspieler Level 2: Kratzbaum",
-      "req_players": 1,
+      "name": "Der Friedhof in den Sümpfen",
+      "req_players": 3,
       "welcome_text": "Zum Fressen geboren, zum Kraulen bestellt; <br /> \r\nin Schlummer verloren - gefällt mir die Welt. <br /> \r\n <br /> \r\nIch schnurr' auf dem Schoße, ich ruhe im Bett; <br /> \r\nin lieblicher Pose - ob schlank oder fett. <br /> \r\n <br /> \r\nSo gelte ich allen als göttliches Tier - <br /> \r\nsie stammeln und lallen und huldigen mir. <br /> \r\n <br /> \r\nLiebkosen mir glücklich den Bauch, Öhrchen und Tatz, <br /> \r\nund ich wählte es wieder - das Leben der Katz. <br /> \r\n<i>(Goethe)</i>  <br /> \r\n <br />",
-      "enemy_name": "Laser-Robo-Katze",
+      "enemy_name": "Untoter Koloss",
       "enemy_hp": 500,
       "enemy_ap": 100,
       "enemy_image": "lasercat.mp4"

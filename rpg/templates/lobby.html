@@ -25,7 +25,9 @@
     <!--</form>-->
 </div>
 
-
+<img src="../static/img/intro_images/{{intro_image}}" width="100%">
+<br>
+<br>
 {{ scene_id|json_script:"socket_scene_id" }}
 {{ char_id|json_script:"socket_char_id" }}
 <script id="socket_scene_id" type="application/json">"socket_scene_id"</script>
