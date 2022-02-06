@@ -215,7 +215,8 @@ inside your html file.
 
 /* general rules to apply on anything inside the content */
 .rpgui-content * {
-  background-color: #4e4a4e;
+  /* fix bg-color shine trough buttons 
+  /*background-color: #4e4a4e;*/
   /* remove outline effect for input elements etc */
   outline: none;
   /* prevent dragging */

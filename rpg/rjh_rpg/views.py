@@ -270,7 +270,12 @@ def lobby(request, scene_id):
 
     current_user_obj = User.objects.get(id=request.user.id)
     GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
-    char_id = str(GameState_char_obj[0].char.id)
+    
+    # catch wierd timeout/reload error
+    try:
+        char_id = str(GameState_char_obj[0].char.id)
+    except:
+        return render(request,'msg_redirect.html',{'msg':'Du musst einen Charakter auswählen!','target':'/chars/'})
 
     intro_image_name = GameScenes.objects.get(id=scene_id).intro_image 
 
