@@ -16,9 +16,13 @@
     {% if chars %} 
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
-                <tr>
+                
                 {% for char in chars %}
+                <tr>
                     <td>
+                        <div class="rpgui-container framed-golden" style="position:relative; width:400px; display:inline-block">
+                            
+                        
                         <p>
                         <b>{{ char.name }}</b> <br />
                         Klasse:
@@ -40,9 +44,11 @@
                         <br />
                         Verfügbare XP: {{ char.xp_to_spend }} <br />
                         </p>
+                    </div>
                     </td>
-                {% endfor %}
                 </tr>
+                {% endfor %}
+                
             </table>
         </div>
     {% else %}

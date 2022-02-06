@@ -9,3 +9,7 @@ class UserCharForm(forms.ModelForm):
         model = UserChar
         exclude = ('usernickname', 'hp', 'ap', 'xp_to_spend', 'Geburtsort', 'Geschlecht')
         fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'myfieldclass'}),
+            'Klasse': forms.Select(attrs={'class': 'rpgui-dropdown'}),
+        }
