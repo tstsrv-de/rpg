@@ -8,33 +8,27 @@
 {% endif %}
 
 
-<div class="container text-center">
-<table width="100%">
-    <tr>
-        <td>
 
 
 {% if chars %}
 
-<form action="{% url 'worldmap' %}" method="POST" id="interest-select" class="form-inline">
- <div class="form-group">
+<form action="{% url 'worldmap' %}" method="POST" id="interest-select" >
+ 
         {% csrf_token %}
         <br />        
         <h4>Wähle einen Charakter aus, um die Weltkarte zu betreten...</h4>
 
 
-        <select id="char_id" name="char" class="form-control">
-        <!--<option disabled selected> Charakter auswählen... </option>--> <!-- muss noch raus solange er ohne auswahl das form absendet -->
+        <select id="char_id" name="char" class="rpgui-dropdown">
+
         {% for char in chars %}
             <option value={{char.id}}>{{char.name}}</option>
         {% endfor %}
         </select> 
         <br />
         <br />        
-         <input class="btn btn-primary" type="submit" value="&#10145; Welt betreten! "/>
-         <br />
-         <br />                  
-         </div>
+        <button type="submit" class="rpgui-button"><p>Welt betreten!</p></button>
+ 
   </form>
 
         {% else %}
@@ -43,15 +37,6 @@
         Lege <a href="../create_char/">hier</a> einen neuen an 👍
         {% endif %}
   
-
-
-
-        </td>
-    </tr>
-</table>
-
-
-</div>
 
 
 

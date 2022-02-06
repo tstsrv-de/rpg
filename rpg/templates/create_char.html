@@ -7,22 +7,13 @@
 <br />
 {% endif %}
 
-
-<div class="container text-center">
-
-<table width="100%">
-    <tr>
-        <td>
             <h3>Neuen Charakter anlegen:</h3>
             
             <form method="POST">
                 {{ form.as_p }}
                 {% csrf_token %}
-                <input type="submit" value="Charakter anlegen" class="btn btn-primary" >
+                <button type="submit" class="rpgui-button"><p>Charakter anlegen</p></button>
+
             </form>
-        </td>
-</tr>
-</table>
-</div>
 
 {% endblock %}
