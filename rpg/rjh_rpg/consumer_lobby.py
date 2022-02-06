@@ -16,7 +16,6 @@ from rjh_rpg.rpg_tools  import rpg_websocket_user_char_chat_heartbeat
 class Consumer(AsyncWebsocketConsumer):
     
     html_table_top = """
-    <h1>**scene_name**</h1>
     <table class="table table-bordered table-striped">
     <tr>
     

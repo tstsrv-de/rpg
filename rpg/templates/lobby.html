@@ -3,31 +3,42 @@
 {% block content %} 
 {% if error %}
 {{ error }}
-
-<br />
-<br />
 {% endif %}
 {% if user.is_authenticated %}
 
-
-
-<!-- Start LobbyWebsocket Test -->
-<!--<a href="#"  alt="Click me!"><img src={% static "img/fom.jpeg" %} width="50" id="lobby_submit"></a> <b id="lobby_test_element"></b>-->
-<div id="lobby_websocket_container" align="center">
-    <!--<form action="" method="" id="" class="form-inline">-->
-        <div class="form-group">
-            {% csrf_token %}
-
-            <div id="lobby_test_element" >
-
-            </div>
-        </div>
-    <!--</form>-->
+<div class="rpgui-container.framed">
+    <img src="../static/img/intro_images/{{intro_image}}" style="width:100%">
 </div>
+ 
+    <!-- Start LobbyWebsocket Test -->
+    <!--<a href="#"  alt="Click me!"><img src={% static "img/fom.jpeg" %} width="50" id="lobby_submit"></a> <b id="lobby_test_element"></b>-->
+        <div id="lobby_websocket_container" align="center">
+            <!--<form action="" method="" id="" class="form-inline">-->
+                <div class="form-group">
+                    {% csrf_token %}
 
-<img src="../static/img/intro_images/{{intro_image}}" width="100%">
-<br>
-<br>
+                    <div id="lobby_test_element" >
+
+                    </div>
+                </div>
+            <!--</form>-->
+        </div>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <td class="text-left">
+            <b>Aktuell im Chat:</b><p id="chat-userlist"></p>
+        </td>
+        <td>
+            <textarea class="form-control" id="chat-text" rows="10" disabled></textarea>
+            <div class="form-inline">
+                <input class="form-control" id="input" type="text" onkeypress="return send_msg(event)" > 
+                <input class="btn btn-primary" id="submit" type="button" value="Send">
+            </div>
+        </td>
+    </tr>
+</table>
+
 {{ scene_id|json_script:"socket_scene_id" }}
 {{ char_id|json_script:"socket_char_id" }}
 <script id="socket_scene_id" type="application/json">"socket_scene_id"</script>
@@ -67,23 +78,6 @@ function free_the_slot(slot_id) {
 
 </script>
 <!-- End LobbyWebsocket Test -->
-<table class="table table-bordered table-striped">
-<tr>
-<td class="text-left">
-<b>Aktuell im Chat:</b><p id="chat-userlist"></p>
-</td>
-<td>
-<textarea class="form-control" id="chat-text" rows="10" disabled></textarea>
-<div class="form-inline">
-<input class="form-control" id="input" type="text" onkeypress="return send_msg(event)" > 
-<input class="btn btn-primary" id="submit" type="button" value="Send">
-</div>
-</td>
-</tr>
-</table>
-
-
-
     {{ char_name|json_script:"user_username" }}
     {{ scene_id|json_script:"room-name" }}
     <script id="room-name" type="application/json">"worldmap"</script>

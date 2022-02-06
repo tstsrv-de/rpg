@@ -2,20 +2,30 @@
 {% load static %}
 <html lang="de">
   <head>
-      {% block html_head %} 
+    {% block html_head %} 
     {% endblock %}
   <link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
   
-    <meta charset="utf-8">
+  <meta charset="utf-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Implementierung Bootstrap -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>RPG-Adventure</title>
+
+  <!-- Implementation CSS-Frameworks + JavaScript-->
+  <!--<link rel="stylesheet" href="/static/css/rjh_rpg.css" type="text/css">-->
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/static/css/rpgui.css" type="text/css">
+  <script src="/static/rpgui.js"></script>
+
+  <title>RPG-Adventure</title>
   </head>
 
   <body>
+  <div class="rpgui-content" style="overflow-y: scroll">
   <nav class="navbar navbar-inverse">
   <div class="container">
     <div class="navbar-header navbar-brand">
@@ -99,5 +109,6 @@
 </footer>
 -->
 
+</div>
   </body>
 </html>
