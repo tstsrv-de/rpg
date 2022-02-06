@@ -33,17 +33,20 @@
             </div>
             <br />
             <br />
-            Lebenspunkte: {{ char.hp }} <br />
-            Angriffskraft:  {{ char.ap }} <br />
-            <br />
-            <!--Geburtsort: {{ char.Geburtsort }} <br /> 
-            Geschlecht: {{ char.Geschlecht }} <br />
-            <br />--> 
-            Verfügbare XP: {{ char.xp_to_spend }} <br />
-            {% if char.xp_to_spend >= 1 %} <br />
-            <a href="/xp-to-hp-{{char.id}}/">Lebenspunkte erhöhen</a> (1 XP = {{ xp_hp }} HP) <br />
-            <a href="/xp-to-ap-{{char.id}}/">Angriffskraft erhöhen</a>  (1 XP = {{ xp_ap }} AP)
+
+            {% if char.xp_to_spend >= 1 %} 
+
+
+            Lebenspunkte: <a href="/xp-to-hp-{{char.id}}/" data-toggle="tooltip" data-placement="top" title="Lebenspunkte erhöhen (1 XP = {{ xp_hp }} HP) ">{{ char.hp }} ➕</a>  <br />
+            Angriffskraft:  <a href="/xp-to-ap-{{char.id}}/" data-toggle="tooltip" data-placement="top" title="Angriffskraft erhöhen (1 XP = {{ xp_ap }} AP)">{{ char.ap }} ➕</a> 
+
+            {% else %}
+            Lebenspunkte: {{ char.hp }}  <br />
+            Angriffskraft:  {{ char.ap }} 
             {% endif %}
+            <br />
+            <br />
+            Verfügbare XP: {{ char.xp_to_spend }} <br />
      
             
             </p>
