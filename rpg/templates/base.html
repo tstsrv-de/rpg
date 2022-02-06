@@ -36,8 +36,8 @@
       background: #444;
       padding-left:20px;
       padding-right:20px;
-      min-width: 740px;
-      max-width: 900px;
+      min-width: 500px;
+      max-width: 90%;
       margin: 0 auto;
     }
     </style>
@@ -45,51 +45,36 @@
   <body>
     <div class="rpgui-content" style="overflow-y:scroll;">
       <div id="container">
-        <table>
+        <table style="  margin-left: auto; margin-right: auto; " width="100%">
           <tr>
-            <td style="vertical-align: top;">
+            <td >
+              <div class="inner rpgui-container framed-golden" style="position:relative; ">    
 
+                  <table style="vertical-align: top; margin-left: auto; margin-right: auto;" width="100%">
+                    <tr >
+                  <td style="padding-left:20px;"><h1>RPG-Adventure!!</h1></td>
 
-
-                <table>
-                <tr>
-                <td>
-
-                <div class="rpgui-container framed-golden" style="position:relative; display:inline-block">    
-                <h1>RPG-Adventure!!</h1>
-
-                <ul >
+                <td style="padding-left:20px;"> [ <a href="../home/">home</a> ] </td> 
                 {% if user.is_authenticated %}
-
-                <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
-                <!--<li class="{% if request.resolver_match.view_name == 'user_profile' %}active{% endif %}"> <a href="../user_profile/">user-profile</a></li>-->
-                <li class="{% if request.resolver_match.view_name == 'create_char' %}active{% endif %}"> <a href="../create_char/">create char</a></li>
-                <li class="{% if request.resolver_match.view_name == 'chars' %}active{% endif %}"> <a href="../chars/">chars</a></li>
-                <li class="{% if request.resolver_match.view_name == 'worldmap' %}active{% endif %}">  <a href="{% url 'worldmap' %}">worldmap</a></li>              
-                <li class="{% if request.resolver_match.view_name == 'logout' %}active{% endif %}"> <a href="../logout/">logout</a></li>
-
-
-
+                  <td  style="padding-left:20px;">  [ <a href="../create_char/">create char</a> ] </td>
+                  <td  style="padding-left:20px;">  [ <a href="../chars/">chars</a> ] </td>
+                  <td  style="padding-left:20px;">  [  <a href="{% url 'worldmap' %}">worldmap</a> ] </td>              
+                  <td  style="padding-left:20px;">  [ <a href="../logout/">logout</a> ] </td>
                 {% else %}
-                <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
-                <li class="{% if request.resolver_match.view_name == 'login' %}active{% endif %}"><a href="../login/">login</a></li>
-                <li class="{% if request.resolver_match.view_name == 'signup' %}active{% endif %}"><a href="../signup/">signup</a></li>
+                  <td  style="padding-left:20px;" > [ <a href="../login/">login</a> ] /td>
+                  <td  style="padding-left:20px;" > [ <a href="../signup/">signup</a> ] </td>
                 {% endif %} 
 
-                </ul>
+              </tr>
+            </table>
                 </div>
 
-
-                </td>
-                </tr>
-                </table>
-
-
-
             </td>
-            <td  style="vertical-align: top;">
+          </tr>
+          <tr>
+            <td>
               <div class="inner rpgui-container framed" style="position:relative">
-              <table>
+              <table width="90%">
               <tr>
               <td>
 
