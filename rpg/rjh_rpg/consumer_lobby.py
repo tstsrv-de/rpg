@@ -16,7 +16,7 @@ from rjh_rpg.rpg_tools  import rpg_websocket_user_char_chat_heartbeat
 class Consumer(AsyncWebsocketConsumer):
     
     html_table_top = """
-    <table class="table table-bordered table-striped">
+    <table>
     <tr>
     
     """
@@ -24,8 +24,9 @@ class Consumer(AsyncWebsocketConsumer):
     html_placeselector = """
     
     <td>
-    <input class="form-control" style="min-width: 0;width: auto;" type="text" id="slot_id_**slot_id**" name="slot_id_**slot_id**" value="**slot_id_char_name**" disabled><br />
-    <input class="btn btn-primary" type="submit" value="**button_text**" onclick="**js_button_function**(**slot_id**);" **button_disabled**>
+    <input style="min-width: 0;width: auto;" type="text" id="slot_id_**slot_id**" name="slot_id_**slot_id**" value="**slot_id_char_name**" disabled><br />
+    <!--<input type="submit" value="**button_text**" onclick="**js_button_function**(**slot_id**);" **button_disabled**>-->
+    <button type="submit" id="submit" class="rpgui-button golden" onclick="**js_button_function**(**slot_id**);" **button_disabled**><p>**button_text**</p></button>
     </td>
     
     """    
@@ -34,29 +35,10 @@ class Consumer(AsyncWebsocketConsumer):
     </tr>
     </table>
     
-    <p><b>Tipp:</b> Um an einem Spiel teilzunehmen, klicke oben auf "<i>Platz belegen</i>"!</p>
+    <p><small><u>Tipp:</u> Um an einem Spiel teilzunehmen, klicke oben auf "<i>Platz belegen</i>"!</small></p>
     
     """
-    
-    html_jump_to_game = """
-    
-    <form action="{% url 'scene_jumper' %}" method="POST" id="interest-select" class="form-inline">
-    <div class="form-group">
-    {% csrf_token %}
 
-    <select  class="custom-select form-control" size="5" id="scene_id" name="scene_id" >
-    {% for scene in game_scenes_list %} 
-        <option value={{scene.id}}>{{scene.name}} (Spieler im Chat: {{ scene.players_in_chat_counter }}, davon spielbereit: {{ scene.waiting_players }}/{{ scene.req_players }})</option>
-    {% endfor %}
-    </select> 
-    <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">
-    <input class="btn btn-primary" type="submit" value="&#10145; Lobby der Szene betreten!"/>
-    </div>
-    </form>
-
-    **Countdown**
-    
-    """
     
     
     async def connect(self):
@@ -184,8 +166,8 @@ class Consumer(AsyncWebsocketConsumer):
                 <br />
                 <h2>...angemeldete Spieler <a href="/game-**game_id**/">wechseln jetzt bitte zum Spiel</a>...</h4>
                 <br />
-                <h4>...alle anderen Spieler gehen bitte zurück in <a href="/worldmap/">die Worldmap</a>...</h4>
-                <h4>...oder rufen <a href="/lobby-**scene_id**/">diese Seite</a> für einen Neustart der Lobby erneut auf... </h4>
+                <p>...alle anderen Spieler gehen bitte zurück in <a href="/worldmap/">die Worldmap</a>...<br />
+                ...oder rufen <a href="/lobby-**scene_id**/">diese Seite</a> für einen Neustart der Lobby erneut auf... </p>
                 <br /><br />
                 """
                 countdown_html = countdown_html.replace("**scene_id**", str(self.scene_id))

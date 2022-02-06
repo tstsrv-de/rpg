@@ -290,6 +290,27 @@ inside your html file.
   background-origin: padding-box;
   background-position: center; }
 
+/* game div for lobby image*/
+.rpgui-container.framed-lobbyimage {
+  /* border */
+  border-style: solid;
+  border-image-source: url("img/border-image-golden.png");
+  border-image-repeat: repeat;
+  border-image-slice: 4 4 4 4;
+  border-image-width: 18px;
+  border-width: 15px;
+  padding: 0px;
+  /* internal border */
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  /* background */
+  
+  background-clip: padding-box;
+  background-origin: padding-box;
+  background-position: center; }
+
+
 /* game div with golden2 background image*/
 .rpgui-container.framed-golden-2 {
   /* border */
