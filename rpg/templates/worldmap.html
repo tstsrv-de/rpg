@@ -128,6 +128,7 @@ setInterval(function(){
             '/'
         );
 
+        var undundefined_error_counter = 0;
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
             console.log(data);
@@ -136,7 +137,7 @@ setInterval(function(){
                 {
                     document.querySelector('#chat-userlist').innerHTML = (data.ul)                    
                 }
-                else { window.location.reload(true); }
+                else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 3) { window.location.reload(true); } }
             } else {
                 if (typeof(data.username) != "undefined")
                 {
@@ -144,10 +145,10 @@ setInterval(function(){
                     {
                         document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
                     }
-                    else { window.location.reload(true); }                    
+                    else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 3) { window.location.reload(true); } }
                     
                 }
-                else { window.location.reload(true); }
+                else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 3) { window.location.reload(true); } }
             };
         }
     </script>
