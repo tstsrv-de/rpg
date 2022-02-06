@@ -63,6 +63,8 @@ class GameScenes(models.Model): # blueprint of the games
     enemy_hp = models.IntegerField(default=100) 
     enemy_ap =  models.IntegerField(default=10)
     enemy_image = models.CharField(default="hypnotoad.mp4", null=True, blank=True, max_length=300)
+    enemy_dead_image = models.CharField(default="vampire_background_3840x2160.jpg", null=True, blank=True, max_length=300)
+    intro_image = models.CharField(default="manor_3840x2160.jpg", null=True, blank=True, max_length=300)
     
     def __str__(self):
         return self.name    

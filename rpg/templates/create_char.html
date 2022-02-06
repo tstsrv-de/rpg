@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %} 
+{% if error %}
+{{ error }}
+
+<br />
+<br />
+{% endif %}
+
+            <h3>Neuen Charakter anlegen:</h3>
+            
+            <form method="POST">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <button type="submit" class="rpgui-button"><p>Charakter anlegen</p></button>
+
+            </form>
+
+{% endblock %}

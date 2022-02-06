@@ -33,6 +33,7 @@ Julian  (Matrikelnummer 12345)} % Autor
 \usepackage{array}
 \usepackage{float}      %Positionierung von Abb. und Tabellen mit [H] erzwingen
 \usepackage{footnote}
+\usepackage{subfig}
 \usepackage[singlelinecheck=false, labelfont=bf, font=bf]{caption} % Tabellendesign lt. Leitfaden
 \usepackage{caption}
 \usepackage{enumitem}
@@ -260,7 +261,7 @@ Julian  (Matrikelnummer 12345)} % Autor
 % Glossar
 %-----------------------------------
 \usepackage{glossaries}
-\glstoctrue %Auskommentieren, damit das Glossar nicht im Inhaltsverzeichnis angezeigt wird.
+% \glstoctrue %Auskommentieren, damit das Glossar nicht im Inhaltsverzeichnis angezeigt wird.
 \makenoidxglossaries
 
 
@@ -400,9 +401,11 @@ Julian  (Matrikelnummer 12345)} % Autor
 \newpage
 
 \input{tex-content/60-vorstellung-ergebnisse}
-\input{tex-content/65-vorstellung-ergebnisse-rico}
-\input{tex-content/66-vorstellung-ergebnisse-julian}
 \input{tex-content/67-vorstellung-ergebnisse-henning}
+\newpage
+\input{tex-content/65-vorstellung-ergebnisse-rico}
+\newpage
+\input{tex-content/66-vorstellung-ergebnisse-julian}
 \newpage
 
 \input{tex-content/70-reflektion}
