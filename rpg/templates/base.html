@@ -50,19 +50,19 @@
             <td >
               <div class="inner rpgui-container framed-golden" style="position:relative; ">    
 
-                  <table style="vertical-align: top; margin-left: auto; margin-right: auto;" width="100%">
+                  <table style="vertical-align: top; margin-left: auto; margin-right: auto;" >
                     <tr >
                   <td style="padding-left:20px;"><h1>RPG-Adventure!!</h1></td>
 
-                <td style="padding-left:20px;"> [ <a href="../home/">home</a> ] </td> 
+                <td style="padding-left:20px;"><h2> [ <a href="../home/">home</a> ] </h2></td> 
                 {% if user.is_authenticated %}
-                  <td  style="padding-left:20px;">  [ <a href="../create_char/">create char</a> ] </td>
-                  <td  style="padding-left:20px;">  [ <a href="../chars/">chars</a> ] </td>
-                  <td  style="padding-left:20px;">  [  <a href="{% url 'worldmap' %}">worldmap</a> ] </td>              
-                  <td  style="padding-left:20px;">  [ <a href="../logout/">logout</a> ] </td>
+                  <td  style="padding-left:20px;"> <h2>  [ <a href="../create_char/">create char</a> ] </h2></td>
+                  <td  style="padding-left:20px;"> <h2>  [ <a href="../chars/">chars</a> ] </h2></td>
+                  <td  style="padding-left:20px;"> <h2>  [  <a href="{% url 'worldmap' %}">worldmap</a> ] </h2></td>              
+                  <td  style="padding-left:20px;"> <h2>  [ <a href="../logout/">logout</a> ] </h2></td>
                 {% else %}
-                  <td  style="padding-left:20px;" > [ <a href="../login/">login</a> ] /td>
-                  <td  style="padding-left:20px;" > [ <a href="../signup/">signup</a> ] </td>
+                  <td  style="padding-left:20px;" ><h2>  [ <a href="../login/">login</a> ] </h2></td>
+                  <td  style="padding-left:20px;" > <h2> [ <a href="../signup/">signup</a> ] </h2></td>
                 {% endif %} 
 
               </tr>
@@ -73,8 +73,8 @@
           </tr>
           <tr>
             <td>
-              <div class="inner rpgui-container framed" style="position:relative">
-              <table width="90%">
+              <div class="inner rpgui-container framed" style="position:relative;">
+              <table style="vertical-align: top; margin-left: auto; margin-right: auto;" >
               <tr>
               <td>
 

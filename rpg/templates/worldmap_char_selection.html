@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %} 
 {% if error %}
-{{ error }}
+<h1>{{ error }}</h1>
 
 <br />
 <br />
@@ -16,9 +16,9 @@
  
         {% csrf_token %}
         <br />        
-        <h4>Wähle einen Charakter aus, um die Weltkarte zu betreten...</h4>
+        <h1>Wähle einen Charakter aus, um die Weltkarte zu betreten...</h1>
 
-
+        <div class="rpgui-container framed-golden-2" style="position:relative;">
         <select id="char_id" name="char" class="rpgui-dropdown">
 
         {% for char in chars %}
@@ -28,6 +28,7 @@
         <br />
         <br />        
         <button type="submit" class="rpgui-button"><p>Welt betreten!</p></button>
+    </div>
  
   </form>
 

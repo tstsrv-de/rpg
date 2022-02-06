@@ -1,7 +1,7 @@
 {% extends 'base.html' %} 
 {% block content %} 
 {% if error %} 
-{{ error }}
+<h1>{{ error }}</h1>
 
 <br />
 <br />
@@ -9,28 +9,18 @@
 
 <h1>Signup...</h1>
 
-
 {% if user.is_authenticated %}
 <p>Du bist bereits angemeldet!</p>
 {% else %}
 
-
+<div class="rpgui-container framed-golden-2" style="position:relative;">
 <form method="POST" action="{% url 'signup' %}">
   {% csrf_token %} 
-  Benutzername:
+  <p>Benutzername:  <input type="text" name="username" /> </p> <br />
+  <p>Passwort:  <input type="password" name="password1" /> </p>  <br />
+  <p>Passwort wiederholen:   <input type="password" name="password2" /> </p>   <br />
   <br />
-  <input type="text" name="username" />
-  <br />
-  Passwort:
-  <br />
-  <input type="password" name="password1" />
-  <br />
-  Passwort wiederholen:
-  <br />
-  <input type="password" name="password2" />
-  <br />
-  <br />
-  <input class="btn btn-primary" type="submit" value="Signup" />
+  <button type="submit" class="rpgui-button"><p>Signup</p></button>
   <br />
 </form>
 {% endif %} 
