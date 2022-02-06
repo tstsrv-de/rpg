@@ -34,22 +34,13 @@
     <ul class="nav navbar-nav">
           {% if user.is_authenticated %}
 
-            {% if request.resolver_match.view_name == 'worldmap' %}
-              <li class="active"> <a href="#">Worldmap </a></li>
-              <li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>
-
-            {% elif request.resolver_match.view_name == 'lobby' %}
-              <li class="active"> <a href="#">Szene </a></li>
-              <!--<li>  <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></li>-->
-              <li>  <a href="{% url 'worldmap' %}">Zurück zur Worldmap...</a></li>
-
-            {% else %}
               <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
-              <li class="{% if request.resolver_match.view_name == 'user_profile' %}active{% endif %}"> <a href="../user_profile/">user-profile</a></li>
+              <!--<li class="{% if request.resolver_match.view_name == 'user_profile' %}active{% endif %}"> <a href="../user_profile/">user-profile</a></li>-->
               <li class="{% if request.resolver_match.view_name == 'create_char' %}active{% endif %}"> <a href="../create_char/">create char</a></li>
               <li class="{% if request.resolver_match.view_name == 'chars' %}active{% endif %}"> <a href="../chars/">chars</a></li>
+              <li class="{% if request.resolver_match.view_name == 'worldmap' %}active{% endif %}">  <a href="{% url 'worldmap' %}">worldmap</a></li>              
               <li class="{% if request.resolver_match.view_name == 'logout' %}active{% endif %}"> <a href="../logout/">logout</a></li>
-            {% endif %}
+
             
 
           {% else %}

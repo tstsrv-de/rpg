@@ -28,7 +28,7 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('chars/', views.chars, name='chars'),
     path('create_char/', views.create_char, name='create_char'),
-    path('user_profile/', views.user_profile, name='user_profile'),
+    # path('user_profile/', views.user_profile, name='user_profile'),
 
     path('worldmap/', views.worldmap, name='worldmap'),
 
