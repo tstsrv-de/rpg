@@ -558,7 +558,7 @@ ul.rpgui-dropdown-imp {
 .rpgui-content textarea {
   line-height: 22px;
   padding-top: 7px;
-  height: 80px;
+  /*height: 80px;*/
   resize: none; }
 
 /* selection highlight */

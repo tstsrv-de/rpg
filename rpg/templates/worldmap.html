@@ -8,9 +8,11 @@
 {% endif %}
 {% if user.is_authenticated %}
 
+<table>
+    <tr>
+        <td style="vertical-align: top; ">
 
-
-
+<div class="rpgui-container framed-golden-2" style="position:relative;">
             {% if game_scenes_list %}
             <div align="center">
                 <div style="font-size: 8vw;">🗺️</div>
@@ -21,41 +23,55 @@
 
                     <select  size="5" id="scene_id" name="scene_id" class="rpgui-list">
                     {% for scene in game_scenes_list %} 
-                        <option value={{scene.id}}>{{scene.name}} ( {{ scene.players_in_chat_counter }}/{{ scene.waiting_players }}/{{ scene.req_players }})</option>
+                    <!--<option value={{scene.id}} title="tres">{{scene.name}} ({{ scene.players_in_chat_counter }} von {{ scene.req_players }} Spieler)</option>-->
+                    <option value={{scene.id}}>{{scene.name}} ({{ scene.players_in_chat_counter }}/{{ scene.waiting_players }}/{{ scene.req_players }})</option>
                     {% endfor %}
                     </select> 
-                    <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}"><br />
-                    <br />
+                    <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">
                     
                     <button type="submit" class="rpgui-button"><p>Spiel auswählen und Lobby betreten</p></button>
+                    <br />
+                    <br />
+                    <p><small><u>Zahlen in den Klammern:</u>(Spieler im Chat/belegte Plätze/benötigte Spieler)  </small></p>                    
                     </div>
             </form>
             </div>
             <br />
-            <br />            <br />
+
 
                     {% else %}
                     <p>Es gibt keine Szenen!</p>
                     {% endif %}
-            
+        </div>
 
+    </td>
+    <td style="vertical-align: top; padding-left:20px;">
 
-
-
+<div class="rpgui-container framed-golden" style="position:relative;">
 <table class="table table-bordered table-striped">
 <tr>
-<td class="text-left">
-<b>Aktuell im Chat:</b><p id="chat-userlist"></p>
+<td  style="vertical-align: top; ">
+<h1>Aktuell im Chat</h1>
+<hr class="golden">
+<p id="chat-userlist"></p>
+<hr class="golden">
+
+<textarea id="chat-text" rows="6" disabled></textarea>
+<br />
+<br />
+<input id="input" type="text" onkeypress="return send_msg(event)" > 
+<br />
+<br />
+<button type="submit" id="submit" class="rpgui-button"><p>Send</p></button>
+
 </td>
-<td>
-<textarea class="form-control" id="chat-text" rows="10" disabled></textarea>
-<div class="form-inline">
-<input class="form-control mb-2" id="input" type="text" onkeypress="return send_msg(event)" > 
-<input class="btn btn-primary" id="submit" type="button" value="Send">
+</tr>
+</table>
 </div>
 </td>
 </tr>
 </table>
+
 
     {{ char_name|json_script:"user_username" }}
     <script id="room-name" type="application/json">"0"</script>
