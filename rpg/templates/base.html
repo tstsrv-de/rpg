@@ -42,54 +42,76 @@
     }
     </style>
     
-    <body>
+  <body>
     <div class="rpgui-content" style="overflow-y:scroll;">
       <div id="container">
-      <div id="main"></div>
-        <div class="inner rpgui-container framed" style="position:relative">
+        <table>
+          <tr>
+            <td style="vertical-align: top;">
 
-          <table>
-            <tr>
+
+
+                <table>
+                <tr>
+                <td>
+
+                <div class="rpgui-container framed-golden" style="position:relative; display:inline-block">    
+                <h1>RPG-Adventure!!</h1>
+
+                <ul >
+                {% if user.is_authenticated %}
+
+                <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
+                <!--<li class="{% if request.resolver_match.view_name == 'user_profile' %}active{% endif %}"> <a href="../user_profile/">user-profile</a></li>-->
+                <li class="{% if request.resolver_match.view_name == 'create_char' %}active{% endif %}"> <a href="../create_char/">create char</a></li>
+                <li class="{% if request.resolver_match.view_name == 'chars' %}active{% endif %}"> <a href="../chars/">chars</a></li>
+                <li class="{% if request.resolver_match.view_name == 'worldmap' %}active{% endif %}">  <a href="{% url 'worldmap' %}">worldmap</a></li>              
+                <li class="{% if request.resolver_match.view_name == 'logout' %}active{% endif %}"> <a href="../logout/">logout</a></li>
+
+
+
+                {% else %}
+                <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
+                <li class="{% if request.resolver_match.view_name == 'login' %}active{% endif %}"><a href="../login/">login</a></li>
+                <li class="{% if request.resolver_match.view_name == 'signup' %}active{% endif %}"><a href="../signup/">signup</a></li>
+                {% endif %} 
+
+                </ul>
+                </div>
+
+
+                </td>
+                </tr>
+                </table>
+
+
+
+            </td>
+            <td  style="vertical-align: top;">
+              <div class="inner rpgui-container framed" style="position:relative">
+              <table>
+              <tr>
               <td>
-          
-  <div class="rpgui-container framed-golden" style="position:relative; display:inline-block">    
-      <h1>RPG-Adventure!!</h1>
 
-    <ul >
-          {% if user.is_authenticated %}
 
-              <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
-              <!--<li class="{% if request.resolver_match.view_name == 'user_profile' %}active{% endif %}"> <a href="../user_profile/">user-profile</a></li>-->
-              <li class="{% if request.resolver_match.view_name == 'create_char' %}active{% endif %}"> <a href="../create_char/">create char</a></li>
-              <li class="{% if request.resolver_match.view_name == 'chars' %}active{% endif %}"> <a href="../chars/">chars</a></li>
-              <li class="{% if request.resolver_match.view_name == 'worldmap' %}active{% endif %}">  <a href="{% url 'worldmap' %}">worldmap</a></li>              
-              <li class="{% if request.resolver_match.view_name == 'logout' %}active{% endif %}"> <a href="../logout/">logout</a></li>
+                {% block content %} 
+                {% endblock %}
 
-            
+              </td>
+              </tr>
+              </table>
+            </div>
 
-          {% else %}
-          <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
-          <li class="{% if request.resolver_match.view_name == 'login' %}active{% endif %}"><a href="../login/">login</a></li>
-          <li class="{% if request.resolver_match.view_name == 'signup' %}active{% endif %}"><a href="../signup/">signup</a></li>
-          {% endif %} 
-      
-    </ul>
-  </div>
+            </td>
+            </tr>
+            </table>
 
-</td>
-<td>
-  
-    
-    
-    {% block content %} 
-    {% endblock %}
-    
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
+
+            </div>
+            </div>
+
+
+
 <!--
     <footer class="footer text-center">
   <div>
@@ -127,6 +149,5 @@
 </footer>
 -->
 
-</div>
   </body>
 </html>
