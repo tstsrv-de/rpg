@@ -1,6 +1,6 @@
 from django.db.models import deletion
 from django.db.models.aggregates import Count
-from django.http import request
+from django.http import request, HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
@@ -367,8 +367,9 @@ def hpap(request, hpap, user_char_id):
             curr_hp = UserChar.objects.get(id=user_char_id).hp
             new_hp = (curr_hp + ceil(curr_xp_to_spend * rpg_get_config("xp_hp_conversion_factor")))
             UserChar.objects.filter(id=user_char_id).update(xp_to_spend=(curr_xp - curr_xp_to_spend), hp=new_hp)
-
-    return redirect('chars')
+    return_string = "/chars/#" + str(user_char_id)
+    return HttpResponseRedirect(return_string)
+    #return redirect('chars')
 
  
 def create_char(request):
