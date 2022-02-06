@@ -90,7 +90,7 @@ Du hast noch eine aktive Chars oder Szene. Bitte setze diese erst zurück &#1014
         {% else %}
         <h2>Du hast noch keine Charaktere...</h2>
 
-        Lege hier einen neuen an 👍
+        Lege <a href="../create_char/">hier</a> einen neuen an 👍
         {% endif %}
   {% endif %}
 
@@ -99,23 +99,6 @@ Du hast noch eine aktive Chars oder Szene. Bitte setze diese erst zurück &#1014
         </td>
     </tr>
 </table>
-<br />
-<br />
-<table width="100%">
-    <tr>
-        <td>
-            <h3>Neuen Charakter anlegen:</h3>
-            
-            <form method="POST">
-                {{ form.as_p }}
-                {% csrf_token %}
-                <input type="submit" value="Charakter anlegen" class="btn btn-primary" >
-            </form>
-        </td>
-
-</tr>
-</table>
-
 
 
 </div>

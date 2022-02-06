@@ -46,6 +46,7 @@
             {% else %}
               <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %}"><a href="../home/">home</a></li>
               <li class="{% if request.resolver_match.view_name == 'user_profile' %}active{% endif %}"> <a href="../user_profile/">user-profile</a></li>
+              <li class="{% if request.resolver_match.view_name == 'create_char' %}active{% endif %}"> <a href="../create_char/">create char</a></li>
               <li class="{% if request.resolver_match.view_name == 'chars' %}active{% endif %}"> <a href="../chars/">chars</a></li>
               <li class="{% if request.resolver_match.view_name == 'logout' %}active{% endif %}"> <a href="../logout/">logout</a></li>
             {% endif %}

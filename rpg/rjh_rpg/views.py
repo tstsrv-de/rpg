@@ -122,33 +122,8 @@ def chars(request):
         xp_to_ap_rate = rpg_get_config("xp_ap_conversion_factor")
         xp_to_hp_rate = rpg_get_config("xp_hp_conversion_factor")
 
-        form = UserCharForm()
         
-        if request.method == 'POST':
-            form = UserCharForm(request.POST)
-            if form.is_valid():
-                tmp_form = form.save(commit=False)
-                tmp_form.usernickname = request.user
-                if tmp_form.Klasse == "W":
-                    tmp_form.hp = rpg_get_config("char_class_w_base_hp")
-                    tmp_form.ap = rpg_get_config("char_class_w_base_ap")
-                elif tmp_form.Klasse == "P":
-                    tmp_form.hp = rpg_get_config("char_class_p_base_hp")
-                    tmp_form.ap = rpg_get_config("char_class_p_base_ap")
-                elif tmp_form.Klasse == "M":
-                    tmp_form.hp = rpg_get_config("char_class_m_base_hp")
-                    tmp_form.ap = rpg_get_config("char_class_m_base_ap")
-                else:
-                    # should not happen
-                    pass
-                    
-
-                tmp_form.save()
-                return render(request,'msg_redirect.html',{'msg':'Der Char wurde erfolgreich angelegt!','target':'/chars/'})
-            else:
-                pass
-        
-        return render(request, 'chars.html', {'chars': char_list, 'form': form, 'active_char' : active_char, 'xp_ap' : xp_to_ap_rate, 'xp_hp' : xp_to_hp_rate })
+        return render(request, 'chars.html', {'chars': char_list, 'active_char' : active_char, 'xp_ap' : xp_to_ap_rate, 'xp_hp' : xp_to_hp_rate })
 
     else:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
@@ -401,3 +376,53 @@ def hpap(request, hpap, user_char_id):
     return redirect('chars')
 
  
+def create_char(request):
+    if not request.user.is_authenticated:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
+
+    if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
+        return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
+
+    current_user_obj = User.objects.get(id=request.user.id)
+    GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
+    
+
+    try:
+        GameState.objects.get(char_user=current_user_obj).delete()
+    except:
+        pass
+
+    char_list = UserChar.objects.filter(usernickname=request.user).order_by('name')
+    
+    current_user = User.objects.get(id=request.user.id)
+    active_char = GameState.objects.filter(char_user=current_user)
+    xp_to_ap_rate = rpg_get_config("xp_ap_conversion_factor")
+    xp_to_hp_rate = rpg_get_config("xp_hp_conversion_factor")
+
+    form = UserCharForm()
+    
+    if request.method == 'POST':
+        form = UserCharForm(request.POST)
+        if form.is_valid():
+            tmp_form = form.save(commit=False)
+            tmp_form.usernickname = request.user
+            if tmp_form.Klasse == "W":
+                tmp_form.hp = rpg_get_config("char_class_w_base_hp")
+                tmp_form.ap = rpg_get_config("char_class_w_base_ap")
+            elif tmp_form.Klasse == "P":
+                tmp_form.hp = rpg_get_config("char_class_p_base_hp")
+                tmp_form.ap = rpg_get_config("char_class_p_base_ap")
+            elif tmp_form.Klasse == "M":
+                tmp_form.hp = rpg_get_config("char_class_m_base_hp")
+                tmp_form.ap = rpg_get_config("char_class_m_base_ap")
+            else:
+                # should not happen
+                pass
+                
+
+            tmp_form.save()
+            return render(request,'msg_redirect.html',{'msg':'Der Char wurde erfolgreich angelegt!','target':'/chars/'})
+        else:
+            pass
+    
+    return render(request, 'create_char.html', {'chars': char_list, 'form': form, 'active_char' : active_char, 'xp_ap' : xp_to_ap_rate, 'xp_hp' : xp_to_hp_rate })
