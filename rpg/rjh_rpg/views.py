@@ -101,7 +101,7 @@ def user_profile(request):
 
 # game views and logic:
 
-def chars(request):
+def chars(request, user_char_id=None):
     if request.user.is_authenticated:
         if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
             return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
@@ -370,7 +370,6 @@ def hpap(request, hpap, user_char_id):
 
     return redirect('chars')
 
- 
 def create_char(request):
     if not request.user.is_authenticated:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
