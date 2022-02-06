@@ -5,16 +5,46 @@
 
 \subsubsection{Infrastruktur}
 
+Die für dieses Projekt eingesetzte Infrastruktur setzt auf verschiedene Komponenten, deren Zusammenspiel hier in einer vereinfachten Darstellung zu erkennen ist und im Folgenden näher beschrieben wird: 
 
 \begin{figure}[H]
     \centering
-    \caption{Diagramm: Konzept Entwicklung, Codeverteilung und Produktivnahme}
     \label{fig:henning-dia-git-dev-server}
-    \includegraphics[width=1\textwidth]{henning-dia-git-dev-server}
+    \caption{Konzept: Entwicklung, Codeverteilung, Produktivnahme}
+    \includegraphics[width=0.8\textwidth]{henning-dia-git-dev-server}
 \end{figure}
 
+Zentraler Punkt stellt das gemeinsame \textbf{Git-Repository auf Github}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/}.} dar. In diesem Repository liegen alle Elemente des Projektes: Code, Skripte und Dokumentation.
 
+Die Funktionen des Repositorys sind folgende: \begin{itemize}
+    \item Entwickler übermitteln neue Inhalte in das Repository (push).
+    \item Entwickler erhalten den stets aktuellen Entwicklungsstand aus dem Repository (pull, fetch).
+    \item Der Server lädt neue Inhalte aus dem Repository automatisch und aktualisiert die Dienste.
+    \item Alle Beteiligten und auch Dritte können über das Repository die Entwicklung nachvollziehen. 
+\end{itemize}
 
+Weiterer wesentlicher Punkt der Infrastruktur ist \textbf{Docker sowie die Container} für den Django-Server, die Datenbank und den Reverse-Proxy. Hier stehen für die lokale Entwicklung \enquote{docker-compose}-Skripte für Windows und auch unixartige Systeme wie Linux und MacOS zur Verfügung. Ebenso für den Betrieb des Servers. Details zur Einrichtung und Nutzung wurden in der \textbf{Readme Repositorys}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/README.md}.} hinterlegt. 
+
+Für den Update-Prozess des Servers und der Dienste wurde ein Cron-Skript erstellt, dass laufend prüft ob neue Commits im Repository vorhanden sind (siehe \textbf{Codelisting 1} unten, Zeile 5). Wenn ja, wird der Django-Webserver gestoppt (Zeile 7), die neuen Inhalte heruntergeladen, verarbeitet und der Django-Webserver im Anschluss wieder gestartet (Zeile 15). 
+
+\textbf{Codelisting 1: \enquote{rpg/server-update-cron.sh}, gekürzt um Logging:}
+\begin{lstlisting}[language=bash]
+#!/bin/bash
+cd /home/rjhadmin/tstsrv/
+now=$(date "+%F %H:%M:%S")
+git -C /home/rjhadmin/tstsrv/ fetch origin 
+if  [ `git -C /home/rjhadmin/tstsrv/ rev-list HEAD...origin/main --count` != 0 ] 
+then
+    docker-compose --project-directory /home/rjhadmin/tstsrv/ stop rpg  
+    git -C /home/rjhadmin/tstsrv/ reset --hard origin/main  
+    git -C /home/rjhadmin/tstsrv/ fetch
+    git -C /home/rjhadmin/tstsrv/ pull 
+    chmod +x /home/rjhadmin/tstsrv/*.sh 
+    docker-compose --project-directory /home/rjhadmin/tstsrv/ run rpg python rpg/manage.py makemigrations 
+    docker-compose --project-directory /home/rjhadmin/tstsrv/ run rpg python rpg/manage.py migrate 
+    docker-compose --project-directory /home/rjhadmin/tstsrv/ run rpg python rpg/manage.py loaddata db_sample_data.json 
+    docker-compose --project-directory /home/rjhadmin/tstsrv/ start rpg 
+\end{lstlisting}
 \subsubsection{Code-Entwicklung}
 
 
@@ -124,7 +154,7 @@ Einbau der Spielseite selbst als logischer Schritte nach der Weltkarte (als Leve
 
 \textbf{Entwicklung, Sonntag 12.12.2021:}
 
-Als Grundlage der Dokumentation eine an APA-Zietierrichtlinien angepasste Variante der LaTeX-FOM-Vorlage\footnote{Siehe \url{https://github.com/andygrunwald/FOM-LaTeX-Template}.} in der Git-Repostitory eingefüht und für das Projekt hier angepasst. Dort erfolgt nun laufen auch die Dokumentation (Commit \url{https://git.io/JSYOZ}). 
+Als Grundlage der Dokumentation eine an APA-Zietierrichtlinien angepasste Variante der LaTeX-FOM-Vorlage\footnote{Siehe \url{https://github.com/andygrunwald/FOM-LaTeX-Template}.} in der Git-Repository eingefüht und für das Projekt hier angepasst. Dort erfolgt nun laufen auch die Dokumentation (Commit \url{https://git.io/JSYOZ}). 
 
 
 
