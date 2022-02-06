@@ -15,18 +15,19 @@
             <div align="center">
                 <div style="font-size: 8vw;">🗺️</div>
 
-            <form action="{% url 'lobby_jumper' %}" method="POST" id="interest-select" class="form-inline">
+            <form action="{% url 'lobby_jumper' %}" method="POST" id="interest-select">
             <div class="form-group">
                     {% csrf_token %}
 
-                    <select  class="custom-select form-control" size="5" id="scene_id" name="scene_id" >
+                    <select  size="5" id="scene_id" name="scene_id" class="rpgui-list">
                     {% for scene in game_scenes_list %} 
-                        <option value={{scene.id}}>{{scene.name}} (Spieler im Chat: {{ scene.players_in_chat_counter }}, davon spielbereit: {{ scene.waiting_players }}/{{ scene.req_players }})</option>
+                        <option value={{scene.id}}>{{scene.name}} ( {{ scene.players_in_chat_counter }}/{{ scene.waiting_players }}/{{ scene.req_players }})</option>
                     {% endfor %}
                     </select> 
                     <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}"><br />
                     <br />
-                    <input class="btn btn-primary" type="submit" value="Spiel auswählen und Lobby betreten..."/>
+                    
+                    <button type="submit" class="rpgui-button"><p>Spiel auswählen und Lobby betreten</p></button>
                     </div>
             </form>
             </div>
@@ -112,9 +113,22 @@ setInterval(function(){
             const data = JSON.parse(e.data);
             console.log(data);
             if (data.ul) {
-                document.querySelector('#chat-userlist').innerHTML = (data.ul)
+                if (typeof(data.ul) != "undefined")
+                {
+                    document.querySelector('#chat-userlist').innerHTML = (data.ul)                    
+                }
+                else { window.location.reload(true); }
             } else {
-                document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
+                if (typeof(data.username) != "undefined")
+                {
+                    if (typeof(data.message) != "undefined")
+                    {
+                        document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
+                    }
+                    else { window.location.reload(true); }                    
+                    
+                }
+                else { window.location.reload(true); }
             };
         }
     </script>

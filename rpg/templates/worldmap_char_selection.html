@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %} 
+{% if error %}
+{{ error }}
+
+<br />
+<br />
+{% endif %}
+
+
+
+
+{% if chars %}
+
+<form action="{% url 'worldmap' %}" method="POST" id="interest-select" >
+ 
+        {% csrf_token %}
+        <br />        
+        <h4>Wähle einen Charakter aus, um die Weltkarte zu betreten...</h4>
+
+
+        <select id="char_id" name="char" class="rpgui-dropdown">
+
+        {% for char in chars %}
+            <option value={{char.id}}>{{char.name}}</option>
+        {% endfor %}
+        </select> 
+        <br />
+        <br />        
+        <button type="submit" class="rpgui-button"><p>Welt betreten!</p></button>
+ 
+  </form>
+
+        {% else %}
+        <h2>Du hast noch keine Charaktere...</h2>
+
+        Lege <a href="../create_char/">hier</a> einen neuen an 👍
+        {% endif %}
+  
+
+
+
+{% endblock %}
