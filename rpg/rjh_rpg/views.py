@@ -277,7 +277,9 @@ def lobby(request, scene_id):
     except:
         return render(request,'msg_redirect.html',{'msg':'Du musst einen Charakter auswählen!','target':'/chars/'})
 
+    scene_name = GameScenes.objects.get(id=scene_id).name
     intro_image_name = GameScenes.objects.get(id=scene_id).intro_image 
+    intro_text = GameScenes.objects.get(id=scene_id).intro_text
 
     GameState.objects.filter(char=char_id).update(place=scene_id)
 
@@ -288,8 +290,10 @@ def lobby(request, scene_id):
     return render(request, 'lobby.html', {
             'char_id': char_id,
             'scene_id': scene_id,
+            'scene_name': scene_name,
             'char_name': char_name,
             'intro_image': intro_image_name,
+            'intro_text': intro_text
         }
     )
 
@@ -316,7 +320,10 @@ def game(request, game_id):
     
 
     game_scene = game_obj.game_scene_id
+    scene_name = GameScenes.objects.get(name=game_scene).name
     image_name = GameScenes.objects.get(name=game_scene).enemy_image
+    enemy_dead_image = GameScenes.objects.get(name=game_scene).enemy_dead_image
+    enemy_name = GameScenes.objects.get(name=game_scene).enemy_name
     current_user_id = User.objects.get(id=request.user.id).id
     
     game_user_char_list = []
@@ -337,7 +344,10 @@ def game(request, game_id):
         'game_id': game_id,
         'game_user_char_list' : game_user_char_list,  
         'request_user_id'      : current_user_id,
-        'enemy_image': image_name, 
+        'enemy_image': image_name,
+        'enemy_dead_image': enemy_dead_image,
+        'enemy_name': enemy_name,
+        'scene_name': scene_name, 
     })
  
 def hpap(request, hpap, user_char_id):

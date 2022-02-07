@@ -10,28 +10,31 @@
 
 <table>
     <tr>
+        <td colspan="2" style="position: relative;">
+            <div style=" margin: auto; text-align: center;" >
+                <p style="font-size: x-large;">{{scene_name}}</p>
+                <button type="submit" class="rpgui-button-collapsible" style="margin: auto;">Level-Beschreibung</button>
+                <div class="collapsible_content" style="overflow-y: scroll;margin: auto; text-align: left;">
+                    <p>{{intro_text}}</p>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
         <td style="vertical-align: top;">
-
-
-
-<div class="rpgui-container framed-lobbyimage" style="position:relative; background: url(../static/img/intro_images/{{intro_image}}) no-repeat center;  background-size: 100%; height:450px;">
-    <!--<img src="../static/img/intro_images/{{intro_image}}" style="width:100%">-->
-</div>
-
-
-</td>
-
-<td style="vertical-align: top; " rowspan="2">
-
-        
-    <div class="rpgui-container framed-golden-2" style="position:relative;">
-        <table class="table table-bordered table-striped">
-        <tr>
-        <td  style="vertical-align: top; ">
-        <h1>Aktuell im Chat</h1>
-        <hr class="golden">
-        <p id="chat-userlist"></p>
-        <hr class="golden">
+            <div class="rpgui-container framed-lobbyimage" style="position:relative; background: url(../static/img/intro_images/{{intro_image}}) no-repeat center;  background-size: 100%; height:450px;">
+            <!--<img src="../static/img/intro_images/{{intro_image}}" style="width:100%">-->
+            </div>
+        </td>
+        <td style="vertical-align: top; " rowspan="2">
+            <div class="rpgui-container framed-golden-2" style="position:relative;">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <td  style="vertical-align: top; ">
+                            <h1>Aktuell im Chat</h1>
+                            <hr class="golden">
+                            <p id="chat-userlist"></p>
+                            <hr class="golden">
     
         <textarea id="chat-text" rows="10" disabled></textarea>
         <br />
@@ -45,12 +48,7 @@
         </tr>
         </table>
     </div>
-
-    
-
-
-</td>
-
+    </td>
 </tr>
 <tr>
 
@@ -70,7 +68,6 @@
 
 </tr>
 </table>
-
 
 {{ scene_id|json_script:"socket_scene_id" }}
 {{ char_id|json_script:"socket_char_id" }}
@@ -188,6 +185,23 @@ setInterval(function(){
                 else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 5) { window.location.reload(true); } }
             };
 
+        }
+    </script>
+
+    <!-- Script for collapsible div for scene_text-->
+    <script>var coll = document.getElementsByClassName("rpgui-button-collapsible");
+        var i;
+        
+        for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+            content.style.display = "none";
+            } else {
+            content.style.display = "block";
+            }
+            });
         }
     </script>
 

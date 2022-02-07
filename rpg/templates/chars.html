@@ -9,18 +9,11 @@
 
 
 <div class="container text-center">
-<table width="100%">
-<tr>
-<td>
     <br />
     {% if chars %} 
-        <div class="rgui-container framed-golden">
-            <table class="table table-bordered table-striped">
-                
+        <div class="rgui-container framed-golden">               
                 {% for char in chars %}
-                <tr>
-                    <td>
-                        <div class="rpgui-container framed-golden" style="position:relative; width:400px; display:inline-block">
+                        <div class="rpgui-container framed-golden" style="position:relative; width:400px; display:inline-block; margin-top: 20px;">
                                                    
                         <p>
                         <b><a name="{{char.id}}"></a>{{ char.name }}</b><br />
@@ -45,20 +38,12 @@
                         Verfügbare XP: {{ char.xp_to_spend }} <br />
                         </p>
                     </div>
-                    </td>
-                </tr>
-                {% endfor %}
-                
-            </table>
+                {% endfor %}                
         </div>
     {% else %}
         <h2>Du hast noch keine Charaktere...</h2>
         Lege <a href="../create_char/">hier</a> einen neuen an 👍
     {% endif %}
-</td>
-</tr>
-</table>
-
 
 </div>
 

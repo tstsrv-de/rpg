@@ -3,3 +3,83 @@
    based on the CSS framework 'RPGUI' by RonenNess (Github-Rpository: https://github.com/RonenNess/RPGUI) and Bootstrap
 */
 
+.game_title{
+   font-size: xx-large !important;
+   color: #8B0000 !important;
+   text-decoration: underline !important;
+   /*border-style: solid !important;
+   border-color: #8B0000 !important;
+   border-radius: 25px !important;
+   border-width: 7px !important;*/
+   padding-top: 4px !important;
+   padding-bottom: 4px !important;
+   padding-left: 11px !important;
+   padding-right: 4px !important;
+   white-space: nowrap;
+}
+
+.rpgui-button-collapsible {
+   /* font color */
+   color: white !important;
+   /* width, height*/
+   width: 40vh;
+   /* hide button default stuff */
+   background-color: Transparent;
+   background-repeat: no-repeat;
+   border: none;
+   overflow: hidden;
+   outline: none;
+   /* background */
+   background: url("img/button.png") no-repeat no-repeat;
+   background-clip: padding-box;
+   background-origin: padding-box;
+   background-position: center;
+   background-size: 100% 100%;
+   /* font size */
+   font-size: 1.0em;
+   /* default size and display */
+   max-width: 100%;
+   min-width: 140px;
+   height: 60px;
+   display: inline-block;
+   /* padding */
+   padding-left: 35px;
+   padding-right: 35px; }
+
+   /* button hover */
+.rpgui-button-collapsible.hover,
+.rpgui-button-collapsible:hover {
+  background-image: url("img/button-hover.png"); }
+
+/* button clicked */
+.rpgui-button-collapsible.down,
+.rpgui-button-collapsible:active {
+  background-image: url("img/button-down.png"); }
+ 
+ .collapsible_content {
+   /* position */
+    position: relative;
+   /* width/height*/
+   max-width: 50vw;
+   max-height: 20vh !important;
+   /* border */
+   border-style: solid;
+   border-image-source: url("img/border-image-golden.png");
+   border-image-repeat: repeat;
+   border-image-slice: 4 4 4 4;
+   border-image-width: 18px;
+   border-width: 15px;
+   padding: 0 18px;
+   /* collapsible tweaks */
+   display:none;
+   overflow:hidden;
+   /* internal border */
+   box-sizing: border-box;
+   -moz-box-sizing: border-box;
+   -webkit-box-sizing: border-box;
+   /* background */
+   background: url("img/background-image-golden.png") repeat repeat;
+   background-clip: padding-box;
+   background-origin: padding-box;
+   background-position: center; 
+ }

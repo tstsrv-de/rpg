@@ -6,137 +6,136 @@
     <link href="/static/favicon.ico" rel="icon" type="image/x-icon" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- CSS-Framework: RPGUI-->
+    <link rel="stylesheet" href="/static/css/rpgui.css" type="text/css">
+    <script src="/static/css/rpgui.js"></script>
+
     <title>RPG-Adventure</title>
   </head>
-  <body style="background-color:#006E9C;">
 
+  <style>
+    body
+    {
+      background: #222;
+      background-image: url("/static/animation/{{enemy_dead_image}}") ;
+      background-repeat: no-repeat;
+      background-position: center;
+      padding-top:20px;
+      padding-bottom:20px;
+    }
 
+    .inner
+    {
+      background: #444;
+      padding-left:20px;
+      padding-right:20px;
+      min-width: 500px;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+    </style>
+
+  <body>
     {% block content %} 
+      <div class="rpgui-content" id="game_websocket_content_rx" style="background-image:url(/static/animation/{{enemy_dead_image}}); background-size: cover;">
 
+        <div class="rpgui-container framed-golden" style="position:relative; text-align: center; padding: 0;">
+          <p style="font-size: large;">{{enemy_name}}</p>
+        </div>
 
+        <table border="1"  cellpadding="0" cellspacing="0"
+               style="height: 70%;width: 80%; position: relative; margin: auto;">
 
-    <div id="game_websocket_content_rx" style="font-family: Arial, Helvetica, sans-serif;  font-size: 2vw;     color: #ffffff;">
-  
-    <table  cellpadding="0"     cellspacing="0"
-    style="height: 100%;       width: 100%;
-      position: absolute;       top: 0;       bottom: 0;
-      left: 0;       right: 0;">
-
-    <tr style="height: 40%; width: 100%">
-      <td  style="  background-color: #3EB96A;
-          vertical-align: middle;
-          text-align: center;
-          width:50%;  " >
-
-          <video loop="true" autoplay="autoplay" autoplay muted style="max-width: auto; height: 20vw;">
-            <source src="../static/animation/{{enemy_image}}"  type="video/mp4" />
-            </video>
-  
-      </td>
-
-      <td style="background-color: #00A97F;   vertical-align: middle;  text-align: center; width:50%; "  rowspan="3">
-  
-        
-        <div id="game_log_textara" style="        margin: 0 auto;
-        width:95%; 
-        height:95%; 
-        font-family: monospace;
-        font-size: 0.7vw;
-        text-align: left;
-        border:0vw;
-        overflow-y: scroll;">
-  
-  
-      </div>
-    </div>
-      </td>
-    </tr>
-
-    <tr style="height: 40%; width: 100%">
-
-      <td style=" background-color: #009690;        vertical-align: middle;        text-align: center; ">
-      <div style="vertical-align: middle;       text-align: center;    margin: auto;">
-
-      
-        {% for user_char in game_user_char_list %} 
-        <table style="width: 95%; border-collapse: collapse; margin: 0.5vw; display: inline-table; ">
-        <tr style="border:0.2vw solid; ">
-
-      <td style="border:0.1vw solid; width:20%"> 
-        <div style="font-size: 4vw;">
-          {% if user_char.klasse == "W" %} 🤺 {% endif %}
-          {% if user_char.klasse == "M" %} 🧙 {% endif %}
-          {% if user_char.klasse == "P" %} 👼 {% endif %}          
+          <tr style="height: 40%; width: 100%">
+            <td style="vertical-align: middle; text-align: center;" >
+              <div class="rpgui-container framed-golden" style="position: relative; padding: 0">
+                <video loop="true" autoplay="autoplay" autoplay muted style="width:50vw;">
+                  <source src="../static/animation/{{enemy_image}}"  type="video/mp4" />
+                </video>
+              </div>
               
-        </div>
-          </td>
+            </td>
+            <td style="vertical-align: middle;  text-align: center; width:40%; "  rowspan="2">
+              <div class="rpgui-container framed-golden" id="game_log_textara" 
+                   style="margin: 0 auto;width:100%; height:100%; font-size:xx-small; text-align: left;border:0vw;overflow-y: scroll; position: relative;">
+              </div>
+            </td>
+          </tr>
+          <tr style="height: 40%; width: 100%">
+            <td style="vertical-align: middle;text-align: center;">
+              <div style="vertical-align: middle;text-align: center;margin: auto;">
 
-      <td style="border:0.1vw solid;  width:60%">
-        
-        <div style=" font-family: Arial, Helvetica, sans-serif;         font-size: 1.4vw;         color: #ffffff;  ">
-          {{user_char.name}}
-        </div>
-          <div style=" font-family: Arial, Helvetica, sans-serif;             font-size: 0.9vw;          color: #ffffff;  ">
-          HP: {{user_char.hp}} /  AP: {{user_char.ap}} 
-        </div>
-      
-      </td>
+              {% for user_char in game_user_char_list %} 
 
-      <td style="border:0.1vw solid;  width:20%; ">
-        <div style="font-family: Arial, Helvetica, sans-serif;
-        font-size: 1vw;
-        color: #ffffff;">  
+                <table class="rpgui-container framed-golden-2" style="height: 70%;width: 100%; position: relative; margin: auto;">
+                  <td> 
+                      <div class="rpgui-container framed-golden"  style="font-size: 4vw; position: relative;">
+                        {% if user_char.klasse == "W" %} 🤺 {% endif %}
+                        {% if user_char.klasse == "M" %} 🧙 {% endif %}
+                        {% if user_char.klasse == "P" %} 👼 {% endif %}                                      
+                      </div>
+                   </td>
+                    <td>
+                      <div class="rpgui-container framed-golden" style="position: relative;">
+                        <p>
+                        {{user_char.name}}
+                        <br>
+                        <br>
+                        HP: {{user_char.hp}} /  AP: {{user_char.ap}} 
+                       </p>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="rpgui-container framed-golden" style="position: relative;">  
+                        {% if user_char.user_char_id == request_user_id  %} 
+                          <button class="rpgui-button" type="submit" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; padding: 0;">
+                            <p>Angriff</p>
+                          </button>
+                          <br />
+                          <button class="rpgui-button" type="submit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%; padding: 0;">
+                            <p>Fähigkeit</p>
+                          </button>
+                          <br />
+                          <button class="rpgui-button" type="submit" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%; padding: 0;"> 
+                            <p>Aussetzen</p>
+                          </button>
+                          <br />
+                        
+                        {% else %}
 
-        {% if user_char.user_char_id == request_user_id  %} 
-        <input type="submit" value="Angriff" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; color: #000000; background:#ffffff; border:0vw; font-size: 1.1vw; margin:0.3vw;"> <br />
-        <input type="submit" value="Fähigkeit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%;  color: #000000; background:#ffffff; border:0vw;  font-size: 1.1vw; margin:0.3vw;"> <br />
-        <input type="submit" value="Aussetzen" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%;  color: #000000;  background:#ffffff; border:0vw;  font-size: 1.1vw; margin:0.3vw;"> <br />
-        {% else %}
+                          <div id="user_char_is_ready_{{ user_char.user_char_in_games_id }}"></div>
+                        {% endif %}
+                          </div>
+                    </td>
+                </table>
+              {% endfor %}     
+              </div>     
+            </td>     
+          </tr> 
+          <tr style="height: 20%; width: 100%">
+            <td style="vertical-align: middle;text-align: center;" colspan="3">
+              <div class="rpgui-container framed" style="position: relative; height:20%">
+                <input type="text" id="game_chat_msg_text" name="game_chat_msg_text" onkeypress="return game_chat_msg_key(event, {{ request_user_id }})"  style="width: 50%;"> 
+                <button class="rpgui-button" type="submit" onclick="game_chat_msg_click({{ request_user_id }});" style="padding: 0;"> 
+                  <p>Send</p>
+                </button>
+                <br />
+                <!-- Dev/Debug-Konsole
+                <button type="submit" onclick="set_game_to_finished();" style="background:#ff0000; width: 40%;padding: 0;">
+                  <p>Dev/Debug: Spiel beenden</p>
+                </button>-->
+              </div>
+            </td>
+          </tr>
+        </table>
 
-        <div id="user_char_is_ready_{{ user_char.user_char_in_games_id }}"></div>
-
-        {% endif %}
       </div>
-      </td>
 
-        </tr> 
-      </table><br />
-      <br />
-        {% endfor %}
-     
-    </div>
+      {{ game_id|json_script:"game_id" }}
+      {{ request_user_id|json_script:"request_user_id" }}
 
-
-      
-      </td>
-
-      
-    </tr>
-
-  
-    <tr style="height: 20%; width: 100%">
-
-      <td style="background-color: #00839B;        vertical-align: middle;          text-align: center;">
-  
-        <input type="text" id="game_chat_msg_text" name="game_chat_msg_text" onkeypress="return game_chat_msg_key(event, {{ request_user_id }})"  style="width: 50%; border:0.1vw solid;  color: #000000;  background:#ffffff; font-size: 1.1vw; margin:0.3vw;"> 
-        <input type="submit" value="Nachricht senden" onclick="game_chat_msg_click({{ request_user_id }});" style="background:#ffffff;   color: #000000; border:0vw; font-size: 1.1vw; margin:0.3vw;"> 
-
-        <br /><input type="submit" value="Dev/Debug: Spiel beenden" onclick="set_game_to_finished();" style="background:#ff0000;"" >
-  
-      </td>
-
-    </tr>
-
-  </table>
-  
-
-  </div>
-
-
-    {{ game_id|json_script:"game_id" }}
-    {{ request_user_id|json_script:"request_user_id" }}
-     
-    <script>
+      <script>
       last_counter_value_update = new Date();
       var last_game_log_content = "";
       var log_textara = document.querySelector('#game_log_textara');
