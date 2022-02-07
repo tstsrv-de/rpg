@@ -1,3 +1,18 @@
+# LaTeX build files
+*.aux
+*.bcf
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.bbl
+*.blg
+
+
 # remove credentials 
 .env
 rjh/fomtest/settings.py
