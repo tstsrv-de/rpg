@@ -9,6 +9,7 @@
 
     <!-- CSS-Framework: RPGUI-->
     <link rel="stylesheet" href="/static/css/rpgui.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/rjh_rpg.css" type="text/css">
     <script src="/static/css/rpgui.js"></script>
 
     <title>RPG-Adventure</title>
@@ -21,104 +22,93 @@
       background-image: url("/static/animation/{{enemy_dead_image}}") ;
       background-repeat: no-repeat;
       background-position: center;
+      background-size: cover;
       padding-top:20px;
       padding-bottom:20px;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
     }
 
-    .inner
-    {
-      background: #444;
-      padding-left:20px;
-      padding-right:20px;
-      min-width: 500px;
-      max-width: 90%;
-      margin: 0 auto;
+    .char_font{
+      font-size: 0.5vw !important;
     }
     </style>
 
   <body>
     {% block content %} 
-      <div class="rpgui-content" id="game_websocket_content_rx" style="background-image:url(/static/animation/{{enemy_dead_image}}); background-size: cover;">
+      <div class="rpgui-content" id="game_websocket_content_rx" style="max-height:100vh;">
 
-        <div class="rpgui-container framed-golden" style="position:relative; text-align: center; padding: 0;">
+        <div class="rpgui-container framed-golden-scalable" style="position:relative; text-align: center; padding: 0; height: 6vh">
           <p style="font-size: large;">{{enemy_name}}</p>
         </div>
 
-        <table border="0"  cellpadding="5%" cellspacing="0"
-               style=" position: relative; margin: auto; height:80%; width: 85%;">
+        <table border="1"  cellpadding="5vw" cellspacing="0"
+               style="margin: auto;width: 85vw; overflow: hidden">
 
-          <tr style="width: 100%">
-            <td style="vertical-align: middle; text-align: center;" >
-              <div class="rpgui-container framed-golden" style="position: relative; padding: 0">
-                <video loop="true" autoplay="autoplay" autoplay muted style="width:50vw;">
+          <tr style="width:100%;height:50%">
+            <td style="vertical-align: top;">
+              <div class="rpgui-container framed-golden-scalable" style="position: relative; padding: 0;">
+                <video loop="true" autoplay="autoplay" autoplay muted style="width:50vw">
                   <source src="../static/animation/{{enemy_image}}"  type="video/mp4" />
                 </video>
               </div>
               
             </td>
-            <td style="vertical-align: top;  text-align: center; width:40%;"  rowspan="2">
+            <td style="vertical-align: top;  text-align: center; width:40vw;"  rowspan="2">
               <!--<div class="rpgui-container framed-golden" id="game_log_textara" style="margin: 0 auto;width:100%; height:100%; font-size:xx-small; text-align: left;border:0vw;overflow-y: scroll; position: relative;">-->
-                <div id="game_log_textara_scroll" class="rpgui-container framed-golden" style="position: relative;overflow-y: scroll; text-align: left; height:100%;">
+                <div id="game_log_textara_scroll" class="rpgui-container framed-golden-scalable" style="position: relative;overflow-y: scroll; text-align: left;max-height:82vh;min-height: 70vh;">
                 
                   <p id="game_log_textara" >
                   </p>
               </div>
             </td>
           </tr>
-          <tr style="height: 40%; width: 100%">
+          <tr style=" width: 100%;">
             <td style="vertical-align: middle;text-align: center;">
               <div style="vertical-align: middle;text-align: center;margin: auto;">
 
               {% for user_char in game_user_char_list %} 
 
-                <table class="rpgui-container framed-golden-2" style="height: 70%;width: 100%; position: relative; margin: auto;">
-                  <td> 
-                      <div class="rpgui-container framed-golden"  style="font-size: 4vw; position: relative;">
+                      <div class="rpgui-container framed-golden-scalable"  style="position: relative;">
+                        <p style="display: inline;">
                         {% if user_char.klasse == "W" %} 🤺 {% endif %}
                         {% if user_char.klasse == "M" %} 🧙 {% endif %}
-                        {% if user_char.klasse == "P" %} 👼 {% endif %}                                      
-                      </div>
-                   </td>
-                    <td>
-                      <div class="rpgui-container framed-golden" style="position: relative;">
-                        <p>
+                        {% if user_char.klasse == "P" %} 👼 {% endif %}  
+                        </p>                                   
+                        <p style="display:inline">
                         {{user_char.name}}
-                        <br>
-                        <br>
-                        HP: {{user_char.hp}} /  AP: {{user_char.ap}} 
+                        </p>
+                        <p style="display:inline">
+                        HP:{{user_char.hp}} /  AP:{{user_char.ap}} 
                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="rpgui-container framed-golden" style="position: relative;">  
                         {% if user_char.user_char_id == request_user_id  %} 
-                          <button class="rpgui-button" type="submit" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style="width:80%; padding: 0;">
+                        <div style="position:relative;">
+                          <button class="rpgui-button" type="submit" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style=" padding: 0; display:inline;">
                             <p>Angriff</p>
                           </button>
-                          <br />
-                          <button class="rpgui-button" type="submit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="width:80%; padding: 0;">
+            
+                          <button class="rpgui-button" type="submit" onclick="game_action('ability', {{ user_char.user_char_in_games_id }});"  style="padding: 0;display:inline;">
                             <p>Fähigkeit</p>
                           </button>
-                          <br />
-                          <button class="rpgui-button" type="submit" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="width:80%; padding: 0;"> 
+                          
+                          <button class="rpgui-button" type="submit" onclick="game_action('pass', {{ user_char.user_char_in_games_id }});"  style="padding: 0;display:inline"> 
                             <p>Aussetzen</p>
                           </button>
-                          <br />
+                        </div>  
                         
                         {% else %}
 
                           <div id="user_char_is_ready_{{ user_char.user_char_in_games_id }}"></div>
                         {% endif %}
                           </div>
-                    </td>
-                </table>
               {% endfor %}     
               </div>     
             </td>     
           </tr> 
           <tr style="height: 20%; width: 100%">
-            <td style="vertical-align: middle;text-align: center;" colspan="2">
-              <div class="rpgui-container framed" style="position: relative; ">
+            <td style="vertical-align: top;text-align: center;" colspan="2">
+              <div class="rpgui-container framed-scalable" style="position: relative;  ">
                 <input type="text" id="game_chat_msg_text" name="game_chat_msg_text" onkeypress="return game_chat_msg_key(event, {{ request_user_id }})"  style="width: 50%;"> 
                 <button class="rpgui-button" type="submit" onclick="game_chat_msg_click({{ request_user_id }});" style="padding: 0; "> 
                   <p>Send</p>

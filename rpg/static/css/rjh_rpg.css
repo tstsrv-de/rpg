@@ -83,3 +83,104 @@
    background-origin: padding-box;
    background-position: center; 
  }
+
+ /* Skalierbare Elemente für game.html -----------------------------------------------------------------------------------------------*/
+ .rpgui-container.framed-scalable {
+   /* border */
+   border-style: solid;
+   border-image-source: url("img/border-image.png");
+   border-image-repeat: repeat;
+   border-image-slice: 6 6 6 6;
+   border-image-width: 0.5vw;
+   border-width: 0.4vw;
+   padding-top: 0.8vh;
+   padding-bottom: 0.8vh;
+   padding-left: 0.8vh;
+   padding-right: 0.8vh;
+   /* internal border */
+   box-sizing: border-box;
+   -moz-box-sizing: border-box;
+   -webkit-box-sizing: border-box;
+   /* background */
+   background: url("img/background-image.png") repeat repeat;
+   background-clip: padding-box;
+   background-origin: padding-box;
+   background-position: center; }
+
+ .rpgui-container.framed-golden-scalable {
+   /* border */
+   border-style: solid;
+   border-image-source: url("img/border-image-golden.png");
+   border-image-repeat: repeat;
+   border-image-slice: 4 4 4 4;
+   border-image-width: 0.5vw;
+   border-width: 0.4vw;
+   padding-top: 0.8vh;
+   padding-bottom: 0.8vh;
+   padding-left: 0.8vh;
+   padding-right: 0.8vh;
+   /* internal border */
+   box-sizing: border-box;
+   -moz-box-sizing: border-box;
+   -webkit-box-sizing: border-box;
+   /* background */
+   background: url("img/background-image-golden.png") repeat repeat;
+   background-clip: padding-box;
+   background-origin: padding-box;
+   background-position: center; }
+
+   .rpgui-container.framed-golden-2-scalable {
+      /* border */
+      border-style: solid;
+      border-image-source: url("img/border-image-golden2.png");
+      border-image-repeat: repeat;
+      border-image-slice: 8 8 8 8;
+      border-image-width: 0.5vw;
+      border-width: 0.4vw;
+      padding-top: 0.2vh;
+      padding-bottom: 0.2vh;
+      padding-left: 0.2vh;
+      padding-right: 0.2vh;
+      /* internal border */
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      /* background */
+      background: url("img/background-image-golden2.png") repeat repeat;
+      background-clip: padding-box;
+      background-origin: padding-box;
+      background-position: center; }
+
+      /* button style */
+.rpgui-button-scalable {
+   /* hide button default stuff */
+   background-color: Transparent;
+   background-repeat: no-repeat;
+   border: none;
+   overflow: hidden;
+   outline: none;
+   /* background */
+   background: url("img/button.png") no-repeat no-repeat;
+   background-clip: padding-box;
+   background-origin: padding-box;
+   background-position: center;
+   /* font size */
+   font-size: 0.5vh;
+   /* default size and display */
+   max-width: 100vw;
+   min-width: 14vw;
+   height: 5vh;
+   display: inline-block;
+   /* padding */
+   padding-left: 0.35vw;
+   padding-right: 0.35vw; }
+
+   /* button hover */
+.rpgui-button.hover,
+.rpgui-button:hover {
+  background-image: url("img/button-hover.png"); }
+
+/* button clicked */
+.rpgui-button.down,
+.rpgui-button:active {
+  background-image: url("img/button-down.png"); }
