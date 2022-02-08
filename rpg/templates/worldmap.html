@@ -24,7 +24,7 @@
                     <select  size="5" id="scene_id" name="scene_id" class="rpgui-list">
                     {% for scene in game_scenes_list %} 
                     <!--<option value={{scene.id}} title="tres">{{scene.name}} ({{ scene.players_in_chat_counter }} von {{ scene.req_players }} Spieler)</option>-->
-                    <option value={{scene.id}}>{{scene.name}} ({{ scene.players_in_chat_counter }}/{{ scene.waiting_players }}/{{ scene.req_players }})</option>
+                    <option value={{scene.id}}>{{scene.name}}</option>
                     {% endfor %}
                     </select> 
                     <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">

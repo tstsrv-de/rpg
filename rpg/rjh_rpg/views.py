@@ -339,7 +339,26 @@ def game(request, game_id):
             'user_char_id': user_char_details.usernickname.id,
             }
         )
-  
+    sorted_game_user_char_list = []  
+    for user_char in game_user_char_list:
+        print("UserChar: "+str(user_char['user_char_id']))
+        if current_user_id == user_char['user_char_id']:
+            print("Gefunden!")
+            sorted_game_user_char_list.insert(0,user_char)
+        else:
+            print("Not Found!")
+            sorted_game_user_char_list.append(user_char)
+
+    game_user_char_list = sorted_game_user_char_list
+
+    
+    if len(game_user_char_list) > 1:
+        icon_size = ""
+        font_size = ""
+    else:
+        icon_size = "font-size:4vw"
+        font_size = "font-size:1vw"
+    
     return render(request,'game.html', {
         'game_id': game_id,
         'game_user_char_list' : game_user_char_list,  
@@ -348,6 +367,8 @@ def game(request, game_id):
         'enemy_dead_image': enemy_dead_image,
         'enemy_name': enemy_name,
         'scene_name': scene_name, 
+        'icon_size': icon_size,
+        'font_size': font_size,
     })
  
 def hpap(request, hpap, user_char_id):

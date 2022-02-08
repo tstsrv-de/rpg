@@ -39,8 +39,8 @@
     {% block content %} 
       <div class="rpgui-content" id="game_websocket_content_rx" style="max-height:100vh;">
 
-        <div class="rpgui-container framed-golden-scalable" style="position:relative; text-align: center; padding: 0; height: 6vh">
-          <p style="font-size: large;">{{enemy_name}}</p>
+        <div class="rpgui-container framed-golden-scalable" style="position:relative; text-align: center; padding: 0;">
+          <p style="font-size: 2vh;">{{enemy_name}}</p>
         </div>
 
         <table border="1"  cellpadding="5vw" cellspacing="0"
@@ -67,21 +67,23 @@
           <tr style=" width: 100%;">
             <td style="vertical-align: middle;text-align: center;">
               <div style="vertical-align: middle;text-align: center;margin: auto;">
-
+           
               {% for user_char in game_user_char_list %} 
 
                       <div class="rpgui-container framed-golden-scalable"  style="position: relative;">
-                        <p style="display: inline;">
-                        {% if user_char.klasse == "W" %} 🤺 {% endif %}
-                        {% if user_char.klasse == "M" %} 🧙 {% endif %}
-                        {% if user_char.klasse == "P" %} 👼 {% endif %}  
-                        </p>                                   
-                        <p style="display:inline">
+                        <p>
+                        <b style="{{icon_size}}">
+                     
+                          {% if user_char.klasse == "W" %} 🤺 {% endif %}
+                          {% if user_char.klasse == "M" %} 🧙 {% endif %}
+                          {% if user_char.klasse == "P" %} 👼 {% endif %}  
+                       
+                        </b>    
+                        <b style=" color: yellow; {{font_size}}">                               
                         {{user_char.name}}
-                        </p>
-                        <p style="display:inline">
-                        HP:{{user_char.hp}} /  AP:{{user_char.ap}} 
-                       </p>
+                      </b> 
+                        <small style="{{font_size}}">HP:{{user_char.hp}} /  AP:{{user_char.ap}}</small>          
+                      </p>
                         {% if user_char.user_char_id == request_user_id  %} 
                         <div style="position:relative;">
                           <button class="rpgui-button" type="submit" onclick="game_action('attack', {{ user_char.user_char_in_games_id }});" style=" padding: 0; display:inline;">

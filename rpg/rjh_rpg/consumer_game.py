@@ -394,15 +394,12 @@ class Consumer(AsyncWebsocketConsumer):
                     
                     await db_set_round_state(self.game_id, 999)
 
-
-
-
                 # Win
                 elif round_state == 995:    
 
                     await db_expand_game_log(self.game_id, "<br /> 💬 " + await db_get_win_text(self.game_id))
                     
-                    await db_expand_game_log(self.game_id, "<br /> 👏 " + enemy_name + " wurde besiegt! 🥳 🎉 🎊 🪅 🍻 ")
+                    await db_expand_game_log(self.game_id, "<br /> 👏 " + enemy_name + " wurde besiegt! 🥳 🎉 🎊 🍻 ")
                     await db_set_round_state(self.game_id, 999)
 
                     await db_expand_game_log(self.game_id, "<br /><br /> 💰💰💰 Dafür gibt es Erfahrungspunkte mit Bonus:")

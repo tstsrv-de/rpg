@@ -7,11 +7,14 @@
 <br />
 {% endif %}
 
-<h1>Home...</h1>
 
 {% if user.is_authenticated %}
-<p>Willkommen, <b>{{ user.get_username }}</b>!<br />
-Du bist eingeloggt. </p>
+<h1 style="font-size: x-large; text-decoration: underline; white-space: nowrap;">Willkommen, <b>{{ user.get_username }}!</b></h1>
+<div class="rpgui-container framed-golden-2" style="position: relative; width:60%; margin:auto">
+<p>
+    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum laboriosam ullam nisi ducimus tempore commodi voluptatibus, nobis quo mollitia dolor consequuntur incidunt nemo distinctio cumque asperiores, et doloribus sapiente fugiat?
+</p>
+</div>
 {% else %}
 <p>Hi! Wenn du spielen willst, log dich ein. </p>
 {% endif %} 
