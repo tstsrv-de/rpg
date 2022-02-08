@@ -6,7 +6,7 @@
       "name": "Am Rande des Dunkelwaldes",
       "req_players": 1,
       "welcome_text": "Arzt: \"Sie haben Krebs und Sie haben Alzheimer.\" <br />\r\n<br />\r\nPatient: \"Na Gott sei dank kein Krebs.\"<br />\r\n<br />",
-      "enemy_name": "Schrecklicher Warg",
+      "enemy_name": "🐺Schrecklicher Warg🐺",
       "enemy_hp": 40,
       "enemy_ap": 10,
       "enemy_image": "warg_3840x2160.mp4",
