@@ -159,7 +159,10 @@ class Consumer(AsyncWebsocketConsumer):
                 locked_in_datetime = await self.db_get_list_datetime_locked_in(self.scene_id)
                 # locked_in_datetime = locked_in_datetime[0].strftime()
                 
-                game_id = await self.db_start_game(self.scene_id, user_char_list, locked_in_datetime[0])
+                try:
+                    game_id = await self.db_start_game(self.scene_id, user_char_list, locked_in_datetime[0])
+                except:
+                    print("Catch: Error on change from lobby to game")
                 
                 countdown_html = """
                 <h1>Das Spiel startet...</h2>

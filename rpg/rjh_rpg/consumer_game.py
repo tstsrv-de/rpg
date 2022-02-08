@@ -431,7 +431,7 @@ class Consumer(AsyncWebsocketConsumer):
                         pass
                     else:
                         await db_set_end_msg_to_shown(self.game_id)
-                        close_button = """<input type="submit" value="Spiel abschließen" onclick="set_game_to_finished();" style="background:#ffffff;  color: #000000; "" >"""
+                        close_button = """<button type="submit" class="rpgui-button" onclick="set_game_to_finished();"><p>Spiel abschließen</p></button>"""
                         await db_expand_game_log(self.game_id,"<br /><br />Bitte schließt das Spiel nun ab: " + close_button)
 
                 

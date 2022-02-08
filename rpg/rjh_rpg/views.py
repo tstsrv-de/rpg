@@ -26,7 +26,7 @@ def signup(request):
     if request.user.is_authenticated:
         return render(request, 'msg_redirect.html', {
             'msg':'Du bist bereits angemeldet!', 
-            'target':'/user_profile/'
+            'target':'/chars/'
             })
     else:
         if request.method == "POST":
@@ -37,7 +37,7 @@ def signup(request):
                 except User.DoesNotExist:
                     user = User.objects.create_user(request.POST['username'],password=request.POST['password1'])
                     auth.login(request,user)
-                    return render(request,'msg_redirect.html',{'msg':'Du wurdest erfolgreich angemeldet!','target':'/user_profile/'})
+                    return render(request,'msg_redirect.html',{'msg':'Du wurdest erfolgreich angemeldet!','target':'/chars/'})
             else:
                 return render (request,'signup.html', {'error':'Passwörter stimmen nicht überein!'})
         else:
@@ -45,7 +45,7 @@ def signup(request):
 
 def login(request):
     if request.user.is_authenticated:
-        return render(request,'msg_redirect.html',{'msg':'Du bist bereits angemeldet!','target':'/user_profile/'})
+        return render(request,'msg_redirect.html',{'msg':'Du bist bereits angemeldet!','target':'/chars/'})
     else:
         if request.method == 'POST':
             user = auth.authenticate(username=request.POST['username'],password = request.POST['password'])

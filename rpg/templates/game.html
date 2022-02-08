@@ -44,10 +44,10 @@
           <p style="font-size: large;">{{enemy_name}}</p>
         </div>
 
-        <table border="1"  cellpadding="0" cellspacing="0"
-               style="height: 70%;width: 80%; position: relative; margin: auto;">
+        <table border="0"  cellpadding="5%" cellspacing="0"
+               style=" position: relative; margin: auto; height:80%; width: 85%;">
 
-          <tr style="height: 40%; width: 100%">
+          <tr style="width: 100%">
             <td style="vertical-align: middle; text-align: center;" >
               <div class="rpgui-container framed-golden" style="position: relative; padding: 0">
                 <video loop="true" autoplay="autoplay" autoplay muted style="width:50vw;">
@@ -56,9 +56,12 @@
               </div>
               
             </td>
-            <td style="vertical-align: middle;  text-align: center; width:40%; "  rowspan="2">
-              <div class="rpgui-container framed-golden" id="game_log_textara" 
-                   style="margin: 0 auto;width:100%; height:100%; font-size:xx-small; text-align: left;border:0vw;overflow-y: scroll; position: relative;">
+            <td style="vertical-align: top;  text-align: center; width:40%;"  rowspan="2">
+              <!--<div class="rpgui-container framed-golden" id="game_log_textara" style="margin: 0 auto;width:100%; height:100%; font-size:xx-small; text-align: left;border:0vw;overflow-y: scroll; position: relative;">-->
+                <div id="game_log_textara_scroll" class="rpgui-container framed-golden" style="position: relative;overflow-y: scroll; text-align: left; height:100%;">
+                
+                  <p id="game_log_textara" >
+                  </p>
               </div>
             </td>
           </tr>
@@ -114,13 +117,12 @@
             </td>     
           </tr> 
           <tr style="height: 20%; width: 100%">
-            <td style="vertical-align: middle;text-align: center;" colspan="3">
-              <div class="rpgui-container framed" style="position: relative; height:20%">
+            <td style="vertical-align: middle;text-align: center;" colspan="2">
+              <div class="rpgui-container framed" style="position: relative; ">
                 <input type="text" id="game_chat_msg_text" name="game_chat_msg_text" onkeypress="return game_chat_msg_key(event, {{ request_user_id }})"  style="width: 50%;"> 
-                <button class="rpgui-button" type="submit" onclick="game_chat_msg_click({{ request_user_id }});" style="padding: 0;"> 
+                <button class="rpgui-button" type="submit" onclick="game_chat_msg_click({{ request_user_id }});" style="padding: 0; "> 
                   <p>Send</p>
                 </button>
-                <br />
                 <!-- Dev/Debug-Konsole
                 <button type="submit" onclick="set_game_to_finished();" style="background:#ff0000; width: 40%;padding: 0;">
                   <p>Dev/Debug: Spiel beenden</p>
@@ -139,6 +141,7 @@
       last_counter_value_update = new Date();
       var last_game_log_content = "";
       var log_textara = document.querySelector('#game_log_textara');
+      var log_textara_scroll = document.querySelector('#game_log_textara_scroll');
 
       var game_ws_loc = window.location;
       var game_ws_prot = "ws://";
@@ -190,7 +193,7 @@
       }));
   }
 
-    
+  
     
       game_socket.onmessage = function(e) {
           const data = JSON.parse(e.data);
@@ -206,7 +209,7 @@
               document.querySelector("#game_log_textara").innerHTML =
                   data.game_websocket_content;
                   last_game_log_content = data.game_websocket_content;
-                  log_textara.scrollTop = log_textara.scrollHeight;
+                  log_textara_scroll.scrollTop = log_textara.scrollHeight;
                 }
           }
       
