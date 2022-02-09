@@ -15,10 +15,10 @@
         <div class="rpgui-container framed-golden-2" style="position:relative;">
             {% if game_scenes_list %}
             <div align="center">
-                <div style="font-size: 8vw;">🗺️</div>
+                <!--<div style="font-size: 8vw;">🗺️</div>-->
 
             <form action="{% url 'lobby_jumper' %}" method="POST" id="interest-select">
-            <div class="form-group">
+            <div style="">
                     {% csrf_token %}
 
                     <select  size="5" id="scene_id" name="scene_id" class="rpgui-list">
@@ -30,9 +30,9 @@
                     <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">
                     
                     <button type="submit" class="rpgui-button"><p>Spiel auswählen und Lobby betreten</p></button>
+                    <!--<br />
                     <br />
-                    <br />
-                    <p><small><u>Zahlen in den Klammern:</u>(Spieler im Chat/belegte Plätze/benötigte Spieler)  </small></p>                    
+                    <p><small><u>Zahlen in den Klammern:</u>(Spieler im Chat/belegte Plätze/benötigte Spieler)  </small></p>-->
                     </div>
             </form>
             </div>
