@@ -13,18 +13,17 @@
     {% if chars %} 
         <div class="rgui-container framed-golden">               
                 {% for char in chars %}
-                        <div class="rpgui-container framed-golden" style="position:relative; width:400px; display:inline-block; margin-top: 20px;">
+                        <div class="rpgui-container framed-golden" style="position:relative; width:400px; display:inline-block; margin-top: 20px; ">
                                                    
-                        <p>
-                        <b><a name="{{char.id}}"></a>{{ char.name }}</b><br />
-                        Klasse:
-                        <div style=" font-size: 30px;font-size: 4vw;">
+                        
+                        <p><h2><a name="{{char.id}}"></a>{{ char.name }}</h2></p>
+                            <p style="display:inline; vertical-align:top;" >Klasse:
+                        <div style=" font-size: 30px;font-size: 4vw; display:inline;">
                         {% if char.Klasse == "W" %} 🤺 {% endif %}
                         {% if char.Klasse == "M" %} 🧙 {% endif %}
                         {% if char.Klasse == "P" %} 👼 {% endif %} 
-                        </div>
-                        <br />
-                        <br />
+                        </div></p>
+                        <p>
                         {% if char.xp_to_spend >= 1 %} 
                             Lebenspunkte: <a href="/xp-to-hp-{{char.id}}/" data-toggle="tooltip" data-placement="top" title="Lebenspunkte erhöhen (1 XP = {{ xp_hp }} HP) ">{{ char.hp }} ➕</a>  <br />
                             Angriffskraft: <a href="/xp-to-ap-{{char.id}}/"  data-toggle="tooltip" data-placement="top" title="Angriffskraft erhöhen (1 XP = {{ xp_ap }} AP)">{{ char.ap }} ➕</a> 
