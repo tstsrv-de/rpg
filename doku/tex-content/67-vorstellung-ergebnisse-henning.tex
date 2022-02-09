@@ -10,10 +10,16 @@ Die für dieses Projekt eingesetzte Infrastruktur setzt auf verschiedene Kompone
     \centering
     \label{fig:henning-dia-git-dev-server}
     \caption{Konzept: Entwicklung, Codeverteilung, Produktivnahme}
-    \includegraphics[width=0.8\textwidth]{henning-dia-git-dev-server}
+    \fbox{\includegraphics[width=0.8\textwidth]{henning-dia-git-dev-server}}
 \end{figure}
 
-Zentraler Punkt stellt das gemeinsame \textbf{Git-Repository auf Github}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/}.} dar. In diesem Repository liegen alle Elemente des Projektes: Code, Skripte und Dokumentation.
+
+Die Dienste selbst laufen auf einem für dieses Projekt bei der \textbf{HostEurope GmbH}\footnote{Siehe \url{https://www.hosteurope.de/Server/Virtual-Server/}.} angemieten, virtuellem Server. Das Produkt nennt sich \enquote{Virtual Server 10.0} und verfügt in der geringsten Austattung über 1 vCPU, 2 GB RAM sowie 40 GB SSD-Speicher. Auf dem Server läuft Debian 11. Der Server hat außerdem eine feste IP-Adresse. Einrichtungskosten gab es keine. Der Vertrag ist montalich kündbar. Der Mietpreis beträgt 5,99 EUR incl. MwSt. monatlich.
+
+Weiter wurde bei \textbf{INWX GmbH}\footnote{Siehe \url{https://www.inwx.de/de/de-domain}.} zu dem Server auch eine Domain gekauft sowie entsprechende Namensservereinträge hinterlegt, die den Betrieb eines Traefik-Proxys mit Subdomains zu Domain erlauben. Auch hier gab es keine Einrichtungskosten. Der Preis für die Domain beträgt pro 5,97 EUR incl. MwSt. pro Jahr. 
+
+
+Abseites der vorgenannten Hardware, stellt das gemeinsame \textbf{Git-Repository auf Github}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/}.} einen zentralen Punkt der Infrastruktur dar. In diesem Repository liegen alle Elemente des Projektes: Code, Skripte und Dokumentation.
 
 Die Funktionen des Repositorys sind folgende: \begin{itemize}
     \item Entwickler übermitteln neue Inhalte in das Repository (push).
@@ -22,7 +28,6 @@ Die Funktionen des Repositorys sind folgende: \begin{itemize}
     \item Alle Beteiligten und auch Dritte können über das Repository die Entwicklung nachvollziehen. 
 \end{itemize}
 
-Weiterer wesentlicher Punkt der Infrastruktur ist \textbf{Docker sowie die Container} für den Django-Server, die Datenbank und den Reverse-Proxy. Hier stehen für die lokale Entwicklung \enquote{docker-compose}-Skripte für Windows und auch unixartige Systeme wie Linux und MacOS zur Verfügung. Ebenso für den Betrieb des Servers. Details zur Einrichtung und Nutzung wurden in der \textbf{Readme Repositorys}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/README.md}.} hinterlegt. 
 
 Für den Update-Prozess des Servers und der Dienste wurde ein Cron-Skript erstellt, dass laufend prüft ob neue Commits im Repository vorhanden sind (siehe \textbf{Codelisting 1} unten, Zeile 5). Wenn ja, wird der Django-Webserver gestoppt (Zeile 7), die neuen Inhalte heruntergeladen, verarbeitet und der Django-Webserver im Anschluss wieder gestartet (Zeile 15). 
 
@@ -44,68 +49,81 @@ then
     docker-compose --project-directory /home/rjhadmin/tstsrv/ run rpg python rpg/manage.py loaddata db_sample_data.json 
     docker-compose --project-directory /home/rjhadmin/tstsrv/ start rpg 
 \end{lstlisting}
-\subsubsection{Code-Entwicklung}
 
 
-\textbf{Entwicklung, Samstag 13.11.2021}
 
-Allererste Tests und Anlage der Django-App sowie  hochladen des ersten Stands zu Github (Commits \url{https://git.io/JSq7n} und \url{https://git.io/JSYH4}). Eigene Notizen zum Ablauf dazu hier: 
+Ein weiterer wesentlicher Punkt der Software-Infrastruktur ist \textbf{Docker sowie die Container} für den Django-Server, die Datenbank und den Reverse-Proxy. Hier stehen für die lokale Entwicklung \enquote{docker-compose}-Skripte für Windows und auch unixartige Systeme wie Linux und MacOS zur Verfügung. Ebenso für den Betrieb des Servers. Details zur Einrichtung und Nutzung wurden in der \textbf{Readme Repositorys}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/README.md}.} hinterlegt. 
 
 
-\begin{lstlisting}
-1. copy files (docker-compose, dockerfile, example.env, requirements.txt) from repo local
-2. rename .env.example to .env and change settings 
-3. init django with: docker-compose run rpg django-admin startproject rpg .
-4. edit rpg/settings.py:
-    add:
-        start:
-            import os
-            import environ
-            env = environ.Env()
-            environ.Env.read_env()
-        after 'BASE_DIR':
-            TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
-            STATIC_DIR = os.path.join(BASE_DIR, 'static')
-        after STATIC_URL:
-            STATICFILES_DIRS = [
-                STATIC_DIR,
-            ]
-    change: 
-        SECRET_KEY to:
-            SECRET_KEY = env('ENV_SECRET_KEY')
-        ALLOWED_HOSTS to:
-            ALLOWED_HOSTS = [env('ENV_ALLOWED_HOSTS')]
-        in Templates, Dirs to:
-                'DIRS': [TEMPLATES_DIR],
-        DATABASES to:
-            DATABASES = {
-                'default': {
-                    'ENGINE': 'django.db.backends.postgresql',
-                    'NAME': env('ENV_POSTGRES_DB'),
-                    'USER': env('ENV_POSTGRES_USER'),
-                    'PASSWORD': env('ENV_POSTGRES_PASSWORD'),
-                }
-            }
+Der Traefik-Proxy wurde so eingerichtet, dass Anfragen auf den Ports HTTP 80 und HTTPS 443 angenommen werden. Anfragen an HTTP 80, werden automatisch umgeleitet an HTTPS 443. Die notwendigen Zertrifikate für die Subdomains werden vollautomatisch vom Traefik-Proxy über Letsencrypt angefordert und verwaltet. Als Grundlage für die Konfiguration diente eine Vorlage von Igor Bubelov\footnote{Siehe Github-Repository dazu \url{https://github.com/bubelov/traefik-letsencrypt-compose}.} die entsprechend um die Funktionen für den Django-Webserver und die Datenbank erweitert wurden.
 
-5. copy and rename .env.example also to rpg/.env (remeber to copy again @changes)
-6. update django to new db: 'docker-compose run python manage.py makemigrations' and 'docker-compose run python manage.py migrate'
-7. create superuser: docker-compose run rpg python manage.py createsuperuser
-8. create django app: docker-compose run rpg python manage.py startapp rjh_rpg 
+
+
+Die hier entwickelte Konfiguration erweis sich als so verlässlich, dass auch ein anderes Projektteam (\textbf{Deskshare\footnote{Siehe \url{https://github.com/tstsrv-de/deskshare} bzw. \url{https://deskshare.tstsrv.de/}.}}) aus unserem Studiengang, ihre Dienste auf unserer Hardware unter einer eigenen Subdomian betreiben konnte. Die Anbindung an den Traefik-Proxy war möglich, auch die SSL-Zertrifikate wurden vollautomatisch erstelt. Weiter konnte auch des Update-Konzepts mittels Cron-Dienst und Github-Repository übernommen werden, so dass das andere Projektteam eigenständig entwickeln konnte. 
+
+
+Die Ressourcen des Servers reichen hier für beide Projekte, auch in der Phase vor Abgabe der Arbeiten, aus: 
+
+\begin{figure}[H]
+    \centering
+    \label{fig:henning-server-auslastung}
+    \caption{Bildschirmfoto: Server Auslastung}
+    \fbox{\includegraphics[width=0.8\textwidth]{server-auslastung.png}}
+\end{figure}
+
+
+
+
+
+
+\subsubsection{Initialisierung der Django-Anwendung}
+
+Nach dem Aufbau der grundsätzlichen Funktionen des Servers (Update-Systemdienste und Cron-Skripte), wurde die Django-Anwendung initialisiert. Der Abaluf orientierte sich hier an den in den Vorlesungen gewonnenen Erkenntnissen und wurde im Anhang (siehe Anhang \ref{django-init}) stichpunktartig festgealten. 
+
+Im Anschluss daran wurden dann zuerst grundlegende Funktionen für die Benutzer-Regeistrierung am System hinzugefügt. Das  insbesondere unter Nutzung von zwei Anleitungen\footnote{Siehe  \url{https://www.nintyzeros.com/2020/06/login-register-user\%20page-in\%20django.html} und \url{https://docs.djangoproject.com/en/3.2/topics/auth/default/\#built-in-auth-forms}.}.
+
+
+Da das Projekt selbst die Entwicklung eines Spiels umfasste, wurde hier bewusst auf die Implementation von allen ansonsten mit einer Benutzerverwaltung im Zusammenhang stehenden Funktionen verzichtet. Es ist somit \textbf{nicht möglich}, seinen Benutzer z.B. zu löschen oder \textbf{ein vergessenes Passwort} zu erneuern. Unser Fokus lag hier, den Anforderungen entsprechend, auf der Entwicklung der Hauptanwendung. 
+
+Es wird hier in dieser Dokumentation auch nicht weiter auf die implementierte Benutzerverwaltung eingegangen, da es sich um weithin bekannte Standart-Features von Django handelt.
+
+Mit Abschluss der Einrichtung der Django-Anwendung, liegt ein mit den bekannten Funktionen (wie Datenbankmodelle, Benutzerverwaltung, DB-Migrationen, ...) nutzbarer Django-Webserver vor. 
+Für die Entwickler und die Entwicklung selbst, ist die direkte Interaktion mit dem Django-Webserver selbst, nicht mehr notwendig. Die entwickelten Skripe, starten den Webserver mit allen notwendigen Paramentern selsbtständig und führen vorher auch notwendige Schritte wie \enquote{makemigrations, migrate oder loaddata} selsbtständig aus. Beispielhaft hier ein Auszug aus dem Skript für den Start der lokalen Entwicklungsumgebung unter unixartigen Betriebssystemen\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/local-dev-start.sh}.}: 
+
+\begin{lstlisting}[language=bash]
+#!/bin/bash
+docker-compose -f local-dev-docker-compose.yml up -d
+docker-compose -f local-dev-docker-compose.yml exec rpg python rpg/manage.py makemigrations
+docker-compose -f local-dev-docker-compose.yml exec rpg python rpg/manage.py migrate
+docker-compose -f local-dev-docker-compose.yml exec rpg python rpg/manage.py loaddata db_sample_data.json
+docker-compose -f local-dev-docker-compose.yml stop
+docker-compose -f local-dev-docker-compose.yml up 
 \end{lstlisting}
 
-Der Webserver wurde 
+
+\subsubsection{Entwicklung von Grundfunktionen des Spiels}
+
+In der Zeit vom 25.11.2021 bis zum 09.01.2022 wurden von Henning Beier im weiteren das Backend, das Datenbankmodell und die wesentlichen Funktionen des Spiels, entsprechend der in den Projektbesprechungen festgehaltenen Anforderungen, entwickelt.
 
 
+\begin{figure}[H]
+    \centering
+    \label{fig:henning-konzept-datenbankmodell}
+    \caption{Konzeptionierung: Datenbankmodell}
+    \subfloat[Entwurfszeichnung vom 23.11.2021]{\fbox{\includegraphics[width=0.5\linewidth]{2021-11-23-erstes-db-konzept}}}
+    \subfloat[Weiterentwickelter Entwurf (05.12.2021)]{\fbox{\includegraphics[width=0.5\linewidth]{2021-12-05-Projketbesprechung-Miro-c}}}
+\end{figure}
+
+
+
+\subsubsection{Code-Entwicklung}
 \textbf{Entwicklung, Mittwoch 24.11.2021}
 
 Einbau von Grundlagen: 
 \begin{itemize}
     \item Update der Django-Basis Installtion bzw. des Projektes (Commit \url{https://git.io/JSqbt}). 
-    \item Einbau der Benutzer-Anmeldung im Django-System insbesondere unter Nutzung von zwei Anleitungen   \footnote{Siehe  \url{https://www.nintyzeros.com/2020/06/login-register-user\%20page-in\%20django.html} und \url{https://docs.djangoproject.com/en/3.2/topics/auth/default/\#built-in-auth-forms}.}.
     \item Auto-Download und restart der Docker-Container bei neuen Commits im Repository auf Github per Cron-Jobjob-Script (siehe \url{https://git.io/JStjW}).
 \end{itemize}
-
-
 
 
 \textbf{Entwicklung, Donnerstag 25.11.2021}
