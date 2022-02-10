@@ -18,7 +18,7 @@ from rjh_rpg.models import UserCharInGames
 
 from rjh_rpg.rpg_tools import rpg_user_has_active_game
 from rjh_rpg.rpg_tools import rpg_user_is_player_of_this_game_id
-from rjh_rpg.rpg_tools import rpg_get_config
+from rjh_rpg.rpg_tools import rpg_get_config, rpg_user_char_id_to_name
 
 from math import ceil
 
@@ -101,91 +101,73 @@ def user_profile(request):
 
 # game views and logic:
 
-def chars(request, user_char_id=None):
-    if request.user.is_authenticated:
-        if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
-            return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
-
-        current_user_obj = User.objects.get(id=request.user.id)
-        GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
-        
-
-        try:
-            GameState.objects.get(char_user=current_user_obj).delete()
-        except:
-            pass
-
-        char_list = UserChar.objects.filter(usernickname=request.user).order_by('name')
-        
-        current_user = User.objects.get(id=request.user.id)
-        active_char = GameState.objects.filter(char_user=current_user)
-        xp_to_ap_rate = rpg_get_config("xp_ap_conversion_factor")
-        xp_to_hp_rate = rpg_get_config("xp_hp_conversion_factor")
-
-        
-        return render(request, 'chars.html', {'chars': char_list, 'active_char' : active_char, 'xp_ap' : xp_to_ap_rate, 'xp_hp' : xp_to_hp_rate })
-
-    else:
-        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
- 
-    
-def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und zusammenpacken
+def BOOchars(request, user_char_id=None):
     if not request.user.is_authenticated:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
     if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
         return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
-
-    # set char to worldmap after selection in /chars/
-    if request.method == 'POST':
-        # set UserChar to worldmap 
-        char_to_gamestate = GameState()
-
-        char_id = request.POST.get('char')
-
-        char_from_db = UserChar.objects.get(id=char_id)
-        char_to_gamestate.char = char_from_db
-
-        current_user = User.objects.get(id=request.user.id)
-        char_to_gamestate.char_user = current_user
-
-        # save GameState item on post data, also catch reload error with post data
-        try:
-            char_to_gamestate.save()
-        except:
-            return redirect('/worldmap/')
-        
-    # get user obj from logged in user
+    
     current_user_obj = User.objects.get(id=request.user.id)
+    GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
+    
 
-    # delete lobby slots
+    try:
+        GameState.objects.get(char_user=current_user_obj).delete()
+    except:
+        pass
+
+    char_list = UserChar.objects.filter(usernickname=request.user).order_by('name')
+    
+    current_user = User.objects.get(id=request.user.id)
+    active_char = GameState.objects.filter(char_user=current_user)
+    xp_to_ap_rate = rpg_get_config("xp_ap_conversion_factor")
+    xp_to_hp_rate = rpg_get_config("xp_hp_conversion_factor")
+
+    
+    return render(request, 'chars.html', {'chars': char_list, 'active_char' : active_char, 'xp_ap' : xp_to_ap_rate, 'xp_hp' : xp_to_hp_rate })
+
+
+def worldmap(request, char_id):
+    if not request.user.is_authenticated:
+        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
+
+    if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
+        return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
+    
+    char_to_gamestate = GameState()
+
+    char_from_db = UserChar.objects.get(id=char_id)
+    char_to_gamestate.char = char_from_db
+    char_to_gamestate.place = 0
+
+    current_user = User.objects.get(id=request.user.id)
+    char_to_gamestate.char_user = current_user
+
+   
+    
+    game_state_char_id = GameState.objects.filter(char = char_from_db).delete()
+
+    
+    obj, created = GameState.objects.filter(char = char_from_db).update_or_create(char = char_from_db, place = 0)
+    #.update_or_create(char = char_from_db, place = 0)
+    print ("obj:" + str(obj))
+    print ("created:" + str(created))
+    
+    current_user_obj = User.objects.get(id=request.user.id)
     user_char_list = UserChar.objects.filter(usernickname=current_user_obj)
     for user_char in user_char_list:
         try:
-            LobbySlots.objects.get(user_char_id=user_char).delete()
+            LobbySlots.objects.get(user_char_id=char_id).delete()
         except:
             pass            
 
     # get gamestate obj based on the user object
-    GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
+    GameState_char_obj = GameState.objects.filter(char=char_id)
     
-    # try if char is selected, if not redirect to char selection
-    try:
-        char_id = GameState_char_obj[0].id
-    except:
-        #return render(request,'msg_redirect.html',{'msg':'Du musst einen Char auswählen!','target':'/chars/'})
-        # render char selection 
-        char_list = UserChar.objects.filter(usernickname=request.user).order_by('name')
-        return render(request, 'worldmap_char_selection.html', {'chars': char_list })
-
-
-
-    char_id_update = str(GameState_char_obj[0].char.id)
-    update_test = GameState.objects.filter(char=char_id_update).update(place=0)
-
     # prepare nessesary lists for worldmap        
     active_char_list = GameState.objects.filter(place=0).order_by('char') # place 0 = worldmap
-    game_scenes_list = GameScenes.objects.order_by('name') # place 0 = worldmap
+    game_scenes_list = GameScenes.objects.order_by('name') 
     
     complete_game_scenes_list = []
 
@@ -212,8 +194,7 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
             }
         )
         
-    char_name = str(GameState_char_obj[0].char)
-    char_user = str(GameState_char_obj[0].char_user)
+    char_name = rpg_user_char_id_to_name(char_id)
 
     user_char_char_id = UserChar.objects.filter(name=char_name)
     
@@ -223,42 +204,16 @@ def worldmap(request): # (TODO!) dringend zusammenkopierten kram aufräumen und 
         {
             'char_id': char_id_form,
             'char_name' : char_name,
-            'char_user' : char_user,
             'active_char_list' : active_char_list,
             'game_scenes_list': complete_game_scenes_list,
 
         }
     )
-
-
-
-def scene(request):
-    if not request.user.is_authenticated:
-        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
-    if not request.method == 'POST':
-        return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/chars/'})
-
-    return render(request,'msg_redirect.html',{'msg':'(TODO!) SZENE ERREICHT! Gamelogik...','target':'/chars/'})
-    # add logic for games...
-    pass
-
+  
     
-def lobby_jumper(request):
-    if not request.user.is_authenticated:
-        return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
-    
-    if request.method == 'POST':
-        scene_id = request.POST.get('scene_id')
-
-        if scene_id is None: 
-            return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/worldmap/'})    
-        else:
-            return redirect('/lobby-'+scene_id+'/')
-    else:
-        return render(request,'msg_redirect.html',{'msg':'Du musst eine Szene auswählen!','target':'/worldmap/'})    
 
 
-def lobby(request, scene_id):
+def lobby(request, scene_id, char_id):
     if not request.user.is_authenticated:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
 
@@ -272,10 +227,10 @@ def lobby(request, scene_id):
     GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
     
     # catch wierd timeout/reload error
-    try:
-        char_id = str(GameState_char_obj[0].char.id)
-    except:
-        return render(request,'msg_redirect.html',{'msg':'Du musst einen Charakter auswählen!','target':'/chars/'})
+    #try:
+    #    char_id = str(GameState_char_obj[0].char.id)
+    #except:
+    #    return render(request,'msg_redirect.html',{'msg':'aaaaDu musst einen Charakter auswählen!','target':'/chars/'})
 
     scene_name = GameScenes.objects.get(id=scene_id).name
     intro_image_name = GameScenes.objects.get(id=scene_id).intro_image 
@@ -341,12 +296,9 @@ def game(request, game_id):
         )
     sorted_game_user_char_list = []  
     for user_char in game_user_char_list:
-        print("UserChar: "+str(user_char['user_char_id']))
         if current_user_id == user_char['user_char_id']:
-            print("Gefunden!")
             sorted_game_user_char_list.insert(0,user_char)
         else:
-            print("Not Found!")
             sorted_game_user_char_list.append(user_char)
 
     game_user_char_list = sorted_game_user_char_list
@@ -402,7 +354,7 @@ def hpap(request, hpap, user_char_id):
     return HttpResponseRedirect(return_string)
     #return redirect('chars')
 
-def create_char(request):
+def chars(request):
     if not request.user.is_authenticated:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
@@ -449,6 +401,31 @@ def create_char(request):
             tmp_form.save()
             return render(request,'msg_redirect.html',{'msg':'Der Char wurde erfolgreich angelegt!','target':'/chars/'})
         else:
-            pass
+            return render(request,'msg_redirect.html',{'msg':'Fehler bei der Charaktererstellung. Versuche es bitte noch mal!','target':'/chars/'})
+
+
+    current_user_obj = User.objects.get(id=request.user.id)
+    GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)
     
-    return render(request, 'create_char.html', {'chars': char_list, 'form': form, 'active_char' : active_char, 'xp_ap' : xp_to_ap_rate, 'xp_hp' : xp_to_hp_rate })
+
+    try:
+        GameState.objects.get(char_user=current_user_obj).delete()
+    except:
+        pass
+
+    char_list = UserChar.objects.filter(usernickname=request.user).order_by('name')
+    
+    current_user = User.objects.get(id=request.user.id)
+    active_char = GameState.objects.filter(char_user=current_user)
+    xp_to_ap_rate = rpg_get_config("xp_ap_conversion_factor")
+    xp_to_hp_rate = rpg_get_config("xp_hp_conversion_factor")
+
+    
+    
+    return render(request, 'chars.html', {
+        'chars': char_list, 
+        'form': form, 
+        'active_char' : active_char, 
+        'xp_ap' : xp_to_ap_rate, 
+        'xp_hp' : xp_to_hp_rate 
+        })

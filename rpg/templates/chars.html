@@ -9,13 +9,19 @@
 
 
 <div class="container text-center">
-    <br />
+
+                
+        <div class="rpgui-container framed-golden-2" style="vertical-align:top;position:relative; width:400px; display:inline-block; margin-top: 20px;">
+            <h1>Neuen Charakter anlegen:</h1>
+            <form method="POST">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <button type="submit" class="rpgui-button"><p>Charakter anlegen</p></button>
+            </form>
+        </div>    
     {% if chars %} 
-        <div class="rgui-container framed-golden">               
                 {% for char in chars %}
-                        <div class="rpgui-container framed-golden" style="position:relative; width:400px; display:inline-block; margin-top: 20px; ">
-                                                   
-                        
+                        <div class="rpgui-container framed-golden" style="vertical-align:top;position:relative; width:400px; display:inline-block; margin-top: 20px; ">
                         <p><h2><a name="{{char.id}}"></a>{{ char.name }}</h2></p>
                             <p style="display:inline; vertical-align:top;" >Klasse:
                         <div style=" font-size: 30px;font-size: 4vw; display:inline;">
@@ -35,16 +41,20 @@
                         <br />
                         <br />
                         Verfügbare XP: {{ char.xp_to_spend }} <br />
+                        <br />
+                        <a href="../worldmap-{{char.id}}/">▶️ Spiel betreten...</a>
                         </p>
                     </div>
                 {% endfor %}                
-        </div>
+        
     {% else %}
-        <h2>Du hast noch keine Charaktere...</h2>
-        Lege <a href="../create_char/">hier</a> einen neuen an 👍
+    <div class="rpgui-container framed-golden-2" style="vertical-align:top;position:relative; width:400px; display:inline-block; margin-top: 20px;">
+        <h1>Du hast noch keine Charaktere...</h1>
+        Lege jetzt einen an 👍
+    </div>
     {% endif %}
-
 </div>
+
 
 
 {% endblock %}

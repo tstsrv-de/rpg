@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %} 
+{% load static %}
 {% if error %}
 {{ error }}
 
@@ -8,66 +9,58 @@
 {% endif %}
 {% if user.is_authenticated %}
 
+
+
 <table>
+    <tr>
+        <td colspan="2" style="text-align:center;">
+            <div class="rpgui-container framed-lobbyimage" style="
+            position:relative; 
+            background: url({% static 'img/worldmap - draft_1920x1080.jpg'%}) no-repeat center;  
+            background-size: 100%; 
+            height:40vh;">
+            </div>
+        </td>
+    </tr>
     <tr>
         <td style="vertical-align: top; ">
 
         <div class="rpgui-container framed-golden-2" style="position:relative;">
             {% if game_scenes_list %}
-            <div align="center">
-                <!--<div style="font-size: 8vw;">🗺️</div>-->
-
-            <form action="{% url 'lobby_jumper' %}" method="POST" id="interest-select">
-            <div style="">
-                    {% csrf_token %}
-
-                    <select  size="5" id="scene_id" name="scene_id" class="rpgui-list">
-                    {% for scene in game_scenes_list %} 
-                    <!--<option value={{scene.id}} title="tres">{{scene.name}} ({{ scene.players_in_chat_counter }} von {{ scene.req_players }} Spieler)</option>-->
-                    <option value={{scene.id}}>{{scene.name}}</option>
-                    {% endfor %}
-                    </select> 
-                    <input type="hidden" id="char_id" name="char_id" value="{{ char_id }}">
-                    
-                    <button type="submit" class="rpgui-button"><p>Spiel auswählen und Lobby betreten</p></button>
-                    <!--<br />
-                    <br />
-                    <p><small><u>Zahlen in den Klammern:</u>(Spieler im Chat/belegte Plätze/benötigte Spieler)  </small></p>-->
-                    </div>
-            </form>
-            </div>
-            <br />
-
-
-                    {% else %}
-                    <p>Es gibt keine Szenen!</p>
-                    {% endif %}
+                <p>
+                {% for scene in game_scenes_list %} 
+                    <a href="../worldmap-{{ char_id }}/lobby-{{ scene.id }}/">{{ scene.name }}</a>  ({{ scene.players_in_chat_counter }} von {{ scene.req_players }} Spieler) <br />
+                {% endfor %}
+                </p>
+            {% else %}
+               <p>Es gibt keine Szenen!</p>
+            {% endif %}
         </div>
 
     </td>
     <td style="vertical-align: top; padding-left:20px;">
 
-<div class="rpgui-container framed-golden" style="position:relative;">
-    <table class="table table-bordered table-striped">
-    <tr>
-    <td  style="vertical-align: top; ">
-    <h1>Aktuell im Chat</h1>
-    <hr class="golden">
-    <p id="chat-userlist"></p>
-    <hr class="golden">
+            <div class="rpgui-container framed-golden" style="position:relative;">
+                <table class="table table-bordered table-striped">
+                <tr>
+                <td  style="vertical-align: top; ">
+                <h1>Aktuell im Chat</h1>
+                <hr class="golden">
+                <p id="chat-userlist"></p>
+                <hr class="golden">
 
-    <textarea id="chat-text" rows="6" disabled></textarea>
-    <br />
-    <br />
-    <input id="input" type="text" onkeypress="return send_msg(event)" > 
-    <br />
-    <br />
-    <button type="submit" id="submit" class="rpgui-button"><p>Send</p></button>
+                <textarea id="chat-text" rows="6" disabled></textarea>
+                <br />
+                <br />
+                <input id="input" type="text" onkeypress="return send_msg(event)" > 
+                <br />
+                <br />
+                <button type="submit" id="submit" class="rpgui-button"><p>Send</p></button>
 
-    </td>
-    </tr>
-    </table>
-</div>
+                </td>
+                </tr>
+                </table>
+            </div>
 
 
 

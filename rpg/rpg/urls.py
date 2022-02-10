@@ -27,13 +27,13 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout, name='logout'),
     path('chars/', views.chars, name='chars'),
-    path('create_char/', views.create_char, name='create_char'),
+    # path('create_char/', views.create_char, name='create_char'),
     # path('user_profile/', views.user_profile, name='user_profile'),
 
-    path('worldmap/', views.worldmap, name='worldmap'),
+    
+    path('worldmap-<int:char_id>/', views.worldmap, name='worldmap'),
 
-    path('lobby_jumper/', views.lobby_jumper, name='lobby_jumper'),
-    path('lobby-<int:scene_id>/', views.lobby, name='lobby'),
+    path('worldmap-<int:char_id>/lobby-<int:scene_id>/', views.lobby, name='lobby'),
     
     path('game-<int:game_id>/', views.game, name='game'),
     

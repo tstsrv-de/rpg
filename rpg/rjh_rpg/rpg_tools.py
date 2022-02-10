@@ -51,8 +51,8 @@ def rpg_get_game_ids_to_user_char(user_char):
 
     return game_ids
 
-def rpg_user_char_id_to_name(user_char_name):
-    return UserChar.objects.get(id=user_char_name).name
+def rpg_user_char_id_to_name(user_char_id):
+    return UserChar.objects.get(id=user_char_id).name
 
 def rpg_user_char_name_to_id(user_char_name):
     return UserChar.objects.get(name=user_char_name).id
