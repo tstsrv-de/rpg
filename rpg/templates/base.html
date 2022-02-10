@@ -51,15 +51,15 @@
             <td >
               <div class="inner rpgui-container framed-golden" style="position:relative;">    
                   <h1 class="game_title" style="display:inline;">MONSTER SLAYER</h1>
-                  <h2 style="display: inline;"> [ <a href="../home/">home</a> ] </h2>
+                  <h2 style="display: inline;"> [ <a href="{% url 'home' %}">home</a> ] </h2>
                 {% if user.is_authenticated %}
-                  <h2 style="display: inline">  [ <a href="../create_char/">create char</a> ] </h2>
-                  <h2 style="display: inline">  [ <a href="../chars/">chars</a> ] </h2>
-                  <h2 style="display: inline">  [  <a href="{% url 'worldmap' %}">worldmap</a> ] </h2>           
-                  <h2 style="display: inline">  [ <a href="../logout/">logout</a> ] </h2>
+                  
+                  <h2 style="display: inline">  [ <a href="{% url 'chars' %}">game</a> ] </h2>
+                       
+                  <h2 style="display: inline">  [ <a href="{% url 'logout' %}">logout</a> ] </h2>
                 {% else %}
-                  <h2 style="display: inline"> [ <a href="../login/">login</a> ] </h2>
-                  <h2 style="display: inline"> [ <a href="../signup/">signup</a> ] </h2>
+                  <h2 style="display: inline"> [ <a href="{% url 'login' %}">login</a> ] </h2>
+                  <h2 style="display: inline"> [ <a href="{% url 'signup' %}">signup</a> ] </h2>
                 {% endif %}     
               </div>
             </td>

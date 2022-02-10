@@ -7,13 +7,13 @@
 <br />
 {% endif %}
 
+            
+        <div class="rpgui-container framed-golden-2" style="position:relative;">
             <h1>Neuen Charakter anlegen:</h1>
-            <div class="rpgui-container framed-golden-2" style="position:relative;">
             <form method="POST">
                 {{ form.as_p }}
                 {% csrf_token %}
                 <button type="submit" class="rpgui-button"><p>Charakter anlegen</p></button>
-
             </form>
         </div>
 
