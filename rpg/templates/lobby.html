@@ -15,7 +15,7 @@
                 <p style="font-size: x-large;">{{scene_name}}</p>
                 <button type="submit" class="rpgui-button-collapsible" style="margin: auto;">Level-Beschreibung</button>
                 <div class="collapsible_content" style="overflow-y: scroll;margin: auto; text-align: left;">
-                    <p>{{intro_text}}</p>
+                    <p id="game-text"></p>
                 </div>
             </div>
         </td>
@@ -110,6 +110,7 @@ function free_the_slot(slot_id) {
 <!-- End LobbyWebsocket Test -->
     {{ char_name|json_script:"user_username" }}
     {{ scene_id|json_script:"room-name" }}
+    {{ intro_text|json_script:"intro_text" }}
     <script id="room-name" type="application/json">"worldmap"</script>
 
     <script>
@@ -137,6 +138,12 @@ function send_msg(e) {
             messageInputDom.value = '';
     }
 }
+
+var game_text = document.getElementById('game-text');
+const intro_text = JSON.parse(document.getElementById('intro_text').textContent);
+document.querySelector('#game-text').innerHTML = intro_text
+
+
 
 var textarea = document.getElementById('chat-text');
 setInterval(function(){
