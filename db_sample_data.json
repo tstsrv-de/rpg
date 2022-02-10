@@ -12,7 +12,7 @@
       "enemy_image": "warg_3840x2160.mp4",
       "enemy_dead_image": "warg_background_3840x2160.jpg",
       "intro_image": "woods_edge_3840x2160.jpg",
-      "intro_text":"rico"
+      "intro_text":"An diesem einst vielleicht nicht so trostlosem Ort berichtet der Dorfvorsteher, dass die umliegenden Bauern sich schon seit längerem beklagen, dass ihr Vieh den Angriffen von wilden Tieren ausgesetzt ist. Aber in jüngster Zeit scheinen die Angriffe häufiger zu werden und ganze Herden werden dahingemetzelt. Jüngst ist sogar eine Hochschwangere den Angriffen zum Opfer gefallen. Außerdem erzählen die Einheimischen von riesigen Wölfen mit glühenden Augen und keiner traut sich mehr vor die Tür. Die Miliz hat fast noch mehr Angst als die Bauern und scheint hoffnungslos überfordert, diese Feiglinge. Deshalb sind alle sehr erfreut, dass du dich der Aufgabe annehmen möchtet. Der Dank der Menschen scheint dir gewiss! <br />\r\n <br />\r\nAls du den letzten Tatort in Augenschein nimmst, wird dir schnell klar, dass die Bauern nicht ganz Recht haben, denn du findest, zwischen all dem Blut, riesige Abdrücke von Wolfstatzen, die in den Wald führen. Aber nur von einem Wolf, dafür ist dieser mindestens so groß, dass man darauf reiten könnte. Du tippst auf einen Warg, der hier seine Jagdgründe hat.  Du richtest dich auf und folgst den Spuren in den Wald hinein. Als du dich tiefer im Wald umschaust, nimmst du eine Bewegung wahr und da siehst du in, groß wie ein Ochse, zumindest wirst du es so in deinen Geschichten erzählen und er taxiert dich mit seinen Blicken, dann geht er unmittelbar zum Angriff über."
     }
   },
   {
@@ -39,8 +39,8 @@
       "req_players": 1,
       "welcome_text": "Ein Informatiker findet im Wald einen sprechenden Frosch und steckt ihn in die Tasche. Nach einer Weile sagt der Frosch: „Hallo, ich bin eine verzauberte Prinzessin. Wenn du mich küsst, erfülle ich dir einen Wunsch.“ <br />\r\n <br />\r\nDer Informatiker nimmt den Frosch aus der Tasche, lächelt und steckt ihn wieder zurück. Nach einer Weile meldet sich der Frosch nochmal: „Hallo, hast du mich nicht richtig verstanden?“ <br />\r\n <br />\r\nDer Informatiker nimmt den Frosch heraus, lächelt wieder und sagt: „Also, ich bin Informatiker… für eine Freundin habe ich keine Zeit, aber ein sprechender Frosch ist cool!“ <br />\r\n <br />",
       "enemy_name": "🐲 Roter Drache Ascheschwinge 🐲",
-      "enemy_hp": 180,
-      "enemy_ap": 55,
+      "enemy_hp": 500,
+      "enemy_ap": 60,
       "enemy_image": "dragon_3840x2160.mp4",
       "enemy_dead_image": "dragon_background_3840x2160.jpg",
       "intro_image": "volcano_3840x2160.jpg",
