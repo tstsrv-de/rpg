@@ -9,7 +9,7 @@
 {% endif %}
 {% if user.is_authenticated %}
 
-
+<small class="rpgui-container" style="left:15px; top:10px; position:absolute;">◀️ <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></small>
 
 <table>
     <tr>
@@ -26,15 +26,12 @@
         <td style="vertical-align: top; ">
 
         <div class="rpgui-container framed-golden-2" style="position:relative;">
-            {% if game_scenes_list %}
-                <p>
-                {% for scene in game_scenes_list %} 
-                    <a href="../worldmap-{{ char_id }}/lobby-{{ scene.id }}/">{{ scene.name }}</a>  ({{ scene.players_in_chat_counter }} von {{ scene.req_players }} Spieler) <br />
-                {% endfor %}
-                </p>
-            {% else %}
-               <p>Es gibt keine Szenen!</p>
-            {% endif %}
+            <p>
+                <h2>Level-Lobby betreten...</h2>
+            {% for scene in game_scenes_list %} 
+                <a href="../worldmap-{{ char_id }}/lobby-{{ scene.id }}/" title="Das ist ein {{ scene.req_players }}-Spieler-Level // Aktuel sind {{ scene.players_in_chat_counter }} Spieler in dieser Lobby">{{ scene.name }}</a> <br />
+            {% endfor %}
+            </p>
         </div>
 
     </td>
@@ -130,7 +127,7 @@ setInterval(function(){
                 {
                     document.querySelector('#chat-userlist').innerHTML = (data.ul)                    
                 }
-                else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 3) { window.location.reload(true); } }
+                else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 2) {  window.location.href = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + window.location.pathname;} }
             } else {
                 if (typeof(data.username) != "undefined")
                 {
@@ -138,10 +135,10 @@ setInterval(function(){
                     {
                         document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
                     }
-                    else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 3) { window.location.reload(true); } }
+                    else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 2) {  window.location.href = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + window.location.pathname;} }
                     
                 }
-                else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 3) { window.location.reload(true); } }
+                else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 2) {  window.location.href = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + window.location.pathname;} }
             };
         }
     </script>

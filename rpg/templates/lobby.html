@@ -7,6 +7,8 @@
 {% if user.is_authenticated %}
 
 
+<small class="rpgui-container" style="left:15px; top:10px; position:absolute;">◀️ <a href="../">Zurück zur Weltkarte...</a></small>
+
 
 <table>
     <tr>
@@ -48,6 +50,7 @@
         </tr>
         </table>
     </div>
+
     </td>
 </tr>
 <tr>
@@ -178,7 +181,7 @@ setInterval(function(){
                 {
                     document.querySelector('#chat-userlist').innerHTML = (data.ul)                    
                 }
-                else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 5) { window.location.reload(true); } }
+                else { undundefined_error_counter = undundefined_error_counter + 1; }
             } else {
                 if (typeof(data.username) != "undefined")
                 {
@@ -186,11 +189,13 @@ setInterval(function(){
                     {
                         document.querySelector('#chat-text').value += (data.username + ': ' + data.message + '\n')
                     }
-                    else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 5) { window.location.reload(true); } }
+                    else { undundefined_error_counter = undundefined_error_counter + 1; }
                     
                 }
-                else { undundefined_error_counter = undundefined_error_counter + 1; if (undundefined_error_counter > 5) { window.location.reload(true); } }
+                else { undundefined_error_counter = undundefined_error_counter + 1; }
             };
+
+            if (undundefined_error_counter > 2) { window.alert("Durch den Vor- bzw. Zurückbutton deines Browsers kam es zu einem Fehler.\nWir leiten dich zurück zur Charakterauswahl - Ab da geht wieder alles ;-) "); window.location.href = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/chars/";} 
 
         }
     </script>
