@@ -189,7 +189,7 @@
     
       game_socket.onmessage = function(e) {
           const data = JSON.parse(e.data);
-          console.log(data)
+          //console.log(data)
       
           if (data.game_msg_type == 'game_content_update') {
               document.querySelector("#game_websocket_content_rx").innerHTML =
@@ -228,7 +228,7 @@
       var game_timer_helper = 0;
       
       function local_game_loop() {
-          console.log(JSON.stringify(game_timer_helper))
+          //console.log(JSON.stringify(game_timer_helper))
 
           // on 0 
           if (game_timer_helper == 0) {

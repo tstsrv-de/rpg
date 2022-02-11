@@ -86,7 +86,7 @@ setInterval(function(){ lobby_socket.send(JSON.stringify({'lobby_msg': 'heartbea
 
 lobby_socket.onmessage = function (e) {
     const data = JSON.parse(e.data);
-    console.log(data)
+    //console.log(data)
     document.querySelector('#lobby_test_element').innerHTML = (data.lobby_msg)
 }
 
@@ -175,7 +175,7 @@ setInterval(function(){
         var undundefined_error_counter = 0;
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-            console.log(data);
+            //console.log(data);
             if (data.ul) {
                 if (typeof(data.ul) != "undefined")
                 {

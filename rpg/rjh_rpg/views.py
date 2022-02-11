@@ -132,6 +132,15 @@ def worldmap(request, char_id):
     if not request.user.is_authenticated:
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})
 
+    is_users_char = False
+    curr_users_user_char_list = UserChar.objects.filter(usernickname=User.objects.get(id=request.user.id))
+    for user_char in curr_users_user_char_list:
+        if user_char.id == char_id:
+            is_users_char = True
+            
+    if not is_users_char:
+        return render(request,'msg_redirect.html',{'msg':'Dieser Charakter gehört dir nicht oder existiert nicht!','target':'/chars/'})
+
     if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
         return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
     
@@ -222,6 +231,15 @@ def lobby(request, scene_id, char_id):
     
     if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
         return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
+
+    is_users_char = False
+    curr_users_user_char_list = UserChar.objects.filter(usernickname=User.objects.get(id=request.user.id))
+    for user_char in curr_users_user_char_list:
+        if user_char.id == char_id:
+            is_users_char = True
+            
+    if not is_users_char:
+        return render(request,'msg_redirect.html',{'msg':'Dieser Charakter gehört dir nicht oder existiert nicht!','target':'/chars/'})
 
     current_user_obj = User.objects.get(id=request.user.id)
     GameState_char_obj = GameState.objects.filter(char_user=current_user_obj)

@@ -10,7 +10,7 @@
 {% if user.is_authenticated %}
 
 <small class="rpgui-container" style="left:15px; top:10px; position:absolute;">◀️ <a href="{% url 'chars' %}">Zurück zur Charakterauswahl...</a></small>
-
+<br />
 <table>
     <tr>
         <td colspan="2" style="text-align:center;">
@@ -121,7 +121,7 @@ setInterval(function(){
         var undundefined_error_counter = 0;
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-            console.log(data);
+            //console.log(data);
             if (data.ul) {
                 if (typeof(data.ul) != "undefined")
                 {
