@@ -49,8 +49,10 @@
 
 ### Gemeinsam
 
-- Kommentare und ToDos im Code rausnehmen
+- Kommentare und ToDos im Code rausnehmen >> Sonntag, 14 Uhr
 
-- Texte von Rico mit Formatierungen (fett, krusiv, unterstreichungen... ) auflockern (Wall-of-Text)
+- Durchlesen, korrigieren >> Sonntag, 14 Uhr
 
-- Anhang: Bildbeschreibungen anpassen und ggfls. aussortieren
+- Texte von Rico mit Formatierungen (fett, krusiv, unterstreichungen... ) auflockern (Wall-of-Text) >> Sonntag, 14 Uhr
+
+- Anhang: Bildbeschreibungen anpassen und ggfls. aussortieren >> Sonntag, 14 Uhr
