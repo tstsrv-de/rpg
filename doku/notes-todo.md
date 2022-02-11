@@ -39,7 +39,7 @@
 
 - Reflektionen schreiben << Samstag
 
-- Henning Scan von deiner Unterschrift und die Matrikelnummer schicken (haenno@web.de) << jo, wird gemacht
+- Henning Scan von deiner Unterschrift und die Matrikelnummer schicken (haenno@web.de) << done
 
 - Traingslevel Texte und Werte anpassen << done, nur noch nicht committet
 
