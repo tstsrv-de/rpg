@@ -39,11 +39,11 @@
 
 - Reflektionen schreiben << Samstag
 
-- Henning Scan von deiner Unterschrift und die Matrikelnummer schicken (haenno@web.de) << jo, wird gemacht
+- Henning Scan von deiner Unterschrift und die Matrikelnummer schicken (haenno@web.de) << done
 
-- Traingslevel Texte und Werte anpassen << Freitag Abend
+- Traingslevel Texte und Werte anpassen << done, nur noch nicht committet
 
-- Texte für Home-Seite (in Zustand an- und abgemeldet) << Freitag Abend
+- Texte für Home-Seite (in Zustand an- und abgemeldet) << done, nur noch nicht committet
 
 - Welcome-Texte müssen für alle Level noch geupdatet werden. << done
 
