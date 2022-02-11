@@ -1,6 +1,24 @@
 [
   {
     "model": "rjh_rpg.gamescenes",
+    "pk": 6,
+    "fields": {
+      "name": "🧸 Trainings-Dojo",
+      "req_players": 4,
+      "welcome_text": "Hier wird niemand sterben...",
+      "enemy_name": "🎯 Trainigsziel 🎯",
+      "enemy_hp": 1000,
+      "enemy_ap": 1,
+      "enemy_image": "warg_3840x2160.mp4",
+      "enemy_dead_image": "warg_background_3840x2160.jpg",
+      "intro_image": "woods_edge_3840x2160.jpg",
+      "intro_text":"Es tut nicht weh. Keine Angst.",
+      "win_text": "Wow! Das war nicht überraschend. ",
+      "gameover_text": "Error. Can not Compute!"
+    }
+  },
+  {
+    "model": "rjh_rpg.gamescenes",
     "pk": 5,
     "fields": {
       "name": "🌲 Am Rande des Dunkelwaldes",

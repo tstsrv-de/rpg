@@ -444,7 +444,7 @@ class Consumer(AsyncWebsocketConsumer):
 
         if message == 'set_game_to_finished':
             set_game_to_finished = await db_set_game_id_to_finished(self.game_id)
-            print("set game to finished, game-id: " + str(self.game_id) + " and its return value was: " + str(set_game_to_finished))
+
             await self.channel_layer.group_send(self.msg_group_name, { 
                                 'type': 'msg_group_send_endscreen',  })
 

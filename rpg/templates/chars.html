@@ -31,8 +31,8 @@
                         </div></p>
                         <p>
                         {% if char.xp_to_spend >= 1 %} 
-                            Lebenspunkte: <a href="/xp-to-hp-{{char.id}}/" data-toggle="tooltip" data-placement="top" title="Lebenspunkte erhöhen (1 XP = {{ xp_hp }} HP) ">{{ char.hp }} ➕</a>  <br />
-                            Angriffskraft: <a href="/xp-to-ap-{{char.id}}/"  data-toggle="tooltip" data-placement="top" title="Angriffskraft erhöhen (1 XP = {{ xp_ap }} AP)">{{ char.ap }} ➕</a> 
+                            Lebenspunkte: <a href="/xp-to-hp-{{char.id}}/" title="Lebenspunkte erhöhen (1 XP = {{ xp_hp }} HP) ">{{ char.hp }} ➕</a>  <br />
+                            Angriffskraft: <a href="/xp-to-ap-{{char.id}}/"  title="Angriffskraft erhöhen (1 XP = {{ xp_ap }} AP)">{{ char.ap }} ➕</a> 
                         {% else %}
                             Lebenspunkte: {{ char.hp }}  <br />
                             Angriffskraft:  {{ char.ap }} 
@@ -42,7 +42,7 @@
                         <br />
                         Verfügbare XP: {{ char.xp_to_spend }} <br />
                         <br />
-                        <a href="../worldmap-{{char.id}}/">▶️ Spiel betreten...</a>
+                        ▶️ <a href="../worldmap-{{char.id}}/" title="...mit {{ char.name }}">Zur Weltkarte...</a>
                         </p>
                     </div>
                 {% endfor %}                
