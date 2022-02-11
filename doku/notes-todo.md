@@ -1,0 +1,56 @@
+# Letzte Aufgaben
+
+## Offene Punkte
+
+./.
+
+## Zurückgestellt (= nicht mehr machen)
+
+- Schriftart der Gamelog-Box / Intro-Text-Box ändern
+
+## Wer macht was bis wann?
+
+### Julian
+
+- Worldmap zeichnen und einbauen >> Freitag
+
+- Trainigslevel Bilder zeichnen einbauen >> Freitag
+- Friedhof Grafiken zeichnen (Prio) >> Sonntag, 16 Uhr
+
+- Julian Doku Kapitel >> Bis Samstag
+  - Frontend
+  - Grafiken
+
+- Reflektionen schreiben >> Bis Samstag
+
+- Henning Scan von deiner Unterschrift und die Matrikelnummer schicken (haenno@web.de) >> Asap
+
+### Henning
+
+- Datenbank zurücksetzten (User, Chars und Games löschen) >> Sonntag, 16 Uhr
+
+- Unterschriften und Matrikelnummern in Doku einpflegen (lokal! nicht im Git) >> Bitte asap, spätestens Samstag
+
+- Henning Doku Kapitel *Code-Entwicklung*: >> Freitag
+  - Rundenlogik
+  - Websockets
+
+### Rico >> Bitte selbst einmal drüber schauen und Zeiten planen *yay
+
+- Reflektionen schreiben
+
+- Henning Scan von deiner Unterschrift und die Matrikelnummer schicken (haenno@web.de)
+
+- Traingslevel Texte und Werte anpassen
+
+- Texte für Home-Seite (in Zustand an- und abgemeldet)
+
+- Welcome-Texte müssen für alle Level noch geupdatet werden.
+
+### Gemeinsam
+
+- Kommentare und ToDos im Code rausnehmen
+
+- Texte von Rico mit Formatierungen (fett, krusiv, unterstreichungen... ) auflockern (Wall-of-Text)
+
+- Anhang: Bildbeschreibungen anpassen und ggfls. aussortieren
