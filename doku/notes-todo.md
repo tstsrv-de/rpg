@@ -49,6 +49,8 @@
 
 ### Gemeinsam
 
+- Trainingslevel gemeinsam testen >> Samstag 16 Uhr
+
 - Kommentare und ToDos im Code rausnehmen >> Sonntag, 14 Uhr
 
 - Durchlesen, korrigieren >> Sonntag, 14 Uhr
