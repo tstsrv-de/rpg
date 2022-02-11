@@ -7,7 +7,7 @@
     {% if user.is_authenticated %}
         <div class="rpgui-container framed-golden-2" style="position: relative; width:60%; margin:auto">
             <h1 style="font-size: x-large; text-decoration: underline; white-space: nowrap;">
-                Willkommen, { user.get_username }}!
+                Willkommen, {{ user.get_username }}!
             </h1>
             <p>
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum laboriosam ullam nisi ducimus tempore commodi voluptatibus, nobis quo mollitia dolor consequuntur incidunt nemo distinctio cumque asperiores, et doloribus sapiente fugiat?
