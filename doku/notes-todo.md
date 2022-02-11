@@ -37,15 +37,15 @@
 
 ### Rico >> Bitte selbst einmal drüber schauen und Zeiten planen *yay
 
-- Reflektionen schreiben
+- Reflektionen schreiben << Samstag
 
-- Henning Scan von deiner Unterschrift und die Matrikelnummer schicken (haenno@web.de)
+- Henning Scan von deiner Unterschrift und die Matrikelnummer schicken (haenno@web.de) << jo, wird gemacht
 
-- Traingslevel Texte und Werte anpassen
+- Traingslevel Texte und Werte anpassen << Freitag Abend
 
-- Texte für Home-Seite (in Zustand an- und abgemeldet)
+- Texte für Home-Seite (in Zustand an- und abgemeldet) << Freitag Abend
 
-- Welcome-Texte müssen für alle Level noch geupdatet werden.
+- Welcome-Texte müssen für alle Level noch geupdatet werden. << done
 
 ### Gemeinsam
 
