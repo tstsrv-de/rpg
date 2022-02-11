@@ -227,7 +227,7 @@ def lobby(request, scene_id, char_id):
         return render(request,'msg_redirect.html',{'msg':'Du bist nicht angemeldet!','target':'/login/'})    
 
     if not GameScenes.objects.filter(id=scene_id).exists():
-        return render(request,'msg_redirect.html',{'msg':'Du musst eine existierende Szene auswählen!','target':'/worldmap/'})
+        return render(request,'msg_redirect.html',{'msg':'Du musst eine existierende Szene auswählen!','target':'/worldmap'+str(char_id)+'/'})
     
     if rpg_user_has_active_game(request.user) != 0: # 0 = no active game, <0 = running game_id 
         return render(request,'msg_redirect.html',{'msg':'Du hast noch ein aktives Spiel. Spiel erst fertig!','target':'/game-'+ str(rpg_user_has_active_game(request.user)) +'/'})
