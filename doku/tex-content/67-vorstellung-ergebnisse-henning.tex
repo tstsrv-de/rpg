@@ -182,10 +182,20 @@ Neben standart Entwicklungen wie z.B. Regeistrierungs- und Loginfunktionen (die 
 
 
 
-Zu den \textbf{Websockets} wurde im Kapitel \nameref{anforderungen} einige Grundlagen erklärt. Bei der Verwendung
+Zu den \textbf{Websockets} wurde im Kapitel \nameref{anforderungen} einige Grundlagen erklärt. Bei der Entwicklung wurde hier als erster Programteil nach den Basisfunktionen eine Chat-Funktion über die Websockets implementiert. 
 
 
-Einbau einer Web-Sockets Chat-Funktion unter Nutzung einer Anleitung\footnote{Siehe \url{https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started}. } (Commit \url{https://git.io/JSmlS} sowie folgender Commits von diesem Tag).
+Dies vorallem unter Nutzung einer Anleitung\footnote{Siehe \url{https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started}.} in zuerst einer Basis-Form. Diese wurde schnell für die beachsichtigten Zwecke erweitert und angepasst. 
+
+In der nun vorliegenden Lösung öffnet sich beim Besuch der Worldmap über das dargestellte Chatfenster eine Websocktverdindung. Diese bleibt als offene Verbindung bestehen und erlaubt es Nachrichten zwischen dem Server (Django) und dem Client (Browser) auszutauchen. Auf der Serverseite läuft dies innerhalb Djangos über ein Routing der Websockets in entsprechende Consumer-Funktionen. Auf Clientseite findet JavaScript Verwendung für das Versenden sowie Empfangen und Verarbeiten der Nachrichten über das Websocket-Protokoll. 
+
+Der Aufbau von Websocket-Verbindungen ist analog der aus Django bekannten \enquote{urls.py} geregelt. Über den Client wird eine bestimmte URL aufgerufen. Beispielhaft und stark vereinfacht wie folgt: 
+
+
+\begin{lstlisting}[language=JavaScript]
+const chat_websocket = new WebSocket("wss://rpg.tstsrv.de/worldmap-chat/");
+chat_websocket.send(JSON.stringify({ user: user_id, message: message, }));
+\end{lstlisting}
 
 
 
