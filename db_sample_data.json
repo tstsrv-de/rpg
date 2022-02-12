@@ -4,7 +4,7 @@
     "pk": 6,
     "fields": {
       "name": "🧸 Trainings-Dojo",
-      "req_players": 4,
+      "req_players": 3,
       "welcome_text": "Hier wird niemand sterben. Zumindest ist hier bis jetzt noch niemand gestorben!",
       "enemy_name": "🎯 Trainigsziel 🎯",
       "enemy_hp": 1000,
