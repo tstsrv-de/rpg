@@ -24,7 +24,7 @@
     "fields": {
       "name": "🌲 Am Rande des Dunkelwaldes",
       "req_players": 1,
-      "welcome_text": "Du und der Warg beäugt euch auf der Lichtung, dann greift er dich mit gefletschten Zähnen an!",
+      "welcome_text": "Du und der Warg beäugt euch auf der Lichtung, dann greift er dich mit gefletschten Zähnen an!<br>",
       "boss_welcome_text": "Warg fletscht hörbar die Zähne!",
       "enemy_name": "🐺 Schrecklicher Warg 🐺",
       "enemy_hp": 140,
