@@ -182,14 +182,24 @@ Neben standart Entwicklungen wie z.B. Regeistrierungs- und Loginfunktionen (die 
 
 
 
-Zu den \textbf{Websockets} wurde im Kapitel \nameref{anforderungen} einige Grundlagen erklärt. Bei der Entwicklung wurde hier als erster Programteil nach den Basisfunktionen eine Chat-Funktion über die Websockets implementiert. 
+Zu den \textbf{Websockets} wurdenim Kapitel \nameref{anforderungen} einige Grundlagen bereits erklärt. Bei der Entwicklung wurde hier als erster Programmteil nach den Basisfunktionen, eine Chat-Funktion über die Websockets implementiert. 
 
 
-Dies vorallem unter Nutzung einer Anleitung\footnote{Siehe \url{https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started}.} in zuerst einer Basis-Form. Diese wurde schnell für die beachsichtigten Zwecke erweitert und angepasst. 
+Dies vorallem unter Nutzung einer Anleitung\footnote{Siehe \url{https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started}.}, die eine Basis-Form der Chat-Funktionalität bereitstellte. Diese wurde schnell für die in diesem Projekt beachsichtigten Zwecke erweitert und angepasst:
 
-In der nun vorliegenden Lösung öffnet sich beim Besuch der Worldmap über das dargestellte Chatfenster eine Websocktverdindung. Diese bleibt als offene Verbindung bestehen und erlaubt es Nachrichten zwischen dem Server (Django) und dem Client (Browser) auszutauchen. Auf der Serverseite läuft dies innerhalb Djangos über ein Routing der Websockets in entsprechende Consumer-Funktionen. Auf Clientseite findet JavaScript Verwendung für das Versenden sowie Empfangen und Verarbeiten der Nachrichten über das Websocket-Protokoll. 
+In der nun vorliegenden Lösung öffnet sich beim \textbf{Besuch der Worldmap}, über das dargestellte Chatfenster eine Websocktverdindung. Diese bleibt als offene Verbindung bestehen und erlaubt es Nachrichten zwischen dem Server (Django) und dem Client (Browser) auszutauchen. Auf der Serverseite läuft dies innerhalb Djangos über ein Routing der Websockets in entsprechende Consumer-Funktionen. Auf Clientseite findet JavaScript Verwendung für das Versenden sowie Empfangen und Verarbeiten der Nachrichten über das Websocket-Protokoll. 
 
-Der Aufbau von Websocket-Verbindungen ist analog der aus Django bekannten \enquote{urls.py} geregelt. Über den Client wird eine bestimmte URL aufgerufen. Beispielhaft und stark vereinfacht wie folgt: 
+Innerhalb der \textbf{Level-Lobby-Seiten} wird jeweils auch eine entsprechende Websocket-Verbindung aufgebaut. Über die ID der Lobby, wir hier analog eine Websocket-Verbindung mit gleicher ID aufgebaut. Die Zurodnung des Aufrufs erfolgt hier innerhalb von Django über die in der \textit{settingy.py} hinzugefügte App \textit{channels} sowie die Einstellungen zur ASGI-App \textbf{mit dem Routing-Ziel} zur enstpechdenen Auflösung des Websockets-Aufrufs über die \textit{routing.py} innerhalb der Django-App \textit{rjh\_rpg}:
+
+\begin{lstlisting}[language=python]
+websocket_urlpatterns = [
+(...)
+    re_path(r'ws/lobby-(?P<scene_id>\w+)/$', consumer_lobby.Consumer.as_asgi()),
+    re_path(r'ws/game-(?P<game_id>\w+)/$', consumer_game.Consumer.as_asgi()),
+]
+\end{lstlisting}
+
+Der Aufbau von Websocket-Verbindungen ist wie man sieht, analog der aus Django bekannten \enquote{urls.py} geregelt. Von \textbf{Client-Seite} aus wird hier eine bestimmte URL aufgerufen und damit die Websocket-Verbindung aufgebaut. Über das Objekt dieser aktiven Verbindung, können dann Nachrichten (hier als JSON-String) übermittelt werden. Beispielhaft und stark vereinfacht wie folgt: 
 
 
 \begin{lstlisting}[language=JavaScript]
@@ -199,242 +209,102 @@ chat_websocket.send(JSON.stringify({ user: user_id, message: message, }));
 
 
 
-Einbau einer Lobby und einer Chatfunktion in dieser Lobby -- Jeweils abhängig von der Lobby werden dynamisch Websockets geöffnet (Commits \url{https://git.io/JSm5n} und \url{https://git.io/JSm5N} sowie weitere Anpassungen und Korrekturen in den Commits vom 01.12.2021).
+Als nächsten Entwicklungsschritt wurde hier dann die \textbf{veränderlichen Webseiteninhalte über Websockets} transportiert - Ähnlich AJAX bzw. einem Framework mit Nutzung einer API als Backend. In dem Anwendunsfall unseres Spiels, findet hier die Verarbeitung vorallem in dem Websockets-\textit{Consumer} für das Spiel statt, der \textbf{consumer\_game.py}.
 
+Darin werden vom Client erhaltene Nachrichten verarbeitet. Diese Nachrichten können z.B. das Klicken eines der Schaltes sein (Angriff, Fähigkeit nutzen, Aussetzen) oder auch ein laufend übersandtes Lebenszeichen -- Ein \textit{Heartbeat}, der dem Server mitteilt, dass der jeweilige Spieler noch im Spiel ist und die Webseite offen hat -- Die Websocket-Verbindung also noch Bestand hat. Stark vereinfacht und gekürzt stellt sich das im Programmcode wie folgt dar: 
 
-Rundensystem implementieren. Dazu mindestens notwendig: Lebens- und Angriffspunkte der User-Chars sowie des Gegners. 
-    \begin{enumerate}
-        \item Erster Schritt: Definition des Ablaufes einer Runde als Pseudo-Code: 
-            \begin{enumerate}
-                \item Gameloop-Schleife: [round-state]
-                \item Aktion von Gegner ausführen (Schaden) [100]
-                \item Prüfen ob User-Char tod ist (HP < 1 = Dead-Flag: True) [200]
-                \item Prüfen wie viele User-Chars noch leben (n < 1 = Gameover-Flag: True, break-Gameloop-Schleife) [300]
-                \item Aktionen der User-Chars aufnehmen (Entscheidung für nächste Aktion von jedem Spieler annehmen + wegspeichern) [400]
-                \item Alle Aktionen der User-Chars ausführen (Aktionen laden und ausführen: Schaden, Aktion, Passen) [500]
-                \item Nach jedem Spieler, prüfen ob Gegner besiegt wurde (HP < 1 = Win-Flag: True, break-Gameloop-Schleife) [immernoch 500]
-                \item Rundencounter +1 [600]
-                \item Gameloop-Schleife nächster Durchlauf [700, zurück zu 100]...
-            \end{enumerate}
-    Steuerung über "round-state" Hilfsvariable, gespeichert in Games-Tabelle (Default=0, Gameover=990, Win=995). Da der Aufruf der Spiele-Logik über den Websocket-Heartbeat der Spieler erfolgt, müssen die Arbeitsschritte sehr kleinteilig sein und diese laufend in kleinen (kleinsten?) Schritten weggepeichert werden. Möglicherweise ergibt sich ein Sync-Problem (Commit \url{https://git.io/JyRml})
-    \item Zweiter Schritt: HP und AP bei User-Chars implementieren, damit AP aus "round-state 100: Gegner führt Schaden aus" durchgeführt werden kann (Commit \url{https://git.io/JyRWD}).  
-    \end{enumerate}
+\begin{lstlisting}[language=python]
+class Consumer(AsyncWebsocketConsumer):
+ 
+    # Verbindungsaufbau
+    async def connect(self):
+        self.game_id = self.scope['url_route']['kwargs']['game_id']
+        self.msg_group_name = 'game-%s' % self.game_id
 
+        await self.channel_layer.group_add(
+            self.msg_group_name,
+            self.channel_name
+        )
 
+        await self.accept()
 
+    # Neue Nachricht alle Empfänger der Websockets-Gruppe (hier Spieler des Spiels) senden
+    async def msg_group_send_game_log_update(self, event):
+        game_log_content = await db_get_game_log(self.game_id)
+        
+        if game_log_content == self.last_game_log_content:
+            # skip sending if no change since last message
+            pass
+        else:
+            await self.send(text_data=json.dumps({ 
+                'game_msg_type': 'game_log_update',
+                'game_websocket_content': str(game_log_content),
+            }))
+            self.last_game_log_content = game_log_content
 
+    # Empfang und Verarbeitung erhaltener Nachrichten
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json['msg']
 
+        if message == 'alive':
+            round_state = await db_get_round_state(self.game_id)
 
-
-
-    Weitere Implementation von Rundenlogik:
-
-    \begin{itemize}
-        \item Rundenschritt 300: Feststellen ob alle Spieler verstorben sind, falls ja in Spielende springen (Commit \url{https://git.io/Jy1Lu}).
-        \item Tests ergaben Probleme beim Spiel mit mehreren Spielern. Die Rundenlogik wird dann gleichzeitig vorangetrieben. Dadurch werden manche Aktionen und Rundenschritte mehrfach ausgeführt. Ein Versuch das Problem mit einem Token (ähnlich einem Semaphor) zu lösen, brachte leider noch keinen abschließenden Erfolg. Der Singleplayer aber, geht fehlerfrei. Das Problem wird daher zurückgestellt und nun zuerst die Entwicklung weiterer Punkte fortgeführt (Commit \url{https://git.io/Jy1qZ}).
-        \item Als Workaround für oben genanntes Problem im Mulitplayer wurde nun eingestellt, dass immer nur der erste Spieler eines Spiels die Rundenlogik vorantreibt. Das ist etwas mehr fehleranfällig als eine korrekte Tokenlösung, wird für das Projekt hier aber vorerst ausreichend sein (Commit \url{https://git.io/Jy1su}).
-        \item Umfangreiche Erweiterungen und Anpassungen für das Anzeigen der User-Chars auf der Spieleseite, darstellen und aussteuern der Aktions-Buttons, das einsammeln der Aktionen in der Datenbank und ebenso bereits das zurücksetzen beim Rundenwechsel (Commit \url{https://git.io/JyDlp}).
-    
-        \begin{figure}[H]
-            \centering
-            \caption{29.12.2021: Bildschirmfoto zum Entwicklungsstand mit Runden-Status 400.}
-            \label{fig:2021-12-29-Bildschirmfoto-Entwicklungsstand-Runden-Status-400.png}
-            \includegraphics[width=0.7\textwidth]{2021-12-29-Bildschirmfoto-Entwicklungsstand-Runden-Status-400.png}
-        \end{figure}
-    
-        \item Die Chatfunktion wurde implementiert. Hier jedoch abweichend vom Plan direkt als Meldungen im Game-Log und nicht in einem gesonderten Chat-Log und Chat-Fenster. Julian war damit im kurzen Teams-Gespräch gestern einverstanden. Den Aufbau der Game-Seite entsprechend angepasst und dem Game-Log deutlich mehr Raum eingeräumt. Außerdem weitere Anpassungen am Design und Style (Commit \url{https://git.io/JyDRK}).
-    
-    \end{itemize}
-    
-
-
-
-
-
-    \begin{itemize}
-        \item Auswahl eines zufälligen, lebenden Spielercharakters und zufügen von Schaden durch den Gegener. Außerdem Erweiterung Runden-/Gameloop und Fortschreiben des Game-Logs (Commit \url{https://git.io/JygDz}).
-        \item Nächster Rundenschritt 200: Prüfen ob Spieler gestorben sind und Meldung im Game-Log ausgeben falls in aktueller Runde gestorben (Commit \url{https://git.io/Jya3H}). 
-    \end{itemize}
-    
-
-
-
-
-\newcommand{\comment}[1]{}
-\comment{
+            # Hier finden sich rund 300 Zeilen Code der die Spiel- und Rundenlogik abbildet
                 
-            \subsubsection{Backup Henning}
-
-
-            In der Zeit vom 25.11.2021 bis zum 09.01.2022 wurden von Henning Beier im weiteren das Backend, das Datenbankmodell und die wesentlichen Funktionen des Spiels, entsprechend der in den Projektbesprechungen festgehaltenen Anforderungen, entwickelt.
-
-
-
-            \textbf{Entwicklung, Mittwoch 24.11.2021}
-
-            Einbau von Grundlagen: 
-            \begin{itemize}
-                \item Update der Django-Basis Installtion bzw. des Projektes (Commit \url{https://git.io/JSqbt}). 
-                \item Auto-Download und restart der Docker-Container bei neuen Commits im Repository auf Github per Cron-Jobjob-Script (siehe \url{https://git.io/JStjW}).
-            \end{itemize}
-
-
-            \textbf{Entwicklung, Donnerstag 25.11.2021}
-
-            Einbau der Charaktere als Datenbank-Modell und View in Django (Commit \url{https://git.io/JSmOd}).
-
-
-
-            \textbf{Entwicklung, Samstag 27.11.2021}
-
-            Einbau der Weltkarte bzw. Levelauswahl (Commit \url{https://git.io/JSmG8}).
-
-
-
-            \textbf{Entwicklung, Sonntag 28.11.2021}
-
-            \begin{itemize}
-                \item (Teilweise) Installation der Entwicklungsumgebung, Docker sowie Git bei Julian und Rico sowie jeweils zwei erste Test-Commits incl. anschließendem Auto-Update des Servers (Rico: \url{https://git.io/JSmKV} und Julian: \url{https://git.io/JSmoF}).
-            \end{itemize}
-
-
-
-            \textbf{Entwicklung, Montag 29.11.2021}
-
-            Erstellung eines Web-Sockets für eine Counter-Funktion incl. der notwendigen Anpassungen an Datenbankmodell, der Django-Reciver und -Consumer (Commit \url{https://git.io/JSmDa}).
-
-
-
-            \textbf{Entwicklung, Dienstag 30.11.2021}
-
-
-
-
-            \textbf{Entwicklung, Samstag 04.12.2021}
-
-            Flask8 als Code-Linter genutzt und einige Anpassungen entsprechend vorgenommen (Commit \url{https://git.io/JSmN2}).
-
-
-            \textbf{Entwicklung, Sonntag 05.12.2021}
-
-            Einbau der Spielseite selbst als logischer Schritte nach der Weltkarte (als Levelauswahl) und der Lobby (Spielfindung /-erstellung) (Commits \url{https://git.io/JSYLS}, \url{https://git.io/JSYqd} und \url{https://git.io/JSYmV}).
-
-
-
-            \textbf{Entwicklung, Sonntag 12.12.2021:}
-
-            Als Grundlage der Dokumentation eine an APA-Zietierrichtlinien angepasste Variante der LaTeX-FOM-Vorlage\footnote{Siehe \url{https://github.com/andygrunwald/FOM-LaTeX-Template}.} in der Git-Repository eingefüht und für das Projekt hier angepasst. Dort erfolgt nun laufen auch die Dokumentation (Commit \url{https://git.io/JSYOZ}). 
-
-
-
-            \textbf{Entwicklung, Sonntag 19.12.2021:}
-
-            An diesem Tag wurden weitere, notwenige Grundlagen für die Integration der Spiellogik eingebaut. Das insbesondere in Vorbereitung auf die kommenden Anpassungen und Entwicklungen die in der Projektbesprechung vom 11.12.2021 besprochen wurden. 
-            Konkret: 
-
-            \begin{itemize}
-                \item Prüfung auf den Seiten Chars, Worldmap und Lobby ob dieser Benutzer ein aktives Spiel hat. Falls ja, wird der Benutzer auf diese Seite umgeleitet.
-                \item Grundfunktion für das Beenden von einem Spiel eingebaut: Man kann nun per Klick im Spiel, das Spiel beenden.
-                \item Daran anschließend eine Prüfung im laufendem Spiel, ob das Spiele beendet wurde und falls ja, Anzeige eines Endbildschirms.
-            \end{itemize}
-
-            Die Entwicklung der Grundlagen an diesem Tag wurde mit Fokus auf Modularisierung erledigt. Der Code der jeweiligen Funktionen wurde in einzelnen Dateien ausgelagert um Wiederverwendbarkeit und Lesbarkeit zu erhöhen. 
-
-            Die zugehörigen Commits sind insbesondere: 
-            \url{https://git.io/JDjKl} und 
-            \url{https://git.io/JDjKB}
-
-
-            \textbf{Entwicklung, Dienstag 21.12.2021:}
-
-            Grundlagen des Kampfsystems entsprechend der Projekt-Besprechung vom 11.12.2021 (Abbildung \ref{fig:2021-12-11-Projekt-Besprechung}) sollen implementiert werden.
-
-            Vorbereitungen: 
-
-            \begin{itemize}
-                \item Tabelle "GamesScenesSteps" und Verknüpfungen entfernen (Commits \url{https://git.io/JDjKz} und \url{https://git.io/JDjKg})
-                \item Kampf-/Gamelog erzeugen: Darin werden alle Meldungen aus dem Spiel wie z.B. Kampftexte, Schaden, Aktionen, Systemmeldungen und alles andere denkbare angezeigt und gespeichert. Getrennt davon soll der Chat-Log dargestellt werden. Dazu werden in der Tabelle "Games" zwei neue Textfelder erzeugt (Commit \url{https://git.io/JDj63}). 
-                \item Anzeige des Game-Logs auf der Spielseite. Schreiben von Nachrichten in das Gamelog als ersten Test des grundlegend umgestellten Seitenaufbaus: Es werden nur noch einzelene Elementinhalte per Websocket transportiert, nicht mehr ganze HTML-Code-Blöcke (Commit \url{https://git.io/JyeJQ}).
-            \end{itemize}
-
-
-            \textbf{Entwicklung, Montag 27.12.2021:} \label{ref-runden-impl}
-
-            Weitere Entwicklungen entsprechend der Projekt-Besprechung vom 11.12.2021 (Abbildung \ref{fig:2021-12-11-Projekt-Besprechung}):
-
-            \begin{itemize}
-                \item Eintrag ins Gamelog zum Spielstart (Commit \url{https://git.io/JyBRf}).
-
-            \end{itemize}
-
-
-            \textbf{Entwicklung, Dienstag 28.12.2021:}
-
-            Fortführung der Entwicklungen vom Vortag. Hier insbesondere nun die Implementation der aller Funktionen der Runden- bzw. Spiellogik:
-
-
-            \textbf{Entwicklung, Mittwoch 29.12.2021:}
-
-
-
-            \textbf{Entwicklung, Donnerstag 30.12.2021:}
-
-            Abschließender Schritt in der Implementation der Rundenlogik:
-
-            \begin{itemize}
-                \item Die Schadensfunktion für Spieler wurde eingebaut: Damit kann dem Gegner nun Schaden zugefügt werden. Außerdem Prüfung auf Tod des Gegners incl. entsprechender Medlung (Commit \url{https://git.io/Jy9E7}).
-            \end{itemize}
-
-            Offen sind nun als nächste Schritte noch:
-            \begin{enumerate}
-                \item Fähigkeiten der Spieler in Rundenlogik implementieren.
-                \item Abschlussbildschirm für Sieg und Gameover konzeptionieren und implementieren. 
-                \item Charakterentwicklung bei Sieg implementieren.
-                \item Erweiterung der Infrastruktur aus Scripten, Anleitungen und des Git-Repos hin zum laden eines Default-Datensatzes (JSON-Datei) mit nutzbaren Spieldaten (insbesondere für Testzwecke und Nutzungen durch Dritte).
-            \end{enumerate}
-
-
-            \textbf{Entwicklung, Freitag 31.12.2021:}
-
-            Abarbeiten der zuletzt genannten, nächsten Schirtte. Hier: 
-
-            \begin{itemize}
-                \item Die Charakterentwicklung wird mit Erfahrungspunkten gelöst: Durch Aktionen im Spiel bzw. Kampf (Schaden bekmmen, Schaden austeilen, Fähigkeiten nutzen) bekommen die entsprechenden Charaktere sofort entsprechende Erfahrungspunkte gutgeschrieben. Wird das Spiel gewonnen, werden alle von allen teilnehmenden Spielern in dieser Runde erspielten Erfarungspunkte noch einmal verdoppelt und jedem der Spieler gutgeschrieben. Verwendet werden können diese Erfahrungspunkte dann in der Charakteransicht um damit z.B. Lebenspunkte (HP) oder Angriffspunkte (AP) zu erhöhen (Commit \url{https://git.io/Jy7gl}).
-            \end{itemize}
-
-
-            \textbf{Entwicklung, Samstag 01.01.2022:}
-
-            Nach kurzer Abstimmung und Vorstellung meiner Ergebnisse bei Julian, letzte Anpassungen bzw. Entwicklungen: 
-
-            \begin{itemize}
-                \item Ausgabe der erhaltenen XP beschleunigt: Es werden nun immer 10\% (aufgrundet auf die nächste Ganzzahl) der XP ausgegeben (Commit \url{https://git.io/JSTIq}).
-                \item Einbau der Charakter-Fähigkeiten (Commit \url{https://git.io/JSkKJ}):
-                \begin{itemize}
-                    \item Priester: Gruppe heilen=Alle HP erhöhen
-                    \item Zauberer: Schaden der Gruppe erhöhen=Alle AP erhöhen
-                    \item Krieger: Gegner blocken=AP Gegner verringern
-                \end{itemize} 
-                Damit die Fähigkeiten über mehrere Runden wirken können, musste eine Hilfstabelle angelegt werden: "AbilitysToApply". Hieraus werden zum Rundenwechsel die jeweils anzuwendenden Fähigkeiten gelesen und auf die relevaten Zahlen gewirkt. 
-                \item Beispieldaten hinzugefügt und automatisches laden in die Datenbank über die local/dev-Skripte eingefügt (Commit \url{https://github.com/tstsrv-de/rpg/commit/1bfa99e89ddf2dbe817bdee2c870d1ddbe4f23c1}).
-            \end{itemize} 
-
-
-            \textbf{Entwicklung, Sonntag 02.01.2022}
-
-            Ein kurzer Anwendungstest mit einem versierten RPG-Spieler und IT-affinen Nutzer. Notizen dazu: 
-
-            \begin{itemize}
-                \item Hinweis beim betreten der Lobby, dass das Spiel erst startet, wenn man einen "Platz-belegt" hat: Sofort erledigt!. 
-                \item Man versuchte die Interaktion mit dem Spiel per Textkommandos über die Chatzeiel. Ineteresannte Alternative zur Nutzng der Buttons: Üübertragen in Ausblick(\ref{ausblick}). 
-                \item Der erste Level ist mit über 10 Runden deutlich zu lang und muss verkürzt werden: Sofort erledigt!
-            \end{itemize}
-
-            Weiter wurden alle im Code enthaltenen Variablen und Konstanten in die Datenbank ausgelagtert. Dazu wurde eine neue Tabelle "MyRpgConfig" angelegt, alle Werte dorthin transportiert und im Code enstprechende Abfragen sowie weitergehende Anpassungen (z.B. Schleifen x-Fach durchlaufen) vorgenommen. Auch wurden die Beispiel- bzw. nun Basisdaten für die Datenbank entsprechend erweitert (Commits \url{https://git.io/JSGJD} und \url{https://git.io/JSGJ7}).
-
-
-            \textbf{Entwicklung, Sonntag 09.01.2022}
-
-            Nach letzter Projektbesprechung\ref{fig:2022-01-06-Projektbesprechung} in der vorallem Deatils zum weitern Ablauf, Meiliensteinen und zeitlichen Fristen besprochen wurden, kommen nun erste konkrete Texte zum Spiel-Inhalt. Dazu wurde das Spiel erweitert: Der bisherige Introtext ergänzt um eine Begrüßung durch den Gegener, sowie 2 Varianten (Gameover und Win) zum Spielende (Commit \url{}).
-
-}
+            # Mit Ende der Verarbeitung werden neue Informationen an die Spieler des Spiels übersandt
+
+            await self.channel_layer.group_send(self.msg_group_name, { 
+                                'type': 'msg_group_send_game_log_update', })
+\end{lstlisting}
+    
+
+Man sieht, durch den Erhalt von Nachrichten, wird im wesentlichen die Spielelogik fortgeführt bzw. -geschrieben. Das Spiel durchläuft dabei Runden, die in Rundenstufen unterteilt sind. Innerhalb dieser Rundenstufen, werden verschiedene Aktionen oder Prüfungen durchgeführt. Auch werden in einer Rundenstufe z.B. die Aktionen der Spieler eingesammelt. Das bedeutet, dass das Spiel solange in dieser Rundenstufe (Aktionen einsammeln) verbleibt, bis jeder Spieler eine nächste Aktion ausgewählt hat. 
+
+In der Projektbesprechung vom 11.12.2021 wurde ein Rundenablauf erarbeitet, der übersetzt als Pseudo-Code Grundlage für die Programmierung wurde: 
+
+\begin{enumerate}
+    \item Aktion von Gegner ausführen (Schaden) [100]
+    \item Prüfen ob User-Char tod ist (HP < 1 = Dead-Flag: True) [200]
+    \item Prüfen wie viele User-Chars noch leben (n < 1 = Gameover-Flag: True, break-Gameloop-Schleife) [300]
+    \item Aktionen der User-Chars aufnehmen (Entscheidung für nächste Aktion von jedem Spieler annehmen + wegspeichern) [400]
+    \item Alle Aktionen der User-Chars ausführen (Aktionen laden und ausführen: Schaden, Aktion, Passen) [500]
+    \item Nach jedem Spieler, prüfen ob Gegner besiegt wurde (HP < 1 = Win-Flag: True, break-Gameloop-Schleife) [immernoch 500]
+    \item Rundencounter +1 [600]
+    \item Gameloop-Schleife nächster Durchlauf [700, zurück zu 100]...
+\end{enumerate}
+
+Mit Abschluss der Programmierung ergab sich ein etwas detailierterer Rundenablauf, der im Code dann wie folgt fixiert und damit auch hier dokumentiert wird: 
+
+
+\begin{lstlisting}
+# all round states in game-loop:
+  0 inital for new games
+ 50 apply effects of used abilitys
+100 enemy makes damage
+200 check user-chars with less than 0 hp, mark them as dead
+300 check if any user-chars are alive, if not end game with gameover-flag 990
+400 collect and save the next actions from all alive user-chars, proceed only every user-char has a next action set
+500 run the collected actions (make damage, use ability, pass turn), check after each user-char if enemy is alive, if not end game with win-flag 995
+600 increase round\_counter + 1
+700 reset round\_state and loop to 50
+
+# round-states without looping anymore:
+990 gaveover / game lost
+995 game is won
+999 show link to exit
+\end{lstlisting}
+
+Tests ergaben Probleme beim Spiel mit mehreren Spielern. Die Rundenlogik wurde gleichzeitig vorangetrieben. Dadurch wurden manche Aktionen und Rundenschritte mehrfach ausgeführt. Ein Versuch das Problem mit einem Token (ähnlich einem Semaphor) zu lösen, brachte leider keinen abschließenden Erfolg. Der Singleplayer aber, funktionierte fehlerfrei. 
+
+Als Workaround für oben genanntes Problem im Mulitplayer wurde eingestellt, dass immer nur der erste Spieler eines Spiels die Rundenlogik vorantreibt. Das ist etwas mehr fehleranfällig als eine korrekte Tokenlösung, wird für das Projekt hier aber vorerst ausreichend sein (Commit \url{https://git.io/Jy1su}).
+
+Die Haupt-Entwicklungsphase endet mit einer Spielseite, die sich noch farbenfroh darstellt: 
+
+\begin{figure}[H]
+    \centering
+    \caption{Bildschirmfoto der Spieleseite zum Entwicklungsstand per 29.12.2021}
+    \label{fig:2021-12-29-Bildschirmfoto-Entwicklungsstand-Runden-Status-400.png}
+    \includegraphics[width=0.7\textwidth]{2021-12-29-Bildschirmfoto-Entwicklungsstand-Runden-Status-400.png}
+\end{figure}
+    
