@@ -9,26 +9,30 @@
 
 <small class="rpgui-container" style="left:15px; top:10px; position:absolute;">◀️ <a href="../">Zurück zur Weltkarte...</a></small>
 
+<p style="font-size: x-large; text-align:center;">{{scene_name}}</p>
+<table border="0">
 
-<table>
-    <tr>
-        <td colspan="2" style="position: relative;">
-            <div style=" margin: auto; text-align: center;" >
-                <p style="font-size: x-large;">{{scene_name}}</p>
-                <button type="submit" class="rpgui-button-collapsible" style="margin: auto;">Level-Beschreibung</button>
-                <div class="collapsible_content" style="overflow-y: scroll;margin: auto; text-align: left;">
-                    <p id="game-text"></p>
-                </div>
-            </div>
-        </td>
-    </tr>
     <tr>
         <td style="vertical-align: top;">
             <div class="rpgui-container framed-lobbyimage" style="position:relative; background: url(../../static/img/intro_images/{{intro_image}}) no-repeat center;  background-size: 100%; height:450px;">
             <!--<img src="../static/img/intro_images/{{intro_image}}" style="width:100%">-->
+            <div style="margin:3px;">
+                <button type="submit" class="rpgui-button-collapsible" >Level-Beschreibung</button>
+                <div class="collapsible_content" style="overflow-y: scroll;margin-left:auto;margin-right:auto;">
+                    <p id="game-text" style="
+                    font-size: 16px; 
+                    font-size: 1rem; 
+                    font-family: 'Lucida Sans Typewriter', 'Lucida Console', Monaco, 'Bitstream Vera Sans Mono', monospace;
+                    color: #fbf9ec;
+                    text-shadow: none; 
+                    background-color: rgba(90, 90, 90, 0.75);"></p>
+                </div>
             </div>
+            </div>
+
         </td>
         <td style="vertical-align: top; " rowspan="2">
+            
             <div class="rpgui-container framed-golden-2" style="position:relative;">
                 <table class="table table-bordered table-striped">
                     <tr>
@@ -150,7 +154,7 @@ document.querySelector('#game-text').innerHTML = intro_text
 
 var textarea = document.getElementById('chat-text');
 setInterval(function(){
-    chatSocket.send(JSON.stringify({'ul': 'heatbeat', }));
+    chatSocket.send(JSON.stringify({'ul': 'heartbeat', }));
     textarea.scrollTop = textarea.scrollHeight;
 }, 500);
 

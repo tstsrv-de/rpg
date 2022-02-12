@@ -41,7 +41,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         except:
             ul = ""
         
-        if ul == 'heatbeat':
+        if ul == 'heartbeat':
             chars_in_chat = await self.db_get_list_chars_in_chat()      
             
             try:
