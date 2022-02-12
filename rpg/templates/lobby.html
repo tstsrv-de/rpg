@@ -150,7 +150,7 @@ document.querySelector('#game-text').innerHTML = intro_text
 
 var textarea = document.getElementById('chat-text');
 setInterval(function(){
-    chatSocket.send(JSON.stringify({'ul': 'heatbeat', }));
+    chatSocket.send(JSON.stringify({'ul': 'heartbeat', }));
     textarea.scrollTop = textarea.scrollHeight;
 }, 500);
 
