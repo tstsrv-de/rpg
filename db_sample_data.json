@@ -9,9 +9,9 @@
       "enemy_name": "🎯 Trainigsziel 🎯",
       "enemy_hp": 1000,
       "enemy_ap": 1,
-      "enemy_image": "warg_3840x2160.mp4",
-      "enemy_dead_image": "warg_background_3840x2160.jpg",
-      "intro_image": "woods_edge_3840x2160.jpg",
+      "enemy_image": "training_dummy.mp4",
+      "enemy_dead_image": "dojo_background.jpeg",
+      "intro_image": "dojo_intro.jpg",
       "intro_text":"„Es tut nicht weh. Keine Angst.“ Genau das hat dein Trainer immer gesagt als er dich durch den Trainingsparcours gescheucht hat. Du hast es gehasst, denn natürlich tat es weh, als er mit dir trainiert hat. Immer wenn du diene Deckung vernachlässigt hast, hat er es dich schmerzhaft spüren lassen. Und selbstverständlich bist du ihm dankbar für diese Lektionen, denn sie haben dich bis heute am Leben gehalten. <br>Heute wird es allerdings anders sein, denn du bist nur hier, um ein paar Moves an der Trainingspuppe zu testen!",
       "win_text": "Wow! Das war nicht überraschend. Aber dass die Trainingspuppe nach deinem letzten sauberen Hieb in ihre einzelteile zerfällt, das hattes du nicht erwartet.",
       "gameover_text": "Oh, da muss die Trainingspuppe locker gewesen sein. Durch einen deiner heftigen Schläge muss sie sich gedreht und dich unglücklich am Kopf getroffen haben."
