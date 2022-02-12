@@ -22,7 +22,7 @@
    /* font color */
    color: white !important;
    /* width, height*/
-   width: 40vh;
+   /*width: 40vh;*/
    /* hide button default stuff */
    background-color: Transparent;
    background-repeat: no-repeat;
@@ -59,17 +59,18 @@
  .collapsible_content {
    /* position */
     position: relative;
+    
    /* width/height*/
-   max-width: 50vw;
-   max-height: 20vh !important;
+   max-width: 35vw;
+   max-height: 30vh !important;
    /* border */
-   border-style: solid;
-   border-image-source: url("img/border-image-golden.png");
+   border-style: none;
+   /*border-image-source: url("img/border-image-golden.png");
    border-image-repeat: repeat;
    border-image-slice: 4 4 4 4;
    border-image-width: 18px;
    border-width: 15px;
-   padding: 0 18px;
+   padding: 0 18px;*/
    /* collapsible tweaks */
    display:none;
    overflow:hidden;
@@ -78,10 +79,10 @@
    -moz-box-sizing: border-box;
    -webkit-box-sizing: border-box;
    /* background */
-   background: url("img/background-image-golden.png") repeat repeat;
+   /*background: url("img/background-image-golden.png") repeat repeat;
    background-clip: padding-box;
    background-origin: padding-box;
-   background-position: center; 
+   background-position: center; */
  }
 
  /* Skalierbare Elemente für game.html -----------------------------------------------------------------------------------------------*/
