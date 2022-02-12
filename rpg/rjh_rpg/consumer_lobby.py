@@ -169,8 +169,8 @@ class Consumer(AsyncWebsocketConsumer):
                 <br />
                 <h2>...angemeldete Spieler <a href="/game-**game_id**/">wechseln jetzt bitte zum Spiel</a>...</h4>
                 <br />
-                <p>...alle anderen Spieler gehen bitte zurück in <a href="/worldmap/">die Worldmap</a>...<br />
-                ...oder rufen <a href="/lobby-**scene_id**/">diese Seite</a> für einen Neustart der Lobby erneut auf... </p>
+                <p>...alle anderen Spieler gehen bitte zurück in <a href="/worldmap-"""+str(char_id)+"""/">die Worldmap</a>...<br />
+                ...oder rufen <a href="/worldmap-"""+str(char_id)+"""/lobby-**scene_id**/">diese Seite</a> für einen Neustart der Lobby erneut auf... </p>
                 <br /><br />
                 """
                 countdown_html = countdown_html.replace("**scene_id**", str(self.scene_id))
