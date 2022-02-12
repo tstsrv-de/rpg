@@ -6,14 +6,9 @@
 <br />
 <br />
 {% endif %}
-
+<div class="rpgui-container framed-golden-2" style="position:relative;">
 <h1>Signup...</h1>
 
-{% if user.is_authenticated %}
-<p>Du bist bereits angemeldet!</p>
-{% else %}
-
-<div class="rpgui-container framed-golden-2" style="position:relative;">
 <form method="POST" action="{% url 'signup' %}">
   {% csrf_token %} 
   <p>Benutzername:  <input type="text" name="username" /> </p> <br />
@@ -23,6 +18,6 @@
   <button type="submit" class="rpgui-button"><p>Signup</p></button>
   <br />
 </form>
-{% endif %} 
 
+</div>
 {% endblock %}
