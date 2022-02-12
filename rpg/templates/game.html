@@ -123,17 +123,18 @@
                 <button class="rpgui-button" type="submit" onclick="game_chat_msg_click({{ request_user_id }});" style="padding: 0; "> 
                   <p>Send</p>
                 </button>
-                <!-- Dev/Debug-Konsole-->
-                <button type="submit" onclick="set_game_to_finished();" style="background:#ff0000; width: 40%;padding: 0;">
-                  <p>Dev/Debug: Spiel abbrechen!</p>
-                </button>
               </div>
             </td>
           </tr>
         </table>
 
+        <!-- Dev/Debug: Spielabbruch -->
+        <div style="bottom:10px;right: 10px;  position:absolute; " >
+          <a href="#" onclick="set_game_to_finished();" title="Dev/Debug: Spiel abbrechen!" >💣</a>
+        </div>
+        
       </div>
-
+      
       {{ game_id|json_script:"game_id" }}
       {{ request_user_id|json_script:"request_user_id" }}
 
