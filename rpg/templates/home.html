@@ -1,24 +1,29 @@
 {% extends 'base.html' %}
 {% block content %} 
-{% if error %}
-{{ error }}
+    {% if error %}
+        {{ error }}
+    {% endif %}
 
-<br />
-<br />
-{% endif %}
-
-
-{% if user.is_authenticated %}
-<h1 style="font-size: x-large; text-decoration: underline; white-space: nowrap;">Willkommen, <b>{{ user.get_username }}!</b></h1>
-<div class="rpgui-container framed-golden-2" style="position: relative; width:60%; margin:auto">
-<p>
-    Sehr gut, du hast dich entschieden Teil der Welt von Monster Slayer zu werden und brennst darauf dein erstes Abenteuer zu bestehen. Darum wähle deine Waffen weise.<br>Doch sei gewarnt, das Böse zögert nicht. Viel Glück tapferer Recke und zukünftiger Held epischer Geschichten!
-</p>
-</div>
-{% else %}
-<p>
-    Herzlich willkommen auf der Seite von Monster Slayer, einem kleinen Spiel das im Ramen einer Projektarbeit an der FOM Hochschule in Siegen, im Fach Web-Technologie entstanden ist. Es nimmt dich mit auf die Reise eines Abenteurers, der epische Kämpfe in einer fantastischen Welt bestreitet. Logge dich ein und suche deine Bestimmung! 
-</p>
-{% endif %} 
+    {% if user.is_authenticated %}
+        <div class="rpgui-container framed-golden-2" style="position: relative; width:60%; margin:auto">
+            <h1 style="font-size: x-large; text-decoration: underline; white-space: nowrap;">
+                Willkommen, {{ user.get_username }}!
+            </h1>
+            <p>
+                Sehr gut, du hast dich entschieden Teil der Welt von Monster Slayer zu werden und brennst darauf dein erstes Abenteuer zu bestehen. Darum wähle deine Waffen weise.<br>
+                Doch sei gewarnt, das Böse zögert nicht. Viel Glück tapferer Recke und zukünftiger Held epischer Geschichten!
+            </p>
+        </div>
+    {% else %}
+        <div class="rpgui-container framed-golden-2" style="position: relative; width:60%; margin:auto">
+            <h1 style="font-size: x-large; text-decoration: underline; white-space: nowrap;">
+                Willkommen!
+            </h1>
+            <p>
+                Herzlich willkommen auf der Seite von Monster Slayer, einem kleinen Spiel das im Ramen einer Projektarbeit an der FOM Hochschule in Siegen, im Fach Web-Technologie entstanden ist.<br>
+                Es nimmt dich mit auf die Reise eines Abenteurers, der epische Kämpfe in einer fantastischen Welt bestreitet. Logge dich ein und suche deine Bestimmung! 
+            </p>
+        </div>
+    {% endif %} 
 
 {% endblock %}
