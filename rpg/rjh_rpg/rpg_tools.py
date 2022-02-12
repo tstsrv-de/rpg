@@ -87,7 +87,7 @@ def rpg_websocket_get_config(config_to_get):
 def rpg_user_char_chat_heartbeat(char_id):
     # last_chat_heartbeat
     try:
-        print("Chat-Heatbeat from 'Char_ID':" + str(char_id))
+        print("Chat-Heartbeat from 'Char_ID':" + str(char_id))
         GameState.objects.filter(char=char_id).update(last_chat_heartbeat=Now())
     except:
         return None
