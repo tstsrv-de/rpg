@@ -4,7 +4,7 @@
 
 \subsubsection{Infrastruktur}
 
-Die für dieses Projekt eingesetzte Infrastruktur setzt auf verschiedene Komponenten, deren Zusammenspiel hier in einer vereinfachten Darstellung zu erkennen ist und im Folgenden näher beschrieben wird: 
+Die für dieses Projekt eingesetzte Infrastruktur setzt auf verschiedene Komponenten, deren Zusammenspiel hier in einer vereinfachten Darstellung zu sehen ist und im Folgenden näher beschrieben wird: 
 
 \begin{figure}[H]
     \centering
@@ -52,14 +52,12 @@ then
 
 
 
-Ein weiterer wesentlicher Punkt der Software-Infrastruktur ist \textbf{Docker sowie die Container} für den Django-Server, die Datenbank und den Reverse-Proxy. Hier stehen für die lokale Entwicklung \enquote{docker-compose}-Skripte für Windows und auch unixartige Systeme wie Linux und MacOS zur Verfügung. Ebenso für den Betrieb des Servers. Details zur Einrichtung und Nutzung wurden in der \textbf{Readme Repositorys}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/README.md}.} hinterlegt. 
+Ein weiterer wesentlicher Punkt der Software-Infrastruktur sind die \textbf{Docker-Container} für den Django-Server, die Datenbank und den Reverse-Proxy. Hier stehen für die lokale Entwicklung \enquote{docker-compose}-Skripte für Windows und auch unixartige Systeme wie Linux und MacOS zur Verfügung. Ebenso für den Betrieb des Servers. Details zur Einrichtung und Nutzung wurden in der \textbf{Readme Repositorys}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/README.md}.} hinterlegt. 
 
 
-Der Traefik-Proxy wurde so eingerichtet, dass Anfragen auf den Ports HTTP 80 und HTTPS 443 angenommen werden. Anfragen an HTTP 80, werden automatisch umgeleitet an HTTPS 443. Die notwendigen Zertrifikate für die Subdomains werden vollautomatisch vom Traefik-Proxy über Letsencrypt angefordert und verwaltet. Als Grundlage für die Konfiguration diente eine Vorlage von Igor Bubelov\footnote{Siehe Github-Repository dazu \url{https://github.com/bubelov/traefik-letsencrypt-compose}.} die entsprechend um die Funktionen für den Django-Webserver und die Datenbank erweitert wurden.
+Der Traefik-Proxy wurde so eingerichtet, dass Anfragen auf den Ports HTTP 80 und HTTPS 443 angenommen werden. Anfragen an HTTP 80, werden automatisch umgeleitet an HTTPS 443. Die notwendigen Zertrifikate für die Subdomains werden vollautomatisch vom Traefik-Proxy über \textit{Letsencrypt} angefordert und verwaltet. Als Grundlage für die Konfiguration diente eine Vorlage von Igor Bubelov\footnote{Siehe Github-Repository dazu \url{https://github.com/bubelov/traefik-letsencrypt-compose}.} die entsprechend um die Funktionen für den Django-Webserver und die Datenbank erweitert wurden.
 
-
-
-Die hier entwickelte Konfiguration erweis sich als so verlässlich, dass auch ein anderes Projektteam (\textbf{Deskshare\footnote{Siehe \url{https://github.com/tstsrv-de/deskshare} bzw. \url{https://deskshare.tstsrv.de/}.}}) aus unserem Studiengang, ihre Dienste auf unserer Hardware unter einer eigenen Subdomian betreiben konnte. Die Anbindung an den Traefik-Proxy war möglich, auch die SSL-Zertrifikate wurden vollautomatisch erstelt. Weiter konnte auch des Update-Konzepts mittels Cron-Dienst und Github-Repository übernommen werden, so dass das andere Projektteam eigenständig entwickeln konnte. 
+Die hier entwickelte Konfiguration erwies sich als so verlässlich, dass auch ein anderes Projektteam (\textbf{Deskshare\footnote{Siehe \url{https://github.com/tstsrv-de/deskshare} bzw. \url{https://deskshare.tstsrv.de/}.}}) aus unserem Studiengang, ihre Dienste auf unserer Hardware unter einer eigenen Subdomian betreiben konnte. Die Anbindung an den Traefik-Proxy war möglich, auch die SSL-Zertrifikate wurden vollautomatisch erstelt. Weiter konnte auch das Update-Konzepts mittels Cron-Dienst und Github-Repository übernommen werden, so dass das andere Projektteam eigenständig entwickeln konnte. 
 
 
 Die Ressourcen des Servers reichen hier für beide Projekte, auch in der Phase vor Abgabe der Arbeiten, aus: 
@@ -78,9 +76,9 @@ Die Ressourcen des Servers reichen hier für beide Projekte, auch in der Phase v
 
 \subsubsection{Initialisierung der Django-Anwendung}
 
-Nach dem Aufbau der grundsätzlichen Funktionen des Servers (Update-Systemdienste und Cron-Skripte), wurde die Django-Anwendung initialisiert. Der Abaluf orientierte sich hier an den in den Vorlesungen gewonnenen Erkenntnissen und wurde im Anhang (siehe Anhang \ref{django-init}) stichpunktartig festgealten. 
+Nach dem Aufbau der grundsätzlichen Funktionen des Servers (Update-Systemdienste und Cron-Skripte), wurde die Django-Anwendung initialisiert. Der Ablauf orientierte sich hier an den in den Vorlesungen gewonnenen Erkenntnissen und wurde im Anhang (siehe Anhang \ref{django-init}) stichpunktartig festgehalten. 
 
-Im Anschluss daran wurden dann zuerst grundlegende Funktionen für die Benutzer-Regeistrierung am System hinzugefügt. Das  insbesondere unter Nutzung von zwei Anleitungen\footnote{Siehe  \url{https://www.nintyzeros.com/2020/06/login-register-user\%20page-in\%20django.html} und \url{https://docs.djangoproject.com/en/3.2/topics/auth/default/\#built-in-auth-forms}.}.
+Im Anschluss daran wurden dann zuerst grundlegende Funktionen für die Benutzer-Regeistrierung am System hinzugefügt. Das geschah insbesondere unter Nutzung von zwei Anleitungen\footnote{Siehe  \url{https://www.nintyzeros.com/2020/06/login-register-user\%20page-in\%20django.html} und \url{https://docs.djangoproject.com/en/3.2/topics/auth/default/\#built-in-auth-forms}.}.
 
 
 Da das Projekt selbst die Entwicklung eines Spiels umfasste, wurde hier bewusst auf die Implementation von allen ansonsten mit einer Benutzerverwaltung im Zusammenhang stehenden Funktionen verzichtet. Es ist somit \textbf{nicht möglich}, seinen Benutzer z.B. zu löschen oder \textbf{ein vergessenes Passwort} zu erneuern. Unser Fokus lag hier, den Anforderungen entsprechend, auf der Entwicklung der Hauptanwendung. 
@@ -88,7 +86,7 @@ Da das Projekt selbst die Entwicklung eines Spiels umfasste, wurde hier bewusst 
 Es wird hier in dieser Dokumentation auch nicht weiter auf die implementierte Benutzerverwaltung eingegangen, da es sich um weithin bekannte Standart-Features von Django handelt.
 
 Mit Abschluss der Einrichtung der Django-Anwendung, liegt ein mit den bekannten Funktionen (wie Datenbankmodelle, Benutzerverwaltung, DB-Migrationen, ...) nutzbarer Django-Webserver vor. 
-Für die Entwickler und die Entwicklung selbst, ist die direkte Interaktion mit dem Django-Webserver selbst, nicht mehr notwendig. Die entwickelten Skripe, starten den Webserver mit allen notwendigen Paramentern selsbtständig und führen vorher auch notwendige Schritte wie \enquote{makemigrations, migrate oder loaddata} selsbtständig aus. Beispielhaft hier ein Auszug aus dem Skript für den Start der lokalen Entwicklungsumgebung unter unixartigen Betriebssystemen\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/local-dev-start.sh}.}: 
+Für die Entwickler und die Entwicklung selbst ist die direkte Interaktion mit dem Django-Webserver nicht mehr notwendig. Die entwickelten Skripte starten den Webserver mit allen notwendigen Paramentern selbstständig und führen vorher auch notwendige Schritte wie \enquote{makemigrations, migrate oder loaddata} automatisch aus. Beispielhaft hier ein Auszug aus dem Skript für den Start der lokalen Entwicklungsumgebung unter unixartigen Betriebssystemen\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/local-dev-start.sh}.}: 
 
 \begin{lstlisting}[language=bash]
 #!/bin/bash
@@ -103,7 +101,7 @@ docker-compose -f local-dev-docker-compose.yml up
 
 \subsubsection{Datenbankmodell}
 
-Aus den ersten Gesprächen und Austausch zum Projekt und den später formulierten Anforderungen wurden Erste Konzepte und Ideen zu Papier gebracht. Dabei wurden auch erste Zeichnungen zu einem möglichen Datenbankmodell erstellt. In bzw. zu den späteren Projektbesprechungen wurden konkretere Zeichnungen erstellt. 
+Aus den ersten Gesprächen und Austausch zum Projekt und den später formulierten Anforderungen wurden erste Konzepte und Ideen zu Papier gebracht. Dabei wurden auch erste Zeichnungen zu einem möglichen Datenbankmodell erstellt. In bzw. zu den späteren Projektbesprechungen wurden konkretere Zeichnungen erstellt. 
 
 \begin{figure}[H]
     \centering
@@ -127,13 +125,13 @@ Hier eine Darstellung des Datenbankmodells als Diagramm sowie anschließend die 
 \end{figure}
 
 
-Der Aufbau der des Datenbankmodells beginnt logisch mit der \textbf{Benutzertablle} sowie den anderen, von Django systemseitig erstellten Tabellen, auf die hier nicht weiter eingegangen wird.
+Der Aufbau der des Datenbankmodells beginnt logisch mit der \textbf{Benutzertabelle}, sowie den anderen von Django systemseitig erstellten Tabellen, auf die hier nicht weiter eingegangen wird.
 
 Auf die Benutzertabelle setzt eine \textbf{Tabelle für Charaktere} (\textit{UserChar}) auf. Darin enthalten und jeweils einem Benutzer zugeordnet, sind alle Daten zu den Spielercharakteren. Neben dem Namen und der Klasse sind in der Tabelle auch veränderliche Attribute wie die Angriffspunkte und Lebenspunkte sowie noch zu verteilende Erfahrungspunkte abgespeichert. 
 
-Bei der Erstellung eines neuen Charakters werden die Start- bzw. Standartwerte für Lebens- und Angriffspunkte aus einer besonderen \textbf{Konfigurationstabelle} (\textit{myrpgconfig}) abgerufen und für die Erstellung des neuen Charakters entsprechend der ausgewählten Klasse, abgespeichert. In dieser Konfigurationstabelle wurden weiter auch für \textbf{alle Konstanten} die im Laufe der Entwicklung Einzug in den Programmcode gehalten haben, in einem späteren Schritt in diese Tabelle transportiert. Dies umfasst tatsächlich komplett alle Konstanten. Beispielhaft genannt seien hier z.B. der Faktor für die Berechnung von Erfahrungspunkten aus dem verursachten Schaden, der Minimal- und Maximalfaktor bei der Berechnung des bei einem Angriff entstandenen Schaden aus den Angriffspunkten heraus sowie auch die Laufzeiten in Rundenzahl sowie die Stärke der Fähigkeiten der einzelnen Klassen. 
+Bei der Erstellung eines neuen Charakters werden die Start- bzw. Standartwerte für Lebens- und Angriffspunkte aus einer besonderen \textbf{Konfigurationstabelle} (\textit{myrpgconfig}) abgerufen und für die Erstellung des neuen Charakters, entsprechend der ausgewählten Klasse, abgespeichert. In diese Konfigurationstabelle wurden weiter auch \textbf{alle Konstanten}, die im Laufe der Entwicklung Einzug in den Programmcode gehalten haben transportiert. Dies umfasst tatsächlich komplett alle Konstanten. Beispielhaft genannt seien hier z.B. der Faktor für die Berechnung von Erfahrungspunkten aus dem verursachten Schaden, der Minimal- und Maximalfaktor bei der Berechnung des bei einem Angriff entstandenen Schaden aus den Angriffspunkten heraus sowie auch die Laufzeiten in Rundenzahl sowie die Stärke der Fähigkeiten der einzelnen Klassen. 
 
-Das erlaubt es, die gesamte Konfiguration des Projektes und ebenso auch das Balancing über die Administrationsoberfläche von Django unkompliziert zu verändern und zu pflegen. Die Konfigurationstabelle umfasst 21 Einstellungen. Zu jeder Einstellung sind in der Datenbank selbst auch entsprechende Erklärungen zur genauen Verwendung und Nutzung hinterlegt. Auch ist es möglich \textbf{verschiedene Datentypen in der Konfigurationstabelle} abzuspeichern und abzurufen. Folgende Hilfsfunktion wurde dazu in der Datei \enquote{rpg\_tools.py}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/rpg/rjh_rpg/rpg_tools.py\#L63-L80}.} erstellt: 
+Das erlaubt es die gesamte Konfiguration des Projektes und ebenso auch das Balancing über die Administrationsoberfläche von Django unkompliziert zu verändern und zu pflegen. Die Konfigurationstabelle umfasst 21 Einstellungen. Zu jeder Einstellung sind in der Datenbank selbst auch entsprechende Erklärungen zur genauen Verwendung und Nutzung hinterlegt. Auch ist es möglich \textbf{verschiedene Datentypen in der Konfigurationstabelle} abzuspeichern und abzurufen. Folgende Hilfsfunktion wurde dazu in der Datei \enquote{rpg\_tools.py}\footnote{Siehe \url{https://github.com/tstsrv-de/rpg/blob/main/rpg/rjh_rpg/rpg_tools.py\#L63-L80}.} erstellt: 
 
 \begin{lstlisting}[language=python]
 def rpg_get_config(config_to_get):
@@ -154,7 +152,7 @@ def rpg_get_config(config_to_get):
 \end{lstlisting}
 
 
-Neben der Benutzertabelle, Charatertabelle und der Konfigurationstabelle gibt es eine ganze Menge an Tabellen für das Spiel selbst. Zentral ist dabei die \textbf{Grundtabelle der Level} (\textit{GameScenes}): Diese ist als Bauplan der Level zu verstehen. Enthalten sind alle notwendigen Informationen um ein neues Spiel in einem der Level starten zu können: Der Name des Gegeners, die Texte und Werte des Gegners. Aber auch die Anzahl der für diesen Level notwendigen Spieler. Ebenso sind alle Texte zum Level (Intro, Gewinn- und Gameover-Nachricht, ...) darin enthalten. 
+Neben der Benutzer-, Charakter- und der Konfigurationstabelle gibt es eine ganze Menge an Tabellen für das Spiel selbst. Zentral ist dabei die \textbf{Grundtabelle der Level} (\textit{GameScenes}): Diese ist als Bauplan der Level zu verstehen. Enthalten sind alle notwendigen Informationen um ein neues Spiel in einem der Level starten zu können: Der Name des Gegeners, die Texte und Werte des Gegners. Aber auch die Anzahl der für diesen Level notwendigen Spieler. Ebenso sind alle Texte zum Level (Intro, Gewinn- und Gameover-Nachricht etc.) darin enthalten. 
 
 In der \textbf{Hilfstabelle für den Spieler-Staus} (\textit{GameState}) wird jeweils der aktuelle Standort eines Spielers hinterlegt. Mit Standort ist dabei die aktuell aufgerufene Seite des Spieles gemeint. Es kann darüber nachvollzogen werden ob der Spieler sich gerade auf der Weltkarte befindet oder in einer der Level-Lobbys. Auch wird darin ein Zeitpunkt des letzten Datenpaketes aus dem Chat hinterlegt. Darüber ist es möglich, Spieler nach Ablauf einer gewissen Zeit (Sekunden), automatisch aus dem Chat zu entfernen. 
 
@@ -173,7 +171,7 @@ Letzte mit dem Spielablauf im Zusammenhang stehende Tabelle ist eine \textbf{Spe
 \subsubsection{Hervorzuhebende Code-Entwicklungen}
 
 
-Neben standart Entwicklungen wie z.B. Regeistrierungs- und Loginfunktionen (die hier wie bereits klar gemacht, nicht weiter Beschrieben werden sollen), wurden vorallem sehr spezifische Entwicklungen durchgeführt. Im nun folgenden Abschnitt werden insbesondere zwei Teile näher beschrieben: 
+Neben Standard-Entwicklungen wie z.B. Registrierungs- und Loginfunktionen (die hier wie bereits klar gemacht, nicht weiter beschrieben werden sollen), wurden vor allem sehr spezifische Entwicklungen durchgeführt. Im nun folgenden Abschnitt werden insbesondere zwei Teile näher beschrieben: 
 
 \begin{enumerate}
     \item Die Funktionsweise und Implementation der Websockets, sowie 
@@ -182,14 +180,14 @@ Neben standart Entwicklungen wie z.B. Regeistrierungs- und Loginfunktionen (die 
 
 
 
-Zu den \textbf{Websockets} wurdenim Kapitel \nameref{anforderungen} einige Grundlagen bereits erklärt. Bei der Entwicklung wurde hier als erster Programmteil nach den Basisfunktionen, eine Chat-Funktion über die Websockets implementiert. 
+Zu den \textbf{Websockets} wurden im Kapitel \nameref{anforderungen} einige Grundlagen bereits erklärt. Bei der Entwicklung wurde hier als erster Programmteil nach den Basisfunktionen, eine Chat-Funktion über die Websockets implementiert. 
 
 
-Dies vorallem unter Nutzung einer Anleitung\footnote{Siehe \url{https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started}.}, die eine Basis-Form der Chat-Funktionalität bereitstellte. Diese wurde schnell für die in diesem Projekt beachsichtigten Zwecke erweitert und angepasst:
+Dies vor allem unter Nutzung einer Anleitung\footnote{Siehe \url{https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started}.}, die eine Basis-Form der Chat-Funktionalität bereitstellte. Diese wurde schnell für die in diesem Projekt beachsichtigten Zwecke erweitert und angepasst:
 
-In der nun vorliegenden Lösung öffnet sich beim \textbf{Besuch der Worldmap}, über das dargestellte Chatfenster eine Websocktverdindung. Diese bleibt als offene Verbindung bestehen und erlaubt es Nachrichten zwischen dem Server (Django) und dem Client (Browser) auszutauchen. Auf der Serverseite läuft dies innerhalb Djangos über ein Routing der Websockets in entsprechende Consumer-Funktionen. Auf Clientseite findet JavaScript Verwendung für das Versenden sowie Empfangen und Verarbeiten der Nachrichten über das Websocket-Protokoll. 
+In der nun vorliegenden Lösung öffnet sich beim \textbf{Besuch der Worldmap}, über das dargestellte Chatfenster eine Websocket-Verbindung. Diese bleibt als offene Verbindung bestehen und erlaubt es Nachrichten zwischen dem Server (Django) und dem Client (Browser) auszutauchen. Auf der Serverseite läuft dies innerhalb Djangos über ein Routing der Websockets in entsprechende Consumer-Funktionen. Auf Clientseite findet JavaScript Verwendung für das Versenden sowie Empfangen und Verarbeiten der Nachrichten über das Websocket-Protokoll. 
 
-Innerhalb der \textbf{Level-Lobby-Seiten} wird jeweils auch eine entsprechende Websocket-Verbindung aufgebaut. Über die ID der Lobby, wir hier analog eine Websocket-Verbindung mit gleicher ID aufgebaut. Die Zurodnung des Aufrufs erfolgt hier innerhalb von Django über die in der \textit{settingy.py} hinzugefügte App \textit{channels} sowie die Einstellungen zur ASGI-App \textbf{mit dem Routing-Ziel} zur enstpechdenen Auflösung des Websockets-Aufrufs über die \textit{routing.py} innerhalb der Django-App \textit{rjh\_rpg}:
+Innerhalb der \textbf{Level-Lobby-Seiten} wird jeweils auch eine entsprechende Websocket-Verbindung aufgebaut. Über die ID der Lobby, wird hier analog eine Websocket-Verbindung mit gleicher ID aufgebaut. Die Zuordnung des Aufrufs erfolgt hier innerhalb von Django über die in der \textit{settings.py} hinzugefügte App \textit{channels} sowie die Einstellungen zur ASGI-App \textbf{mit dem Routing-Ziel} zur enstpechdenen Auflösung des Websockets-Aufrufs über die \textit{routing.py} innerhalb der Django-App \textit{rjh\_rpg}:
 
 \begin{lstlisting}[language=python]
 websocket_urlpatterns = [
@@ -199,7 +197,7 @@ websocket_urlpatterns = [
 ]
 \end{lstlisting}
 
-Der Aufbau von Websocket-Verbindungen ist wie man sieht, analog der aus Django bekannten \enquote{urls.py} geregelt. Von \textbf{Client-Seite} aus wird hier eine bestimmte URL aufgerufen und damit die Websocket-Verbindung aufgebaut. Über das Objekt dieser aktiven Verbindung, können dann Nachrichten (hier als JSON-String) übermittelt werden. Beispielhaft und stark vereinfacht wie folgt: 
+Der Aufbau von Websocket-Verbindungen ist, wie man sieht, analog der aus Django bekannten \enquote{urls.py} geregelt. Von \textbf{Client-Seite} aus wird hier eine bestimmte URL aufgerufen und damit die Websocket-Verbindung aufgebaut. Über das Objekt dieser aktiven Verbindung können dann Nachrichten (hier als JSON-String) übermittelt werden, beispielhaft und stark vereinfacht wie folgt: 
 
 
 \begin{lstlisting}[language=JavaScript]
@@ -209,9 +207,9 @@ chat_websocket.send(JSON.stringify({ user: user_id, message: message, }));
 
 
 
-Als nächsten Entwicklungsschritt wurde hier dann die \textbf{veränderlichen Webseiteninhalte über Websockets} transportiert - Ähnlich AJAX bzw. einem Framework mit Nutzung einer API als Backend. In dem Anwendunsfall unseres Spiels, findet hier die Verarbeitung vorallem in dem Websockets-\textit{Consumer} für das Spiel statt, der \textbf{consumer\_game.py}.
+Als nächsten Entwicklungsschritt wurden hier dann die \textbf{veränderlichen Webseiteninhalte über Websockets} transportiert - Ähnlich AJAX bzw. einem Framework mit Nutzung einer API als Backend. In dem Anwendungsfall unseres Spiels findet hier die Verarbeitung vor allem in dem Websockets-\textit{Consumer} für das Spiel statt: der \textbf{consumer\_game.py}.
 
-Darin werden vom Client erhaltene Nachrichten verarbeitet. Diese Nachrichten können z.B. das Klicken eines der Schaltes sein (Angriff, Fähigkeit nutzen, Aussetzen) oder auch ein laufend übersandtes Lebenszeichen -- Ein \textit{Heartbeat}, der dem Server mitteilt, dass der jeweilige Spieler noch im Spiel ist und die Webseite offen hat -- Die Websocket-Verbindung also noch Bestand hat. Stark vereinfacht und gekürzt stellt sich das im Programmcode wie folgt dar: 
+Darin werden vom Client erhaltene Nachrichten verarbeitet. Diese Nachrichten können z.B. das Klicken eines der Buttons sein (Angriff, Fähigkeit, Aussetzen) oder auch ein laufend übersendetes Lebenszeichen, ein \textit{Heartbeat}. Dieser teilt dem Server mit, dass der jeweilige Spieler noch im Spiel ist und die Webseite offen hat, die Websocket-Verbindung also noch Bestand hat. Stark vereinfacht und gekürzt stellt sich das im Programmcode wie folgt dar: 
 
 \begin{lstlisting}[language=python]
 class Consumer(AsyncWebsocketConsumer):
@@ -259,7 +257,7 @@ class Consumer(AsyncWebsocketConsumer):
 \end{lstlisting}
     
 
-Man sieht, durch den Erhalt von Nachrichten, wird im wesentlichen die Spielelogik fortgeführt bzw. -geschrieben. Das Spiel durchläuft dabei Runden, die in Rundenstufen unterteilt sind. Innerhalb dieser Rundenstufen, werden verschiedene Aktionen oder Prüfungen durchgeführt. Auch werden in einer Rundenstufe z.B. die Aktionen der Spieler eingesammelt. Das bedeutet, dass das Spiel solange in dieser Rundenstufe (Aktionen einsammeln) verbleibt, bis jeder Spieler eine nächste Aktion ausgewählt hat. 
+Man sieht, dass die Spielelogik im Wesentlichen durch den Erhalt von Nachrichten fortgeführt bzw. -geschrieben wird.  Das Spiel durchläuft dabei Runden, die in Rundenstufen unterteilt sind. Innerhalb dieser Rundenstufen werden verschiedene Aktionen oder Prüfungen durchgeführt. Auch werden in einer Rundenstufe z.B. die Aktionen der Spieler eingesammelt. Das bedeutet, dass das Spiel solange in dieser Rundenstufe (Aktionen einsammeln) verbleibt, bis jeder Spieler eine nächste Aktion ausgewählt hat. 
 
 In der Projektbesprechung vom 11.12.2021 wurde ein Rundenablauf erarbeitet, der übersetzt als Pseudo-Code Grundlage für die Programmierung wurde: 
 
@@ -274,7 +272,7 @@ In der Projektbesprechung vom 11.12.2021 wurde ein Rundenablauf erarbeitet, der 
     \item Gameloop-Schleife nächster Durchlauf [700, zurück zu 100]...
 \end{enumerate}
 
-Mit Abschluss der Programmierung ergab sich ein etwas detailierterer Rundenablauf, der im Code dann wie folgt fixiert und damit auch hier dokumentiert wird: 
+Mit Abschluss der Programmierung ergab sich ein etwas detailierterer Rundenablauf, der im Code dann wie folgt fixiert wurde und hier dokumentiert ist: 
 
 
 \begin{lstlisting}
@@ -295,11 +293,11 @@ Mit Abschluss der Programmierung ergab sich ein etwas detailierterer Rundenablau
 999 show link to exit
 \end{lstlisting}
 
-Tests ergaben Probleme beim Spiel mit mehreren Spielern. Die Rundenlogik wurde gleichzeitig vorangetrieben. Dadurch wurden manche Aktionen und Rundenschritte mehrfach ausgeführt. Ein Versuch das Problem mit einem Token (ähnlich einem Semaphor) zu lösen, brachte leider keinen abschließenden Erfolg. Der Singleplayer aber, funktionierte fehlerfrei. 
+Tests ergaben Probleme beim Spiel mit mehreren Spielern. Die Rundenlogik wurde gleichzeitig vorangetrieben. Dadurch wurden manche Aktionen und Rundenschritte mehrfach ausgeführt. Ein Versuch das Problem mit einem Token (ähnlich einem Semaphor) zu lösen, brachte leider keinen abschließenden Erfolg. Der Einzelspieler aber funktionierte fehlerfrei. 
 
-Als Workaround für oben genanntes Problem im Mulitplayer wurde eingestellt, dass immer nur der erste Spieler eines Spiels die Rundenlogik vorantreibt. Das ist etwas mehr fehleranfällig als eine korrekte Tokenlösung, wird für das Projekt hier aber vorerst ausreichend sein (Commit \url{https://git.io/Jy1su}).
+Als Workaround für oben genanntes Problem im Mehrspieler wurde eingestellt, dass immer nur der erste Spieler eines Spiels die Rundenlogik vorantreibt. Das ist etwas fehleranfälliger als eine korrekte Token-Lösung, wird für das Projekt hier aber vorerst ausreichend sein (Commit \url{https://git.io/Jy1su}).
 
-Die Haupt-Entwicklungsphase endet mit einer Spielseite, die sich noch farbenfroh darstellt: 
+Die Hauptentwicklungsphase endete mit einer Spielseite, die sich noch farbenfroh darstellte: 
 
 \begin{figure}[H]
     \centering
