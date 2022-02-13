@@ -1,5 +1,21 @@
 # README for 'Browser RPG-Adventure'-project
 
+This is the code and documentation for "Browser RPG-Adventure"-project (as part of an examination in the 5th semester of business informatics, FOM University of Siegen).
+
+The final product, the game **MONSTER SLAYER**, can be found and played at <https://rpg.tstsrv.de>.
+
+The authors are:
+- Frakes95 <https://github.com/haenno>
+- haenno <https://github.com/derBart0815>
+- derBart0815 <https://github.com/Frakes95>
+
+## Credits and acknowledgements
+
+- Ronen Ness for a CSS-Framework <https://github.com/RonenNess/RPGUI>
+- A Django Chat-Tutorial <https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started>
+- The Krita manual <https://docs.krita.org/en/index.html>
+- Igor Bubelov for a Traefik guide  <https://github.com/bubelov/traefik-letsencrypt-compose>
+
 ## Short howto for local testing and/or dev useage
 
 - Install git and docker
@@ -30,13 +46,6 @@
 ### Scripts for following usage 
 
 If you want to keep using this local *installation*, just use on of the scripts ``local-dev-start.bat`` (on 🪟)  or ``local-dev-start.sh``  (on 🍎 and 🐧) to start it back up again. On each start they will collect and apply migrations, load sample data to the database from the *.json file in the base-dir and start the docker containers (Django server and the database) back up again. Also it will keep the terminal open, so that you can see all the (error-)messages and output from Django and the database.
-
-## Credits and acknowledgements
-
-- Ronen Ness for a CSS-Framework <https://github.com/RonenNess/RPGUI>
-- A Django Chat-Tutorial <https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started>
-- The Krita manual <https://docs.krita.org/en/index.html>
-- Igor Bubelov for a Traefik guide  <https://github.com/bubelov/traefik-letsencrypt-compose>
 
 ## Licence
 
