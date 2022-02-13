@@ -103,12 +103,9 @@ class Consumer(AsyncWebsocketConsumer):
                 slot_template = slot_template.replace('**js_button_function**','free_the_slot')
                 slot_template = slot_template.replace('**button_text**','Platz freigeben')
 
-                # (TODO!) every user gets the same html string, so this logic does not work in this way. 
-                # maybe with JS an local check if the char_id fits the button
-                # if str(user_char_name) == str(char_name): # disable button not here, maybe on countdown
-                #    slot_template = slot_template.replace('**button_disabled**','**button_disabled_for_lvl2**')
-                # else: # disable button here now - because first you need to free the taken slot
-                #    slot_template = slot_template.replace('**button_disabled**','disabled')
+                # (OPT/LATER/BONUS) every user gets the same html string. set a button to disabled, 
+                # could be solved in the client with JS
+                
                 slot_template = slot_template.replace('**button_disabled**','**button_disabled_for_lvl2**')
                     
             else: # slot is free
@@ -205,9 +202,6 @@ class Consumer(AsyncWebsocketConsumer):
         char_id = text_data_json['char_id']
 
         if message == 'heartbeat':
-            # (TODO!) update timestamps, delete old entrys
-            # check timestamps, delete old and zombie  entrys
-            
             try:
                 heartbeat_char_id = text_data_json['char_id']
                 await rpg_websocket_user_char_chat_heartbeat(heartbeat_char_id)

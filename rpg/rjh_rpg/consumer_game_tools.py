@@ -111,7 +111,7 @@ def db_set_user_char_to_dead(user_char_in_games_id):
 @database_sync_to_async
 def db_give_dmg_to_user_char(user_char_in_games_id, ap_to_deliver):
     last_hp = UserCharInGames.objects.get(id=user_char_in_games_id).current_hp
-    ap_to_deliver = random.randint(int(ap_to_deliver * rpg_get_config("dmg_min")), int(ap_to_deliver * rpg_get_config("dmg_max"))) # (TODO!) Maybe later replace with dice
+    ap_to_deliver = random.randint(int(ap_to_deliver * rpg_get_config("dmg_min")), int(ap_to_deliver * rpg_get_config("dmg_max"))) 
     new_hp = last_hp - int(ap_to_deliver)
     if new_hp < 0:
         new_hp = 0
@@ -204,7 +204,7 @@ def db_get_user_char_current_hp(user_char_in_games_id):
 @database_sync_to_async
 def db_give_dmg_to_enemy(game_id, ap_to_deliver):
     last_hp = Games.objects.get(id=game_id).enemy_current_hp
-    ap_to_deliver = random.randint(int(ap_to_deliver * rpg_get_config("dmg_min")), int(ap_to_deliver * rpg_get_config("dmg_max")))  # (TODO!) Maybe later replace with dice
+    ap_to_deliver = random.randint(int(ap_to_deliver * rpg_get_config("dmg_min")), int(ap_to_deliver * rpg_get_config("dmg_max"))) 
     new_hp = last_hp - int(ap_to_deliver)
     if new_hp < 0:
         new_hp = 0

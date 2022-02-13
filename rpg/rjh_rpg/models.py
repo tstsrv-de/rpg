@@ -48,7 +48,7 @@ class UserChar(models.Model):
     xp_to_spend =  models.IntegerField(default=0)
 
 
-    def __str__(self): # (TODO!) this maybe the cause of many problems... why do we need this? would it be better w/o? to fetch id's...
+    def __str__(self):
         return self.name
 
 
@@ -74,7 +74,7 @@ class GameScenes(models.Model): # blueprint of the games
 class LobbySlots(models.Model):
     user_char_id = models.OneToOneField(UserChar, on_delete=models.CASCADE, unique=True)
     game_scene_id = models.ForeignKey(GameScenes, on_delete=models.CASCADE) # also known as scene_id
-    slot_id = models.IntegerField(null=True, blank=True) # also known as scene_id    (TODO!) install as a required field w/o null and blank   
+    slot_id = models.IntegerField(null=True, blank=True) # also known as scene_id   
     datetime_slot_taken = models.DateTimeField(default=datetime.now) 
     datetime_locked_in = models.DateTimeField(null=True, blank=True)    
 

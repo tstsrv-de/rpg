@@ -51,7 +51,7 @@ def login(request):
             user = auth.authenticate(username=request.POST['username'],password = request.POST['password'])
             if user is not None:
                 auth.login(request,user)
-                # (TODO!) should we delete gamesessions here?
+                # (OPT/LATER/BONUS) delete gamesessions here
                 return redirect('home')
             else:
                 return render (request,'login.html', {'error':'Benutzername oder Passwort falsch!'})
