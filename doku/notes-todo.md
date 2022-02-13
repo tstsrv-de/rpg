@@ -58,3 +58,9 @@
 - Texte von Rico mit Formatierungen (fett, krusiv, unterstreichungen... ) auflockern (Wall-of-Text) >> Sonntag, 14 Uhr
 
 - Anhang: Bildbeschreibungen anpassen und ggfls. aussortieren >> Sonntag, 14 Uhr
+
+- Impressum/Credits geben/Lizenz
+ - RPG-Gui
+ - Chat-Howto
+ - Traefik Server
+ 

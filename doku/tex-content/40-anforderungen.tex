@@ -16,7 +16,7 @@ Die wensentlichen Anforderungen, deren Erfüllbarkeit vorallem auch an die gewä
 \end{itemize}
 
 
-Die Anforderungen \enquote{im Web laufen} sowie \enquote{performant und stabil} sind bei korrekter Konfiguration, entsprechender Hardware und Wartung durch nahezu jeden \ac{Stack} zu erfüllen. 
+Die Anforderungen \enquote{im Web laufen} sowie \enquote{performant und stabil} sind bei korrekter Konfiguration, entsprechender Hardware und Wartung durch nahezu jeden Stack\footnote{Stack: Software-, Technologie- oder Lösungsstack} zu erfüllen. 
 
 Da das gesamte Projektteam unerfahren mit der Umsetzung von Webprojekten war und die ersten, in den Vorlesungen zum Modul gesammelten Erfahrungen, mit der dort Vorgestellten Lösung \textbf{Django} durchweg positiv waren, wurde dem eine deutliche Präferenz zugeschrieben. Die zuerst genannten Anforderungen, dürfen bei Django auch als erfüllt betrachtet werden. Django ist weit verbreitet und wird produktiv im gewerblichen Einsatz erfolgreich betrieben. 
 
@@ -24,9 +24,9 @@ Die nächste Anforderung \enquote{multiplayerfähig}, stellte bereits höhere An
 
 Wir haben hier in Projektbesprechungen schnell erkannt, dass das Spiel mit allen möglichen Interaktionen, jeweils einzeln genau definiert werden müssen. Nur so lassen sich konkrete Anforderungen formulieren und die spätere Programmierung erledigen. 
 
-Bei dieser Definition wurde weiter deutlich, dass es (bedingt duch die geforderte Multiplayerfähigkeit) nicht nur einen bedeutenden Aufwand zu Entwurf und Programmierung bezüglich der Spiellogik selbst, sondern auch bezüglich des \textbf{\gls{Matchmaking}} geben wird. 
+Bei dieser Definition wurde weiter deutlich, dass es (bedingt duch die geforderte Multiplayerfähigkeit) nicht nur einen bedeutenden Aufwand zu Entwurf und Programmierung bezüglich der Spiellogik selbst, sondern auch bezüglich des \textbf{Matchmaking}\footnote{Das Matchmaking umfasst bei Mulitplayerspielen das Zusammenfinden oder auch automatische Zusammenstellen von verschiedenen Mitspielenden zu einem Spiel} geben wird. 
 
-Das \gls{Matchmaking} sollte hier nicht automatisch erfolgen, sondern bewusst durch die Spieler. Ein gewisser Austausch ist dafür unabdingbar: Es wurde eine Chat-Funktion bennötigt. Über eine Recherche dazu, wurden wir auf das \textbf{Websocket-Protokoll} aufmerksam. Gemäß der Beschreibung nach \citeauthor{heise-django-2011} (\citeyear{heise-django-2011}) sollten unsere Anforderungen umfassend erfüllt werden. Das Websocket-Protkoll ist -ähnlich einer TCP-Verbindung- eine bestehen bleibende Verbindung, die es auch erlaubt Events von Serverseite aus, an den Client (ohne dessen gesonderte Anforderung), zu übertragen. 
+Das Matchmaking sollte hier nicht automatisch erfolgen, sondern bewusst durch die Spieler. Ein gewisser Austausch ist dafür unabdingbar: Es wurde eine Chat-Funktion bennötigt. Über eine Recherche dazu, wurden wir auf das \textbf{Websocket-Protokoll} aufmerksam. Gemäß der Beschreibung nach \citeauthor{heise-django-2011} (\citeyear{heise-django-2011}) sollten unsere Anforderungen umfassend erfüllt werden. Das Websocket-Protkoll ist -ähnlich einer TCP-Verbindung- eine bestehen bleibende Verbindung, die es auch erlaubt Events von Serverseite aus, an den Client (ohne dessen gesonderte Anforderung), zu übertragen. 
 
 An vielen Stellen im Projekt, würde dies eine Anforderung sein, die mit den Websockets damit erfüllt werden konnten. 
 
