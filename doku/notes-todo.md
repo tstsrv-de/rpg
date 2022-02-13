@@ -60,7 +60,30 @@
 - Anhang: Bildbeschreibungen anpassen und ggfls. aussortieren >> Sonntag, 14 Uhr
 
 - Impressum/Credits geben/Lizenz
- - RPG-Gui
- - Chat-Howto
- - Traefik Server
- 
+  - RPG-Gui
+  - Chat-Howto
+  - Traefik Server
+
+### Backup des Dojo Levels
+
+```json
+  {
+    "model": "rjh_rpg.gamescenes",
+    "pk": 6,
+    "fields": {
+      "name": "🧸 Monsterjäger-Dojo",
+      "req_players": 3,
+      "welcome_text": "Hier wird niemand sterben. Zumindest ist hier bis jetzt noch niemand gestorben!<br><br>",
+      "boss_welcome_text": "Schlag mich!",
+      "enemy_name": "🎯 Trainigsziel 🎯",
+      "enemy_hp": 1000,
+      "enemy_ap": 1,
+      "enemy_image": "training_dummy.mp4",
+      "enemy_dead_image": "dojo_background.jpeg",
+      "intro_image": "dojo_intro.jpg",
+      "intro_text":"„Es tut nicht weh. Keine Angst.“ Genau das hat euer Trainer immer gesagt als er euch durch den Trainingsparcours gescheucht hat. Ihr habt es gehasst, denn natürlich tat es weh, als er mit euch trainiert hat. Immer wenn ihr eure Deckung vernachlässigt habt, hat er es euch schmerzhaft spüren lassen. Und selbstverständlich seid ihr ihm dankbar für diese Lektionen, denn sie haben euch bis heute am Leben gehalten. <br>Heute wird es allerdings anders sein, denn ihr seid nur hier, um ein paar neue Techniken an der Trainingspuppe zu testen!",
+      "win_text": "Holla! Das war nicht überraschend. Aber dass die Trainingspuppe nach eurem letzten sauberen Hieb in ihre Einzelteile zerfällt, das hattet ihr nicht erwartet.",
+      "gameover_text": "Oh, da muss die Trainingspuppe locker gewesen sein. Durch einen eurer heftigen Schläge muss sie sich gedreht und euch unglücklich am Kopf getroffen haben."
+    }
+  },
+```
