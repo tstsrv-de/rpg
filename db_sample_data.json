@@ -101,17 +101,17 @@
     "fields": {
       "name": "⚰️ Der Friedhof in den Sümpfen",
       "req_players": 3,
-      "welcome_text": "Als ihr in die Krypta des Friedhofs hinabsteigt, bebt der Boden und ein riesiger Koloss aus Knochen greift euch mordlüstern an!<br><br>",
-      "boss_welcome_text": "Tiefer, grollender Schrei!",
-      "enemy_name": "💀 Untoter Koloss 💀",
+      "welcome_text": "Als ihr in die Krypta des Friedhofs hinabsteigt, öffnet sich einer der Sarkophage und ein untoter Magier entsteigt dem kalten Grab. Er spricht eine furchterregende Zauberformel und schickt euch eine Welle grausamer Totenmagie entgegen.<br><br>",
+      "boss_welcome_text": "Hierher zu kommen war töricht kleiner Mensch! Bald schon wirst du mir im Tode als Sklave dienen Unwürdiger!",
+      "enemy_name": "💀 Untoter Magier 💀",
       "enemy_hp": 600,
       "enemy_ap": 60,
-      "enemy_image": "lasercat.mp4",
-      "enemy_dead_image": "worm_background_3840x2160.jpg",
+      "enemy_image": "boss_undead_3840x2160.mp4",
+      "enemy_dead_image": "boss_undead_background_3840x2160.jpg",
       "intro_image": "mine_3840x2160.jpg",
       "intro_text":"Ein Friedhof ist normalerweise ein stiller und friedvoller Ort. Des Nachts vielleicht etwas unheimlich und immer für eine Schauergeschichte gut, aber diesmal scheint es anders. Hier ist schon lange keine Beerdigung mehr gewesen, denn im Umkreis lebt schon ewig keine Seele mehr. Das Land ist verdorrt, die Bäume tot und nur die Raben krächzten ihr schauriges Lied. Ihr seid hier, um zu ergründen warum diese Gegend vor so vielen Jahren verlassen wurde und ihr seid sicher, dass es irgendwie mit den Geschichten zusammenhängt, die sich über diesen Ort erzählt werden. Die einen berichten von wiederkehrenden Missernten und dem Austrocknen der Flüsse und Bäche, wieder andere von nächtlichem Spuk in der Gegend und wieder andere gar von einem uralten Schlachtfeld aus längst vergangenen Tagen, auf dem dieser Landstrich ruht, und dass die Toten ihren Platz wieder einfordern.<br>br>Je näher ihr kommt umso mehr beschleicht euch das Gefühl, dass an allem was ihr gehört habt ein Körnchen Wahrheit ist und noch viel schlimmer. Denn an diesem Ort kann man das Böse nicht nur spüren sondern fast anfassen. Als ihr durch das große schmiedeeiserne Tor am Eingang des Friedhofs tretet, seht ihr die vielen offenen Gräber, wie von innen heraus aufgebrochen, und dann hört ihr den markerschütternden Schrei und spürt das Beben des Bodens. Der Schrei schien aus der Krypta auf dem Hügel vor Euch zu kommen. Vorsichtig bewegt ihr euch die Stufen hinab zur Hauptkammer der Krypta. Als ihr den, in spärliches Licht getauchten Raum betretet, könnt ihr einen Magier sehen, der in ein unheiliges Ritual vertiefen ist. Als er euch bemerkt, wendet er sich euch zu und ihr seht das er weder Haut noch Fleisch auf den Knochen hat. Er scheint nicht erfreut, den ihr könnt den blanken Hass in seinen leeren Augenhöhlen sehen. Die Götter stehen euch bei!",
       "win_text": "Der Skeletmagier ist besiegt und das war selbst mit vereinten Kräften kein leichtes Unterfangen. Der schiere Hass der Bestie auf alles Lebende hätte euch fast bezwungen, aber eure Gemeinschaft und euer individuelles Können hat euch hier wie schon so oft zuvor gerettet. Eure Wunden, von unheiligen Klauen gerissen, heilen langsam und es fällt euch schwer das Grauen dieses Ortes zu vergessen. Ihr glaubt das nicht einmal die Wärme des Lagerfeuers, an dem Ihr diese Geschichte erzählen werdet, ganz die Kälte vertreiben kann, die hier versucht hat, von euch Besitz zu ergreifen.",
-      "gameover_text": "Der Skeletmagier ist ein harter Brocken und selbst mit vereinten Kräften war es euch nicht möglich ihn in die Knie zu zwingen. Es war euch gerade so möglich eure Leben und noch viel wichtiger eure Seelen, zu retten. Eure Wunden sind nicht nur körperlich, sondern die Angst und der Hass an diesem Ort haben sich tief eingebrannt. Der Gedanke an diesen Ort zurück kehren zu müssen, erfüllt euch mit einer tiefen, fast unerträglichen Kälte und Schwere."
+      "gameover_text": "Der untote Magier besitzt mächtige und uralte Magiekräfte und selbst mit vereinten Kräften war es euch nicht möglich ihn in die Knie zu zwingen. Es war euch gerade so möglich eure Leben und noch viel wichtiger eure Seelen, zu retten. Eure Wunden sind nicht nur körperlich, sondern die Angst und der Hass an diesem Ort haben sich tief eingebrannt. Der Gedanke an diesen Ort zurück kehren zu müssen, erfüllt euch mit einer tiefen, fast unerträglichen Kälte und Schwere."   
     }
   },
 
