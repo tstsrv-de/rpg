@@ -4,9 +4,17 @@
 
 
 
-\subsubsection{Spieldesign} Am Anfang der Entwicklung musste ein geeignetes Setting für das geplante RPG* gefunden werden. Zur Auswahl standen die beiden klassischen, den meisten bekannten Arten von Spieleuniversen zur Auswahl. Das eine wäre futuristisches Scifi und das andere eher mittelalterliches Fantasy. 
+\subsubsection{Spieldesign} Am Anfang der Entwicklung musste ein geeignetes Setting für das geplante RPG gefunden werden. Zur Auswahl standen die beiden klassischen, den meisten bekannten Arten von Spieleuniversen zur Auswahl. Das eine wäre futuristisches Scifi und das andere eher mittelalterliches Fantasy. 
 
-In der Frühen Phase der Entwicklung war beim Spieldesign ursprünglich geplant ein RPG zu entwickeln, dass viele Elemente des klassischen Pen and Paper Rollenspielen*, wie z.B. Dungeons \& Dragons enthält. Man wollte unterschiedliche Charakterklassen, die sich in ihrer Ausrüstung, wie individuelle Waffen und Rüstungen, sowie ihren spezifischen Fähigkeiten klar voneinander unterscheiden. Ein Levelsystem, bei dem die einzelnen Charaktere von Abenteuer zu Abenteuer ihre Fähigkeiten verbessern und bessere Ausrüstung in Form von Beutegut finden können, sollte auch enthalten sein. Das Entwicklerteam hat sich dann für das Fantasy Setting entschieden, weil man der Ansicht war, dass sich die vorher genannten Eigenschaften damit besser umsetzen lassen würden. Speziell die unterschiedlichen Eigenschaften der Charakterklassen waren bei dieser Entscheidung maßgeblich, denn eine Eingrenzung auf die besonderen Fähigkeiten der unterschiedlichen Spielfiguren, wie z. B. einen Tank*, einen Heiler* und einen Damagedealer*, schien im Scifi-Hintergrund nicht so einfach und für den Spieler nicht schlüssig zu gestalten.
+In der Frühen Phase der Entwicklung war beim Spieldesign ursprünglich geplant ein RPG zu entwickeln, dass viele Elemente des klassischen Pen and Paper Rollenspielen, wie z.B. Dungeons \& Dragons enthält. Man wollte unterschiedliche Charakterklassen, die sich in ihrer Ausrüstung, wie individuelle Waffen und Rüstungen, sowie ihren spezifischen Fähigkeiten klar voneinander unterscheiden. Ein Levelsystem, bei dem die einzelnen Charaktere von Abenteuer zu Abenteuer ihre Fähigkeiten verbessern und bessere Ausrüstung in Form von Beutegut finden können, sollte auch enthalten sein. Das Entwicklerteam hat sich dann für das Fantasy Setting entschieden, weil man der Ansicht war, dass sich die vorher genannten Eigenschaften damit besser umsetzen lassen würden. Speziell die unterschiedlichen Eigenschaften der Charakterklassen waren bei dieser Entscheidung maßgeblich, denn eine Eingrenzung auf die besonderen Fähigkeiten der unterschiedlichen Spielfiguren, wie z. B. einen Tank\footnote{Eine in Spielen übliche Bezeichnung für eine Charakterklasse, die sich durch eine besonders Starke Rüstung, Ausdauer und/oder Verteidigung auszeichnet.}, einen Healer\footnote{s. vorgen., hier aber eine Charakterklasse die die Lebenspunkte durch Heil-Zauber wiederherstellen kann.} und einen Damagedealer\footnote{s. vorgen., ist eine Charakterklasse die besonders viel Schaden verursachen kann.}, schien im Scifi-Hintergrund nicht so einfach und für den Spieler nicht schlüssig zu gestalten.
+
+\begin{figure}[H]
+    \centering
+    \caption{Details den Klassen aus der Projektbesprechung vom 11.12.2021}
+    \label{fig:2021-12-11-Projekt-Besprechung-Klassenbeschreibung}
+    \fbox{\includegraphics[width=0.5\textwidth]{2021-12-11-Projekt-Besprechung-Klassenbeschreibung}}
+\end{figure}
+
 
 Die Überlegungen führten somit schon am Anfang recht schnell zu den bereits erwähnten unterschiedlichen Spielfiguren, die der Spieler verkörpern kann. Ein Tank soll Schaden von anderen und sich selbst abhalten können. Ein Heiler soll sich und seine Kameraden heilen können und ein Damagedealer soll seinen Schaden und den der anderen Spielfiguren erhöhen. Es war angedacht, dass die einzelnen Spielfiguren über Lebenspunkte, Magiepunkte und verschiedene Handlungsoptionen verfügen, die sich abhängig von der Charakterklasse, voneinander unterscheiden. Auch schien klar zu sin, dass die Würfelmechanik, die Pen and Paper Rollenspielen zu Grunde liegt in das Spiel übernommen werden soll.
 
@@ -32,6 +40,32 @@ Die Kampfmechanik wird wie folgt aussehen. Der Kampf ist deutlich vereinfacht un
 \subsubsection{Balancing} Trotz der recht einfachen Mechanik ist das Ballancing doch recht komplex, denn die einzelnen Klassen, unterscheiden sich klar in ihren Fähigkeiten von einander und sollen trotzdem ihrer unterschiedlichen Spielweise ungefähr gleichwertig im Spiel sein und dem Spieler natürlich auch gleich viel Spaß bereiten. Um dafür die richtigen Stellschrauben zu haben, damit die Fähigkeiten, Lebenspunkte (HP) und Angriffspunkte (AP) individuell eingestellt werden können, sind sämtliche Werte so hinterlegt, dass sie einzeln abgeändert werden können. Im Einzelnen stellt sich das wie folgt dar. 
 
 Wie schon erwähnt, können HP und AP für jede Klasse und jeden Gegner einzeln und völlig unabhängig voneinander abgeändert werden. Die Spezialfähigkeiten der einzelnen Charakterklassen sind in Dauer und Ausprägung unterteilt, die sich wie bei den anderen Werten individuell für jede Klasse einzeln regeln lassen. Auch die erhaltene Erfahrung ist mit einem abänderbaren Multiplikator versehen, um Einfluss darauf zu nehmen wie viel Erfahrung die einzelnen Charaktere erhalten und damit wie schnell sie ihre Fähigkeiten verbessern können. Dabei ist ebenfalls darauf geachtet worden, dass es die Möglichkeit gibt, dass HP und AP unterschiedlich viele Erfahrungspunkte kosten können und wie alle anderen Werte ist dies auch variabel einstellbar. Die unterschiedlichen Erfahrungspunktkosten von HP und AP sind nötig, weil der Unterschied von diesen die Charaktere voneinander abgrenzt und diese im Kampf unterschiedlich wichtig sind und die Spieler nicht zu schnell zu mächtig werden sollen.
+
+\begin{lstlisting}
+"name": "ability_m_effect_strength",
+"type": "float", "value": "0.6",
+"hint": "strength of the mage ability in percent (written in float, 0.1 = 10%, 0.5 = 50%)"
+
+"name": "ability_m_duration_rounds",
+"type": "int", "value": "2",
+"hint": "mage ability will be applyed to this number of next rounds"
+
+"name": "ability_p_effect_strength",
+"type": "float", "value": "0.08",
+"hint": "strength of the priest ability in percent (written in float, 0.1 = 10%, 0.5 = 50%)"
+
+"name": "ability_p_duration_rounds",
+"type": "int", "value": "4",
+"hint": "priest ability will be applyed to this number of next rounds"
+
+"name": "ability_w_effect_strength",
+"type": "float", "value": "0.20",
+"hint": "strength of the warrior ability in percent (written in float, 0.1 = 10%, 0.5 = 50%)"
+
+"name": "ability_w_duration_rounds",
+"type": "int", "value": "3",
+"hint": "warrior ability will be applyed to this number of next rounds"
+\end{lstlisting}
 
 Die Trennung von HP und AP hat außerdem zur Folge, dass nicht jeder Charakter, derselben Klasse, demselben Stereotyp entspricht. Also ist es möglich, dass sich jeder Krieger, so der Spieler denn möchte, anders entwickeln kann als der Krieger, den der Spieler davor gespielt hat. Der Spieler kann also einen Krieger erschaffen, der entweder Wert auf HP oder AP legt und das jedes Mal individuell neu entscheiden. Dies Gilt auch für alle anderen Klassen. Der variable Schaden soll dazu dienen, dass nicht jeder Kampf vorherberechnet werden kann, indem man die HP des Gegners mit den AP des Spielers vergleicht.
 
