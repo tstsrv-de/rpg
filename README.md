@@ -35,6 +35,7 @@ If you want to keep using this local *installation*, just use on of the scripts 
 
 - Ronen Ness for a CSS-Framework <https://github.com/RonenNess/RPGUI>
 - A Django Chat-Tutorial <https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started>
+- The Krita manual <https://docs.krita.org/en/index.html>
 - Igor Bubelov for a Traefik guide  <https://github.com/bubelov/traefik-letsencrypt-compose>
 
 ## Licence
