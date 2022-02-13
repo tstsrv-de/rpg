@@ -30,3 +30,36 @@
 ### Scripts for following usage 
 
 If you want to keep using this local *installation*, just use on of the scripts ``local-dev-start.bat`` (on 🪟)  or ``local-dev-start.sh``  (on 🍎 and 🐧) to start it back up again. On each start they will collect and apply migrations, load sample data to the database from the *.json file in the base-dir and start the docker containers (Django server and the database) back up again. Also it will keep the terminal open, so that you can see all the (error-)messages and output from Django and the database.
+
+## Credits and acknowledgements
+
+- Ronen Ness for a CSS-Framework <https://github.com/RonenNess/RPGUI>
+- A Django Chat-Tutorial <https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started>
+- Igor Bubelov for a Traefik guide  <https://github.com/bubelov/traefik-letsencrypt-compose>
+
+## Licence
+
+This is free and unencumbered software released into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
+
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+For more information, please refer to <http://unlicense.org/>
