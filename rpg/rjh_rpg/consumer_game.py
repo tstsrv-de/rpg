@@ -113,8 +113,7 @@ class Consumer(AsyncWebsocketConsumer):
                 self.my_user_char = await db_get_user_char_from_user_id(self.game_id, self.request_user_id)
 
 
-            # (TODO!) update timestamps, delete old entrys
-            # check timestamps, delete old and zombie  entrys
+            # (OPT/LATER/BONUS) update timestamps, delete old entrys, check timestamps, delete old and zombie  entrys
             
             self.mycounter = self.mycounter + 1
 
@@ -142,7 +141,7 @@ class Consumer(AsyncWebsocketConsumer):
             # this part sadly does not work correctly. problem here is that with multiple 
             # clients/players, the rounds are driven at the same time. solution should be
             # a token -- but this token also need to be synced, which brings new promblems.
-            # (TODO!) get expert help on that.
+            # (OPT/LATER/BONUS) get expert help on that.
 
             # self.round_state_token_is_mine = False
             # if await db_get_is_round_state_locked(self.game_id) == False:            
@@ -253,7 +252,6 @@ class Consumer(AsyncWebsocketConsumer):
 
                 elif round_state == 100:
 
-                    # (TODO!) Implement selection based on aggro-table instand of random char
                     char_to_hit = await db_get_random_alive_user_char_in_games_id(self.game_id) 
 
                     if not char_to_hit: # failsave in case no player is alive

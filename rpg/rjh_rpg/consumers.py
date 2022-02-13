@@ -87,7 +87,6 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async     
     def db_get_list_chars_in_chat(self):
-        # (TODO!) Delete users with to old datetime 'lastaction'
         list_of_chars_in_chat = GameState.objects.filter(place=self.room_name).order_by('char')
         current_datetime = int(datetime.now().strftime('%s'))
         chat_timeout = rpg_get_config('chat_timeout')
