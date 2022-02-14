@@ -4,10 +4,12 @@ This is the code and documentation for "Browser RPG-Adventure"-project (as part 
 
 The final product, the game **MONSTER SLAYER**, can be found and played at <https://rpg.tstsrv.de>.
 
+The project documentation submitted for evaluation can be found here: <https://github.com/tstsrv-de/rpg/raw/main/doku/thesis_main.pdf>.
+
 The authors are:
-- Frakes95 <https://github.com/Frakes95>
-- haenno <https://github.com/haenno>
-- derBart0815 <https://github.com/derBart0815>
+- Frakes95, frontend development and graphic design <https://github.com/Frakes95>
+- haenno, infrastructure and backend development <https://github.com/haenno>
+- derBart0815, game design <https://github.com/derBart0815>
 
 ## Credits and acknowledgements
 
@@ -15,6 +17,7 @@ The authors are:
 - A Django Chat-Tutorial <https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started>
 - The Krita manual <https://docs.krita.org/en/index.html>
 - Igor Bubelov for a Traefik guide  <https://github.com/bubelov/traefik-letsencrypt-compose>
+- The FOM LaTeX template from https://github.com/andygrunwald/FOM-LaTeX-Template
 
 ## Short howto for local testing and/or dev useage
 
