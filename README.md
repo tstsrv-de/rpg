@@ -5,9 +5,9 @@ This is the code and documentation for "Browser RPG-Adventure"-project (as part 
 The final product, the game **MONSTER SLAYER**, can be found and played at <https://rpg.tstsrv.de>.
 
 The authors are:
-- Frakes95 <https://github.com/haenno>
-- haenno <https://github.com/derBart0815>
-- derBart0815 <https://github.com/Frakes95>
+- Frakes95 <https://github.com/Frakes95>
+- haenno <https://github.com/haenno>
+- derBart0815 <https://github.com/derBart0815>
 
 ## Credits and acknowledgements
 
