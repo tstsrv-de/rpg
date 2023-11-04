@@ -1,5 +1,13 @@
 # README for 'Browser RPG-Adventure'-project
 
+## Update and Info (2023-11-05)
+
+After finishing my studies, I have to consolidate my projects, repositories and most importantly my rented servers. Therefore, I will shut down the demo at ~~<https://rpg.tstsrv.de>~~ and move it to my private server. Also this repo under the ~~<https://github.com/tstsrv-de/rpg>~~ oraganization will be archived.
+
+**For the new demo check out <https://rpg.haenno.de> and for the most recent code check out <https://github.com/haenno/rpg>.**
+
+## Old Readme
+
 This is the code and documentation for "Browser RPG-Adventure"-project (as part of an examination in the 5th semester of business informatics, FOM University of Siegen).
 
 The final product, the game **MONSTER SLAYER**, can be found and played at <https://rpg.tstsrv.de>.
@@ -7,6 +15,7 @@ The final product, the game **MONSTER SLAYER**, can be found and played at <http
 The project documentation submitted for evaluation can be found here: <https://github.com/tstsrv-de/rpg/raw/main/doku/thesis_main.pdf>.
 
 The authors are:
+
 - Frakes95, frontend development and graphic design <https://github.com/Frakes95>
 - haenno, infrastructure and backend development <https://github.com/haenno>
 - derBart0815, game design <https://github.com/derBart0815>
@@ -17,7 +26,7 @@ The authors are:
 - A Django Chat-Tutorial <https://github.com/veryacademy/YT-Django-Project-Chatroom-Getting-Started>
 - The Krita manual <https://docs.krita.org/en/index.html>
 - Igor Bubelov for a Traefik guide  <https://github.com/bubelov/traefik-letsencrypt-compose>
-- The FOM LaTeX template from https://github.com/andygrunwald/FOM-LaTeX-Template
+- The FOM LaTeX template from <https://github.com/andygrunwald/FOM-LaTeX-Template>
 
 ## Short howto for local testing and/or dev useage
 
@@ -46,7 +55,7 @@ The authors are:
   ``docker-compose -f local-dev-docker-compose.yml exec rpg python rpg/manage.py createsuperuser``
 - Open and login to admin: <http://localhost:8000/admin>
 
-### Scripts for following usage 
+### Scripts for following usage
 
 If you want to keep using this local *installation*, just use on of the scripts ``local-dev-start.bat`` (on 🪟)  or ``local-dev-start.sh``  (on 🍎 and 🐧) to start it back up again. On each start they will collect and apply migrations, load sample data to the database from the *.json file in the base-dir and start the docker containers (Django server and the database) back up again. Also it will keep the terminal open, so that you can see all the (error-)messages and output from Django and the database.
 
